@@ -2,19 +2,16 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.1
+ * @version 0.2
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.1
+Version: 0.2
 Author URI: http://www.esscotti.com/
 */
-
-define('WP_POSTS_TABLE', $tableposts);
-define('WP_POST_META_TABLE', $tablepostmeta);
 
 
 class family_member {
@@ -40,6 +37,66 @@ class family_member {
 	}		
 	function get_html($the_family) {
 
+		$html = '<table border="0" width="100%">';
+		$html .= '<tr><td width="150"><b><a href="'.$this->url.'">'.$this->name.'</a></b></td>';
+		$html .= '<td width="80">';
+		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
+		$html .= '</td>';
+		$html .= '<td>Born: '.$this->born.'</td>';
+		if (!empty($this->died) && strlen($this->died) > 1) {
+			$html .= '<td>Died: '.	$this->died.'</td>';	
+		} else {
+			$html .= '<td></td>';	
+		}
+		$html .= '</tr>';
+		$html .= '<tr><td colspan="2">Father: ';
+		if (isset($this->name_father)) {
+			$html .= '<a href="'.$this->url_father.'">'.$this->name_father.'</a>';
+		} else {
+			$html .= 'Unspecified';
+		}
+		$html .= '</td>';	
+		$html .= '<td colspan="2">Mother: ';
+		if (isset($this->name_mother)) {
+			$html .= '<a href="'.$this->url_mother.'">'.$this->name_mother.'</a>';
+		} else {
+			$html .= 'Unspecified';
+		}
+		$html .= '</td></tr>';
+		$html .= '<tr><td colspan="4">Children: ';
+		if (count($this->children) > 0) {
+			$first = true; 
+			foreach ($this->children as $child) {
+				if (!$first) {
+					$html .= ', ';
+				} else {
+					$first = false;
+				}
+				$html .= '<a href="'.$the_family[$child]->url.'">'.$the_family[$child]->name.'</a>';
+			}
+		} else {
+			$html .= 'none';
+		}
+		$html .= '</td></tr>';
+		$html .= '<tr><td colspan="4">Siblings: ';
+		if (count($this->siblings) > 0) {
+			$first = true; 
+			foreach ($this->siblings as $sibling) {
+				if (!$first) {
+					$html .= ', ';
+				} else {
+					$first = false;
+				}
+				$html .= '<a href="'.$the_family[$sibling]->url.'">'.$the_family[$sibling]->name.'</a>';
+			}
+		} else {
+			$html .= 'none';
+		}
+		$html .= '</td></tr>';
+		$html .= '</table>';
+		return $html;
+	}
+	function get_html_old($the_family) {
 		$html = '';
 		$html .= '<p><a href="'.$this->url.'">'.$this->name.'</a></p>';
 		$html .= '<p>Born: '.$this->born.'</p>';	
@@ -83,41 +140,44 @@ class family_member {
 		$html .= '</p>';
 		return $html;
 	}
+	function get_box_html($the_family) {
+		$html = '';
+		$html .= '<a href="'.$this->url.'">'.$this->name.'</a>';
+		$html .= '<br>Born: '.$this->born;
+		if (!empty($this->died) && strlen($this->died) > 1) {
+			$html .= '<br>Died: '.	$this->died;	
+		}
+		
+		return $html;
+		
+	}
 }
 
-function family_tree()
+function get_the_family()
 {
     global $wpdb;
 
-	$sql = "SELECT mt.post_id,mt.meta_key,mt.meta_value as born,p.post_title as name FROM " . WP_POST_META_TABLE . " mt, ".WP_POSTS_TABLE." p where (mt.meta_key='born' or mt.meta_key='died' or mt.meta_key='father' or mt.meta_key='mother' or mt.meta_key='gender') and p.ID=mt.post_id ORDER BY mt.meta_value ASC";	
-	$ft_details = $wpdb->get_results($sql);
+	$family_posts = get_posts('category_name='.get_option("family_tree_category_key").'&numberposts=-1&orderby=title&order=asc');
 
 	$the_family = array();	
-	
-	echo '<p>Family Members';
-	foreach($ft_details as $ft_detail) {
+
+	foreach($family_posts as $post_detail) {
+
+		// print_r($post_detail);
+		
 		$fm = new family_member();
 
-		// print_r($ft_detail);
-
-		$fm->post_id 	= $ft_detail->post_id;
-		$fm->name 		= $ft_detail->name;
-		$fm->url		= get_permalink($ft_detail->post_id);
-
-		$sql = "SELECT mt.meta_key,mt.meta_value FROM " . WP_POST_META_TABLE . " mt where mt.post_id=".$ft_detail->post_id." and (mt.meta_key='born' or mt.meta_key='died' or mt.meta_key='father' or mt.meta_key='mother' or mt.meta_key='gender')ORDER BY mt.meta_key ASC";
-		$member_details = $wpdb->get_results($sql);
-
-		foreach($member_details as $member_detail) {
-			switch ($member_detail->meta_key) {
-			case 'gender': 	$fm->gender = $member_detail->meta_value; break;
-			case 'father': 	$fm->father = $member_detail->meta_value; break;
-			case 'mother': 	$fm->mother = $member_detail->meta_value; break;
-			case 'born': 	$fm->born 	= $member_detail->meta_value; break;
-			case 'died': 	$fm->died 	= $member_detail->meta_value; break;
-			}
-			// print_r($member_detail);
-		}
-		$the_family[$ft_detail->post_id] = $fm;
+		$fm->post_id 	= $post_detail->ID;
+		$fm->name 		= $post_detail->post_title;
+		$fm->url		= get_permalink($post_detail->ID);
+		
+		$fm->gender	= get_post_meta($post_detail->ID, 'gender', true);
+		$fm->father	= get_post_meta($post_detail->ID, 'father', true);
+		$fm->mother	= get_post_meta($post_detail->ID, 'mother', true);
+		$fm->born	= get_post_meta($post_detail->ID, 'born', true);
+		$fm->died	= get_post_meta($post_detail->ID, 'died', true);
+			
+		$the_family[$post_detail->ID] = $fm;
 	}
 
 	// Set father/mother child relationships...
@@ -157,17 +217,67 @@ function family_tree()
 		$siblings = array_merge( $siblings_f, array_diff($siblings_m, $siblings_f));
 		$temp = array();
 		$temp[] = $fm->post_id;
-		$fm->siblings = $siblings;
+		$fm->siblings = array_diff($siblings, $temp);
 	}
 
-	// Print information about each family member...
-	foreach ($the_family as $fm) {
-		echo $fm->get_html($the_family);
-		echo '<hr>';
-	}
-	
+	return $the_family;
 }
 
+function family_list() {
+	
+	$the_family = get_the_family();
+	
+	$html = "";
+	// Print information about each family member...
+	foreach ($the_family as $fm) {
+		$html .= $fm->get_html($the_family);
+		$html .= '<hr>';
+	}
+	return $html;
+}
+
+function family_tree() {
+
+	$the_family = get_the_family();
+	$member = 3;
+?>
+
+<div style="position:relative;width:450px;height:500px;border:0px solid blue;background:#eee;">
+<?php
+	$fm = $the_family[3];
+	
+	echo '<div style="position:absolute;top:0px;left:0px;border:1px dashed black;padding:5px">';
+	echo $fm->get_box_html($the_family);
+	echo '</div>';	
+
+	$father = $fm->father;
+	echo '<div style="position:absolute;top:0px;left:200px;border:1px solid black;padding:5px">';
+	if (!empty($father)) {
+		echo $the_family[$father]->get_box_html($the_family);
+	} else {
+		echo '???';
+	}
+	echo '</div>';	
+
+	$mother = $fm->mother;
+	echo '<div style="position:absolute;top:60px;left:200px;border:1px solid black;padding:5px">';
+	if (!empty($mother)) {
+		echo $the_family[$mother]->get_box_html($the_family);
+	} else {
+		echo '???';
+	}
+	echo '</div>';	
+
+
+
+?>	
+</div>
+	
+
+
+	
+<?php
+}
 
 function family_tree_edit_page_form()
 {
@@ -208,8 +318,8 @@ function family_tree_edit_page_form()
     <option value="m" <?php if ($gender == "m") echo "selected=\"selected\""; ?>>Male</option>
     <option value="f" <?php if ($gender == "f") echo "selected=\"selected\""; ?>>Female</option>
 	</select></td></tr>
-    <tr><td>Born:</td><td><input type="text" name="born" value="<?php echo wp_specialchars(get_post_meta($post->ID, 'born', true), true) ?>" id="born" size="80" /></td></tr>
-    <tr><td>Died:</td><td><input type="text" name="died" value="<?php echo wp_specialchars(get_post_meta($post->ID, 'died', true), true) ?>" id="died" size="80" /></td></tr>
+    <tr><td>Born (YYYY-MM-DD):</td><td><input type="text" name="born" value="<?php echo wp_specialchars(get_post_meta($post->ID, 'born', true), true) ?>" id="born" size="80" /></td></tr>
+    <tr><td>Died (YYYY-MM-DD):</td><td><input type="text" name="died" value="<?php echo wp_specialchars(get_post_meta($post->ID, 'died', true), true) ?>" id="died" size="80" /></td></tr>
     <tr><td>Mother:</td><td>
     <select style="width:200px" name="mother" id="mother">
     <option value="" <?php if (empty($mother)) echo "selected=\"selected\""; ?>> </option>
@@ -259,12 +369,22 @@ function family_tree_update_post($id)
 
 
 // Function to deal with showing the family tree on pages
-function family_tree_insert($content)
+function family_list_insert($content)
 {
   if (preg_match('{FAMILY-MEMBERS}',$content))
     {
-      $ft_output = family_tree();
+      $ft_output = family_list();
       $content = str_replace('{FAMILY-MEMBERS}', $ft_output, $content);
+    }
+  return $content;
+}
+// Function to deal with showing the family tree on pages
+function family_tree_insert($content)
+{
+  if (preg_match('{FAMILY-TREE}',$content))
+    {
+      $ft_output = family_tree	();
+      $content = str_replace('{FAMILY-TREE}', $ft_output, $content);
     }
   return $content;
 }
@@ -334,6 +454,7 @@ function family_tree_options_subpanel()
 
 
 // Enable the ability for the family tree to be loaded from pages
+add_filter('the_content','family_list_insert');
 add_filter('the_content','family_tree_insert');
 
 add_action('edit_post', 'family_tree_update_post');
