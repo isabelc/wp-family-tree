@@ -1,0 +1,33 @@
+h1 {
+	font-weight: 400;
+	height: 5%;
+}
+#familytree {
+	margin: 	0 auto;
+	text-align: center;
+	z-index: 10;
+}
+#focusperson {
+/*	font-family: Consolas, Monaco, "Lucida Console", monospace; */
+	height: 2em;
+/*	margin: 10px; */
+	padding: 0;
+	width: 40%;
+}
+#go {
+	font-size: 2em;
+	display:none;
+}
+#hoverimage {
+	position : absolute;
+	border : 1px solid gray;
+	background-color : #efefef;
+/*	padding : 3px; */
+	z-index: 100;
+	/* set this to create word wrap */
+	/* max-width: 200px;*/
+}
+
+#buttons {
+	display:none;
+}

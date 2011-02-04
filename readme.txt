@@ -3,27 +3,22 @@ Contributors: the_arv
 Donate link: http://www.esscotti.com/wp-family-tree-plugin/
 Tags: family tree, genealogy
 Requires at least: 2.8.6
-Tested up to: 2.8.6
+Tested up to: 3.0.0
 Stable tag: trunk
 
-WP Family Tree is a simple family tree generator plugin for Wordpress. Each family member have their own post within 
+WP Family Tree is a family tree generator plugin for Wordpress. Each family member have their own post within 
 a "Family" category. In the family member posts you can specify birth dates, mother, father, etc. A complete family 
-list can be displayed on any page with the {FAMILY-MEMBERS} tag. 
-
-In this version 0.1 the family tree is simply a list of family members with links to parents, children and siblings. 
-In future versions the family tree will be fancier.
+tree can be displayed on any page with the [family-tree] shortcode. 
 
 == Description ==
 
-WP Family Tree is a simple family tree generator plugin for Wordpress. Each family member have their own post within 
+WP Family Tree is a family tree generator plugin for Wordpress. Each family member have their own post within 
 a "Family" category. In the family member posts you can specify birth dates, mother, father, etc. A complete family 
-list can be displayed on any page with the {FAMILY-MEMBERS} tag. 
+tree can be displayed on any page with the [family-tree] shortcode. 
 
-In this version 0.1 the family tree is simply a list of family members with links to parents, children and siblings. 
-In future versions the family tree will be fancier.
+The root of the tree can be specified with the root parameter: [family-tree root='John Doe']
 
-For support and an example installation please visit the 
-[WordPress Family Tree Plugin](http://www.esscotti.com/wp-family-tree-plugin/ "Wordpress Family Tree Plugin") homepage
+For support please visit the [WordPress Family Tree Plugin](http://www.esscotti.com/wp-family-tree-plugin/ "Wordpress Family Tree Plugin") homepage
 
 Released under the terms of the GNU GPL, version 3.
 
@@ -33,19 +28,25 @@ Any suggestions for future enhancements welcome.
 
 == Installation ==
 
-1. Copy the family tree plugin directory to the `/wp-content/plugins/` directory
+1. Copy the family tree plugin directory to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Create a page and put a {FAMILY-MEMBERS} on it
+3. Create a page and put a [family-tree] on it
 4. Add posts specifying the custom fields available at the bottom of edit posts page, adding the posts to the "Family"
 category.
 
 == Screenshots ==
 
-1. Here are the custom fields that are added to the posts
-2. Family list entry with links to each individual's blog post page
-3. My Family page that displays the family tree
+1. Family tree as drawn on a page using the short code [family-tree]
+2. Here are the custom fields that are added to the posts
+3. Family list entry with links to each individual's blog post page
 
 == Changelog ==
+
+= 0.3 =
+* Added tree style parameters in admin optins page
+* Added family tree rendering using the Raphael library (Sunil Shah contributed the tree rendering script)
+* Fixed problem selecting correct category for family members (Thanks to Cyril Pauya for identifying the problem and 
+providing a solution)
 
 = 0.2 =
 * Family members list now shown in a table
@@ -60,5 +61,6 @@ category.
 == Roadmap ==
 
 - GEDCOM support
-- Family tree as graphical output (PNG, PDF, or both)
+- Family tree in printable form(PDF?)
+- Please suggest.. :)
 

@@ -1,0 +1,173 @@
+<?php
+// Copyright (c) 2010,2011 Arvind Shah
+// WP Family Tree is released under the GNU General Public
+// License (GPL) http://www.gnu.org/licenses/gpl.txt
+
+class node {
+	var $post_id;
+	var $gender;
+	var $father;
+	var $mother;
+	var $born;
+	var $died;
+
+	var $children;
+	var $siblings;
+	
+	var $name;
+	var $name_father;
+	var $name_mother;
+	var $url;
+	var $url_father;
+	var $url_mother;
+
+	function __construct() {
+		$children = array();
+	}
+
+	static function get_node($post_detail) {
+		$fm = new node();
+		$fm->post_id 	= $post_detail->ID;
+		$fm->name 		= $post_detail->post_title;
+		$fm->url		= get_permalink($post_detail->ID);			
+		$fm->gender	= get_post_meta($post_detail->ID, 'gender', true);
+		$fm->father	= get_post_meta($post_detail->ID, 'father', true);
+		$fm->mother	= get_post_meta($post_detail->ID, 'mother', true);
+		$fm->born	= get_post_meta($post_detail->ID, 'born', true);
+		$fm->died	= get_post_meta($post_detail->ID, 'died', true);
+
+
+		return $fm;
+	}
+	function get_html($the_family) {
+
+		$html = '<table border="0" width="100%">';
+		$html .= '<tr><td width="150"><b><a href="'.$this->url.'">'.$this->name.'</a></b></td>';
+		$html .= '<td width="80">';
+		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+//		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
+		if ($this->gender == 'm') {
+			$html .= '<img alt="Male" title="Male" src="'.$plugloc.'icon-male-small.gif"/>';
+		} else if ($this->gender == 'f') {
+			$html .= '<img alt="Female" title="Female" src="'.$plugloc.'icon-female-small.gif"/>';
+		} else {
+			$html .= '<img alt="Gender not specified" title="Gender not specified" src="'.$plugloc.'icon-qm-small.gif"/>';
+		}
+//		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
+		
+		$html .=' <a href="/family-tree/?ancestor='.$this->name.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+		
+		$html .= '</td>';
+		$html .= '<td>Born: '.$this->born.'</td>';
+		if (!empty($this->died) && strlen($this->died) > 1) {
+			$html .= '<td>Died: '.	$this->died.'</td>';	
+		} else {
+			$html .= '<td></td>';	
+		}
+		$html .= '</tr>';
+		$html .= '<tr><td colspan="2">Father: ';
+		if (isset($this->name_father)) {
+			$html .= '<a href="'.$this->url_father.'">'.$this->name_father.'</a>';
+		} else {
+			$html .= 'Unspecified';
+		}
+		$html .= '</td>';	
+		$html .= '<td colspan="2">Mother: ';
+		if (isset($this->name_mother)) {
+			$html .= '<a href="'.$this->url_mother.'">'.$this->name_mother.'</a>';
+		} else {
+			$html .= 'Unspecified';
+		}
+		$html .= '</td></tr>';
+		$html .= '<tr><td colspan="4">Children: ';
+		if (count($this->children) > 0) {
+			$first = true; 
+			foreach ($this->children as $child) {
+				if (!$first) {
+					$html .= ', ';
+				} else {
+					$first = false;
+				}
+				$html .= '<a href="'.$the_family[$child]->url.'">'.$the_family[$child]->name.'</a>';
+			}
+		} else {
+			$html .= 'none';
+		}
+		$html .= '</td></tr>';
+		$html .= '<tr><td colspan="4">Siblings: ';
+		if (count($this->siblings) > 0) {
+			$first = true; 
+			foreach ($this->siblings as $sibling) {
+				if (!$first) {
+					$html .= ', ';
+				} else {
+					$first = false;
+				}
+				$html .= '<a href="'.$the_family[$sibling]->url.'">'.$the_family[$sibling]->name.'</a>';
+			}
+		} else {
+			$html .= 'none';
+		}
+		$html .= '</td></tr>';
+		$html .= '</table>';
+		return $html;
+	}
+	function get_html_old($the_family) {
+		$html = '';
+		$html .= '<p><a href="'.$this->url.'">'.$this->name.'</a></p>';
+		$html .= '<p>Born: '.$this->born.'</p>';	
+		$html .= '<p>Gender: ';
+		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
+		$html .= '</p>';
+		$html .= '<p>Father: ';
+		if (isset($this->name_father)) {
+			$html .= '<a href="'.$this->url_father.'">'.$this->name_father.'</a>';
+		} else {
+			$html .= 'Unspecified';
+		}
+		$html .= '</p>';	
+		$html .= '<p>Mother: ';
+		if (isset($this->name_mother)) {
+			$html .= '<a href="'.$this->url_mother.'">'.$this->name_mother.'</a>';
+		} else {
+			$html .= 'Unspecified';
+		}
+		$html .= '</p>';
+		if (!empty($this->died) && strlen($this->died) > 1) {
+			$html .= '<p>Died: '.	$this->died.'</p>';	
+		}
+//		$html .= '<p>ID: '.		$this->post_id.'</p>';	
+		$html .= '<p>Children: ';
+		if (count($this->children) > 0) {
+			foreach ($this->children as $child) {
+				$html .= '<a href="'.$the_family[$child]->url.'">'.$the_family[$child]->name.'</a> ';
+			}
+		} else {
+			$html .= 'none';
+		}
+		$html .= '<p>Siblings: ';
+		if (count($this->siblings) > 0) {
+			foreach ($this->siblings as $sibling) {
+				$html .= '<a href="'.$the_family[$sibling]->url.'">'.$the_family[$sibling]->name.'</a> ';
+			}
+		} else {
+			$html .= 'none';
+		}
+		$html .= '</p>';
+		return $html;
+	}
+	function get_box_html($the_family) {
+		$html = '';
+		$html .= '<a href="'.$this->url.'">'.$this->name.'</a>';
+		$html .= '<br>Born: '.$this->born;
+		if (!empty($this->died) && strlen($this->died) > 1) {
+			$html .= '<br>Died: '.	$this->died;	
+		}
+		
+		return $html;
+		
+	}
+}
+
+
+?>
