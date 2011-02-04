@@ -1,14 +1,12 @@
 === WP Family Tree ===
-Contributors: the_arv
+Contributors: Arvind Shah, Sunil Shah
 Donate link: http://www.esscotti.com/wp-family-tree-plugin/
 Tags: family tree, genealogy
 Requires at least: 2.8.6
 Tested up to: 3.0.0
 Stable tag: trunk
 
-WP Family Tree is a family tree generator plugin for Wordpress. Each family member have their own post within 
-a "Family" category. In the family member posts you can specify birth dates, mother, father, etc. A complete family 
-tree can be displayed on any page with the [family-tree] shortcode. 
+WP Family Tree is a plugin for Wordpress that renders family trees on any Page or Post.
 
 == Description ==
 
