@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.3
+ * @version 0.3.1
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.3
+Version: 0.3.1
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -28,6 +28,8 @@ require_once('class.tree.php');
 /* Render a list of nodes. */
 function family_list() {
 	
+	wpft_options::check_options();
+
 	$the_family = tree::get_tree();
 	
 	$html = "";
@@ -80,10 +82,12 @@ function family_tree($root='') {
 }
 function bio_data() {
 	global $post;
-	
-//	echo '<p>This is the family member with id: '.$post->ID.'</p>';
-	echo '<p><a href="/family-tree/?ancestor='.$post->post_title.'">click here to view family tree</a>';
-	
+	$ftlink = wpft_options::get_option('family_tree_link');
+	if (strpos($ftlink, '?') === false) {
+		echo '<p><a href="'.$ftlink.'?ancestor='.$post->post_title.'">click here to view family tree</a>';
+	} else {
+		echo '<p><a href="'.$ftlink.'&ancestor='.$post->post_title.'">click here to view family tree</a>';
+	}
 }
 
 
@@ -214,6 +218,8 @@ function wpft_family_tree_shortcode($atts, $content=NULL) {
 
 //	$content = do_shortcode($content);
 	
+	wpft_options::check_options();
+
 	return $ft_output;
 }
 

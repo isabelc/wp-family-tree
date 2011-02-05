@@ -55,7 +55,12 @@ class node {
 		}
 //		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
 		
-		$html .=' <a href="/family-tree/?ancestor='.$this->name.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+		$ftlink = wpft_options::get_option('family_tree_link');
+		if (strpos($ftlink, '?') === false) {
+			$html .=' <a href="'.$ftlink.'?ancestor='.$this->name.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+		} else {
+			$html .=' <a href="'.$ftlink.'&ancestor='.$this->name.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+		}
 		
 		$html .= '</td>';
 		$html .= '<td>Born: '.$this->born.'</td>';

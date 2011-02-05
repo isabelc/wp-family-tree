@@ -1,12 +1,14 @@
 === WP Family Tree ===
-Contributors: Arvind Shah, Sunil Shah
+Contributors: the_arv
 Donate link: http://www.esscotti.com/wp-family-tree-plugin/
 Tags: family tree, genealogy
 Requires at least: 2.8.6
 Tested up to: 3.0.0
 Stable tag: trunk
 
-WP Family Tree is a plugin for Wordpress that renders family trees on any Page or Post.
+WP Family Tree is a family tree generator plugin for Wordpress. Each family member have their own post within 
+a "Family" category. In the family member posts you can specify birth dates, mother, father, etc. A complete family 
+tree can be displayed on any page with the [family-tree] shortcode. 
 
 == Description ==
 
@@ -24,13 +26,16 @@ Copyright (c) Arvind Shah
 
 Any suggestions for future enhancements welcome.
 
+NOTE: All releases of this plugin up to V1.0 are considered unfinished or incomplete. The plugin renders a family tree and serves to gather feedback but expect that there will be some features missing.
+
 == Installation ==
 
 1. Copy the family tree plugin directory to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Create a page and put a [family-tree] on it
-4. Add posts specifying the custom fields available at the bottom of edit posts page, adding the posts to the "Family"
-category.
+3. Create a page and put a [family-tree] shortcode on it (this is the family tree page)
+4. Create a page and put a {FAMILY-MEMBERS} tag on it (this is the family list page)
+5. Visit the family tree admin panel and set the family tree link option (link to family tree page)
+6. Add posts specifying the custom fields available at the bottom of edit posts page, adding the posts to the "Family" category.
 
 == Screenshots ==
 
@@ -39,6 +44,9 @@ category.
 3. Family list entry with links to each individual's blog post page
 
 == Changelog ==
+
+= 0.3.1 =
+* Added parameter in admin that needs to be specified and that tells WP Family Tree which page is the family tree page
 
 = 0.3 =
 * Added tree style parameters in admin optins page

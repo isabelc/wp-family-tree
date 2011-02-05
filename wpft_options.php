@@ -22,6 +22,9 @@ function family_tree_options_subpanel() {
 		if ($_POST['family_tree_category_key'] != "")  {
 			update_option('family_tree_category_key', stripslashes(strip_tags($_POST['family_tree_category_key'])));
 		}
+		if ($_POST['family_tree_link'] != "")  {
+			update_option('family_tree_link', stripslashes(strip_tags($_POST['family_tree_link'])));
+		}
 		if ($_POST['canvasbgcol'] != "")  {
 			update_option('canvasbgcol', stripslashes(strip_tags($_POST['canvasbgcol'])));
 		}
@@ -53,10 +56,16 @@ function family_tree_options_subpanel() {
 	}
 ?>
 	<h3>General</h3>
-	<table class="form-table"><tr valign="top">
-	<th scope="row"><label for="family_tree_category_key">Name of category for family members (default: "Family")</label></th>
-	<td><input name="family_tree_category_key" type="text" id="family_tree_category_key" value="<?php echo wpft_options::get_option('family_tree_category_key'); ?>" size="40" /></td>
-	</tr></table>
+	<table class="form-table">
+		<tr valign="top">
+			<th scope="row"><label for="family_tree_category_key">Name of category for family members (default: "Family")</label></th>
+			<td><input name="family_tree_category_key" type="text" id="family_tree_category_key" value="<?php echo wpft_options::get_option('family_tree_category_key'); ?>" size="40" /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="family_tree_link">Link to page with family tree</label></th>
+			<td><input name="family_tree_link" type="text" id="family_tree_link" value="<?php echo wpft_options::get_option('family_tree_link'); ?>" size="40" /></td>
+		</tr>
+	</table>
 
 	<h3>Family tree styling</h3>
 	<table class="form-table">
@@ -108,6 +117,8 @@ class wpft_options {
 		}
 		// Option did not exist in database so return default values...
 		switch ($option) {
+		case "family_tree_link":
+			return '/family-tree/';	// Default link to where the family tree sits
 		case "family_tree_category_key":
 			return 'Family';	// Default category for posts included in the tree
 		case "canvasbgcol":
@@ -124,7 +135,12 @@ class wpft_options {
 		return '';
 	}
 	
-	
+	static function check_options() {
+		$value = get_option('family_tree_link');
+		if ($value === false) { 
+			echo '<script language="javascript">alert("You need to configure the WP Family Tree plugin and set the \"family tree link\" parameter in the administrator panel.\n\nThis parameter will tell the family tree plugin which page is used to display the main family tree. I.e, the page where you have put the [family-tree] shortcode.\n\n");</script>';
+		}
+	}
 		
 }
 
