@@ -6,9 +6,7 @@ Requires at least: 2.8.6
 Tested up to: 3.0.0
 Stable tag: trunk
 
-WP Family Tree is a family tree generator plugin for Wordpress. Each family member have their own post within 
-a "Family" category. In the family member posts you can specify birth dates, mother, father, etc. A complete family 
-tree can be displayed on any page with the [family-tree] shortcode. 
+WP Family Tree is a graphical family tree generator plugin for Wordpress. Each family member have their own blog post.
 
 == Description ==
 
@@ -32,13 +30,16 @@ The plugin renders a family tree and serves to gather feedback but expect that t
 
 == Installation ==
 
-1. Copy the family tree plugin directory to the '/wp-content/plugins/' directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Create a page and put a [family-tree] shortcode on it (this is the family tree page)
-4. Create a page and put a {FAMILY-MEMBERS} tag on it (this is the family list page)
-5. Visit the family tree admin panel and set the family tree link option (link to family tree page)
+1. Copy the family tree plugin directory to the '/wp-content/plugins/' directory.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
+3. Create a page and put a [family-tree] shortcode on it; (this is the family tree page).
+4. Create a page and put a {FAMILY-MEMBERS} tag on it; (this is the family list page).
+5. Visit the family tree admin panel and set the family tree link option; (link to family tree page).
 6. Add posts specifying the custom fields available at the bottom of edit posts page, 
 adding the posts to the "Family" category.
+
+Note: You can put the post name/title of the person you wish to be displayed at the root of the family tree as a 
+parameter in the shortcode: [family-tree root='<post title>']
 
 == Screenshots ==
 
