@@ -16,6 +16,9 @@ tree can be displayed on any page with the [family-tree] shortcode.
 
 The root of the tree can be specified with the root parameter: [family-tree root='John Doe']
 
+Specify a 'featured image' for the post and the image thumbnail will be used in the family memebers list and in 
+the family tree. Please see the screenshots.
+
 For support please visit the 
 [WordPress Family Tree Plugin](http://www.esscotti.com/wp-family-tree-plugin/ "Wordpress Family Tree Plugin") homepage
 
@@ -39,15 +42,18 @@ The plugin renders a family tree and serves to gather feedback but expect that t
 adding the posts to the "Family" category.
 
 Note: You can put the post name/title of the person you wish to be displayed at the root of the family tree as a 
-parameter in the shortcode: [family-tree root='<post title>']
+parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Screenshots ==
 
-1. Family tree as drawn on a page using the short code [family-tree]
+1. Family tree as drawn on a page using the short code [family-tree]. Thumbnail shown where mouse is hovering.
 2. Here are the custom fields that are added to the posts
 3. Family list entry with links to each individual's blog post page
 
 == Changelog ==
+
+= 0.4 =
+* Added the capability to show thumbnails in the family tree on hover.
 
 = 0.3.1 =
 * Added parameter in admin that needs to be specified and that tells WP Family Tree which page is 
@@ -72,7 +78,7 @@ tag to pages
 
 == Roadmap ==
 
-- GEDCOM support
+- GEDCOM import/export
 - Family tree in printable form(PDF?)
 - Please suggest.. :)
 

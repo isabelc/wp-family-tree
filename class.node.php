@@ -10,6 +10,8 @@ class node {
 	var $mother;
 	var $born;
 	var $died;
+	var $thumbsrc;
+	var $thumbhtml;
 
 	var $children;
 	var $siblings;
@@ -35,15 +37,22 @@ class node {
 		$fm->mother	= get_post_meta($post_detail->ID, 'mother', true);
 		$fm->born	= get_post_meta($post_detail->ID, 'born', true);
 		$fm->died	= get_post_meta($post_detail->ID, 'died', true);
-
+		$thumbid = get_post_thumbnail_id($post_detail->ID);
+		$thumbsrc = wp_get_attachment_image_src($thumbid, 'thumbnail');
+		$fm->thumbsrc = $thumbsrc[0];
+		$fm->thumbhtml = get_the_post_thumbnail($post_detail->ID, 'thumbnail');
 
 		return $fm;
 	}
 	function get_html($the_family) {
 
 		$html = '<table border="0" width="100%">';
-		$html .= '<tr><td width="150"><b><a href="'.$this->url.'">'.$this->name.'</a></b></td>';
-		$html .= '<td width="80">';
+		$html .= '<tr><td width="150" style="vertical-align:bottom"><b><a href="'.$this->url.'">';
+		if (!empty($this->thumbhtml)) {
+			$html .= "<br>".$this->thumbhtml;
+		}
+		$html .= $this->name.'</a></b></td>';
+		$html .= '<td width="80" style="vertical-align:bottom">';
 		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 //		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
 		if ($this->gender == 'm') {
@@ -63,9 +72,9 @@ class node {
 		}
 		
 		$html .= '</td>';
-		$html .= '<td>Born: '.$this->born.'</td>';
+		$html .= '<td style="vertical-align:bottom">Born: '.$this->born.'</td>';
 		if (!empty($this->died) && strlen($this->died) > 1) {
-			$html .= '<td>Died: '.	$this->died.'</td>';	
+			$html .= '<td style="vertical-align:bottom">Died: '.	$this->died.'</td>';	
 		} else {
 			$html .= '<td></td>';	
 		}

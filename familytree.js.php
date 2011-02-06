@@ -57,11 +57,14 @@
 		iCanvasHeight = 100;
 	
 	this.familytreemain = function() {
+        aFamilyTreeElement = document.getElementById("familytree");
+		if (!aFamilyTreeElement) {
+			return;
+		}
 		m_Canvas 	=  Raphael("familytree", iCanvasWidth, iCanvasHeight);
         m_Canvas.clear();
 		m_CanvasRect = m_Canvas.rect(0, 0, iCanvasWidth, iCanvasHeight, 10).attr({fill: canvasbgcol, stroke: "none"}).toBack();
 
-        aFamilyTreeElement = document.getElementById("familytree");
         text_sStartName = document.getElementById("focusperson");
 //        text_sStartName.onkeydown = onKeyDown_Name; 
         hoverpic = document.getElementById("hoverimage");
@@ -979,24 +982,31 @@
 	$first = true;
 	foreach ($the_family as $node) {
 		if (!$first) {
-			$tree_data_js .= ',';
+			$tree_data_js .= ','."\n";
 		} else {
 			$first = false;
 		}
 //		$str  = '"EsscottiFTID='.$node->post_id.'",'."\n";
 		$str  = '"EsscottiFTID='.$node->name.'",'."\n";
 		$str .= '"Name='.$node->name.'",'."\n";
-//		"ImageURL=http://4.bp.blogspot.com/_O5UyIvnogNQ/SfGnEbDHJ9I/AAAAAAAAAMg/v7k5o6ziL3c/s1600/image-upload-211-713263.jpg",
+		if (!empty($node->thumbsrc)) {
+			$str .= '"ImageURL='.$node->thumbsrc.'",'."\n";
+		}
 //		"ShortInfoURL=http://bpa.esscotti.com/",
 //		"LongInfoURL=http://cpa.esscotti.com/",
-		$str .= '"'.(($node->gender=='m')?'Male':'Female').'",'."\n";
+		$str .= '"';
+		if ($node->gender=='m') {
+			$str .= 'Male';
+		} else {
+			$str .= 'Female';
+		}
+		$str .= '",'."\n";
 		$str .= '"Birthday='.$node->born.'",'."\n";
 //		"Spouse=Sunil Shah",
 		$str .= '"Parent='.$the_family[$node->mother]->name.'",'."\n";
-		$str .= '"Parent='.$the_family[$node->father]->name.'"'."\n";
+		$str .= '"Parent='.$the_family[$node->father]->name.'"';
 
 		$tree_data_js .= $str;	
-
 
 	}
 	$tree_data_js .= ');'."\n";
