@@ -52,6 +52,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.4.1 =
+
+* Bug fix: added check for the function get_post_thumbnail_id
+
 = 0.4 =
 * Added the capability to show thumbnails in the family tree on hover.
 

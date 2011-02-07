@@ -37,11 +37,12 @@ class node {
 		$fm->mother	= get_post_meta($post_detail->ID, 'mother', true);
 		$fm->born	= get_post_meta($post_detail->ID, 'born', true);
 		$fm->died	= get_post_meta($post_detail->ID, 'died', true);
-		$thumbid = get_post_thumbnail_id($post_detail->ID);
-		$thumbsrc = wp_get_attachment_image_src($thumbid, 'thumbnail');
-		$fm->thumbsrc = $thumbsrc[0];
-		$fm->thumbhtml = get_the_post_thumbnail($post_detail->ID, 'thumbnail');
-
+		if (function_exists(get_post_thumbnail_id)) {
+			$thumbid = get_post_thumbnail_id($post_detail->ID);
+			$thumbsrc = wp_get_attachment_image_src($thumbid, 'thumbnail');
+			$fm->thumbsrc = $thumbsrc[0];
+			$fm->thumbhtml = get_the_post_thumbnail($post_detail->ID, 'thumbnail');
+		}
 		return $fm;
 	}
 	function get_html($the_family) {
