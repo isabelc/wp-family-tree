@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.4.1
+ * @version 0.4.2
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.4.1
+Version: 0.4.2
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -228,7 +228,7 @@ add_shortcode('family-tree', 'wpft_family_tree_shortcode');
 
 add_action('admin_menu', 'family_tree_options_page');
 
-function addHeaderCode() {
+function wpft_addHeaderCode() {
 	$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 	wp_enqueue_script('raphael', $plugloc.'raphael.js');
 	wp_enqueue_script('familytree', $plugloc.'familytree.js.php');
@@ -244,7 +244,7 @@ add_filter('the_content','family_list_insert');
 add_filter('the_content','family_tree_insert');
 add_filter('the_content','bio_data_insert');
 
-add_action('init', 'addHeaderCode');
+add_action('init', 'wpft_addHeaderCode');
 add_action('edit_post', 'family_tree_update_post');
 add_action('save_post', 'family_tree_update_post');
 add_action('publish_post', 'family_tree_update_post');
