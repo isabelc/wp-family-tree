@@ -9,7 +9,7 @@ Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.4.2
+Version: 0.5
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
