@@ -13,7 +13,24 @@ class tree {
 	{
 	    global $wpdb;
 	
-		$family_posts = get_posts('category_name='.wpft_options::get_option('family_tree_category_key').'&numberposts=-1&orderby=title&order=asc');
+	$category = wpft_options::get_option('family_tree_category_key');
+	$args = array(
+		'numberposts'     => -1,
+		'offset'          => 0,
+		'category'        => $category,
+		'orderby'         => 'title',
+		'order'           => 'ASC',
+//		'include'         => ,
+//		'exclude'         => ,
+//		'meta_key'        => ,
+//		'meta_value'      => ,
+		'post_type'       => 'post',
+//		'post_mime_type'  => ,
+//		'post_parent'     => ,
+		'post_status'     => 'publish' );	
+
+		$family_posts = get_posts($args);
+//		$family_posts = get_posts('category_name='.wpft_options::get_option('family_tree_category_key').'&numberposts=-1&orderby=title&order=asc');
 	
 		$the_family = array();	
 	
@@ -60,6 +77,51 @@ class tree {
 			$temp = array();
 			$temp[] = $fm->post_id;
 			$fm->siblings = array_diff($siblings, $temp);
+		}
+
+		// Set partner...
+		foreach ($the_family as $fm) {
+			if (!empty($fm->partner)) {
+				continue;	// If partner has been set (by database meta data) then leave as-is
+			}
+			if (is_array($fm->children)) {
+				$partners = array();
+				foreach ($fm->children as $childid) {
+					$prospective_partner = "";
+					
+					$child = $the_family[$childid];
+
+					if ($fm->gender == 'm') {
+						if (!empty($child->mother)) {
+							$prospective_partner = $child->mother;
+						}
+					} else if ($fm->gender == 'f') {
+						if (!empty($child->father)) {
+							$prospective_partner = $child->father;
+						}
+					}
+
+					if (!empty($prospective_partner)) {
+						if (!isset($partners[$prospective_partner])) {
+							$partners[$prospective_partner] = 1;
+						} else {
+							$partners[$prospective_partner]++;
+						}
+					}
+				}
+				
+				$max = 0;
+				$partner = 0;
+				foreach ($partners as $partnerid => $num) {
+					if ($num > $max) {
+						$max = $num;
+						$partner = $partnerid;
+					}
+				}
+				if (!empty($partner)) {
+					$fm->partner = $partner;
+				}
+			}
 		}
 	
 		return $the_family;

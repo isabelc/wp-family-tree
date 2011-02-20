@@ -6,6 +6,7 @@
 class node {
 	var $post_id;
 	var $gender;
+	var $partner;
 	var $father;
 	var $mother;
 	var $born;
@@ -33,6 +34,7 @@ class node {
 		$fm->name 		= $post_detail->post_title;
 		$fm->url		= get_permalink($post_detail->ID);			
 		$fm->gender	= get_post_meta($post_detail->ID, 'gender', true);
+		$fm->partner= get_post_meta($post_detail->ID, 'partner', true);
 		$fm->father	= get_post_meta($post_detail->ID, 'father', true);
 		$fm->mother	= get_post_meta($post_detail->ID, 'mother', true);
 		$fm->born	= get_post_meta($post_detail->ID, 'born', true);

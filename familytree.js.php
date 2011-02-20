@@ -1003,6 +1003,9 @@
 		$str .= '",'."\n";
 		$str .= '"Birthday='.$node->born.'",'."\n";
 //		"Spouse=Sunil Shah",
+		if (!empty($node->partner) && !empty($the_family[$node->partner]->name)) {
+			$str .= '"Spouse='.$the_family[$node->partner]->name.'",'."\n";
+		}
 		$str .= '"Parent='.$the_family[$node->mother]->name.'",'."\n";
 		$str .= '"Parent='.$the_family[$node->father]->name.'"';
 

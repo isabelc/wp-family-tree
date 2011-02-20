@@ -2,7 +2,7 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.4.2
+ * @version 0.5
  */
 /*
 Plugin Name: WP Family Tree

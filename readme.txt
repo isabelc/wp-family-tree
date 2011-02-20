@@ -52,6 +52,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.5 =
+
+* Added so the tree shows partner/spouse.
+
 = 0.4.2 =
 
 * Bug fix: renamed the function addheadercode() as it could cause conflicts with other plugins.
