@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.5
+ * @version 0.6
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.5
+Version: 0.6
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -18,11 +18,9 @@ License (GPL) http://www.gnu.org/licenses/gpl.txt
 
 */
 
-
 require_once('wpft_options.php');
 require_once('class.node.php');
 require_once('class.tree.php');
-
 
 
 /* Render a list of nodes. */
@@ -41,43 +39,49 @@ function family_list() {
 	return $html;
 }
 
+
 /* Render the tree. */
 function family_tree($root='') {
 	$the_family = tree::get_tree();
 
 	$out = '';
-//	$out .= '<div id="buttons">';
-//	$out .= '		<button id="wrap" 	type="button" onclick="setOneNamePerLine(!getOneNamePerLine());">Wrap Names</button>';
-//	$out .= '		<button id="one" 	type="button" onclick="setOnlyFirstName(!getOnlyFirstName());">First Name</button>';
-//	$out .= '		<button id="dates"	type="button" onclick="setBirthAndDeathDates(!getBirthAndDeathDates());">Dates</button>';
-//	$out .= '		<button id="conceal" type="button" onclick="setConcealLivingDates(!getConcealLivingDates());">Conceal living dates</button>';
-//	$out .= '		<button id="diag" 	type="button" onclick="setDiagonalConnections(!getDiagonalConnections());">Diagonal Lines</button>';
-//	$out .= '		<button id="gender" type="button" onclick="setGender(!getGender());">Show Gender</button>';
-//	$out .= '		<button id="maiden" type="button" onclick="setMaidenName(!getMaidenName());">Prev. Names</button>';
-//	$out .= '		<button id="spouse" type="button" onclick="setSpouse(!getSpouse());">Show Spouse</button>';
-//	$out .= '</div>';
-	$out .= '<div>';
 
 	$ancestor = $_GET['ancestor'];
 	if (empty($ancestor)) {
 		if (!empty($root)) {
-			$focuspers = $root;
+			$ancestor = $root;
 		} else {
 			$node = reset($the_family);
-			$focuspers = ($node!==false)?$node->name:'kjk';
+			$ancestor = ($node!==false)?$node->post_id:'-1';
 		}
-	} else {
-		$focuspers = $ancestor;
 	}
 
-	$out .= '<input type="hidden" onkeyup="onFocusPersonChanged();" size="30" name="focusperson" id="focusperson" value="'.$focuspers.'">';
-	$out .= '<button id="go" 	type="button" onclick="redrawTree();">Redraw</button>';
-	$out .= '</div>';
-	$out .= '<div style="width:630px;border:0px solid black;overflow:auto">';
-	$out .= '	<div id="familytree"> </div>';
-	$out .= '	<img name="hoverimage" id="hoverimage" style="visibility:hidden;">';
-	$out .= '</div>';
+	if (!is_numeric($ancestor)) {
+		// find post by post title and assigns the post id to ancestor
+		$ancestor = tree::get_id_by_name($ancestor, $the_family);
+	}
 
+	$render_from_parent = true;
+	if ($render_from_parent) {
+		$node = tree::get_node_by_id($ancestor, $the_family);	
+		if (!empty($node->father)) {
+			$ancestor = $node->father;
+		} else if (!empty($node->mother)) {
+			$ancestor = $node->mother;
+		}
+	}
+
+	$out .= '<input type="hidden" size="30" name="focusperson" id="focusperson" value="'.$ancestor.'">';
+
+	$out .= '<div id="tree-container">';
+	$out .= '<div id="toolbar-container">';
+	foreach ($the_family as $node) {
+		$out .= $node->get_toolbar_div();
+	}
+	$out .= '</div><div id="familytree"></div>';
+	$out .= '<img name="hoverimage" id="hoverimage" style="visibility:hidden;" >';
+	$out .= '</div>';
+	
 	return $out;
 }
 function bio_data() {
@@ -216,8 +220,6 @@ function wpft_family_tree_shortcode($atts, $content=NULL) {
 	$root = $atts['root'];
 	$ft_output = family_tree($root);
 
-//	$content = do_shortcode($content);
-	
 	wpft_options::check_options();
 
 	return $ft_output;

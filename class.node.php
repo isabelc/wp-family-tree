@@ -69,9 +69,9 @@ class node {
 		
 		$ftlink = wpft_options::get_option('family_tree_link');
 		if (strpos($ftlink, '?') === false) {
-			$html .=' <a href="'.$ftlink.'?ancestor='.$this->name.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+			$html .=' <a href="'.$ftlink.'?ancestor='.$this->post_id.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
 		} else {
-			$html .=' <a href="'.$ftlink.'&ancestor='.$this->name.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+			$html .=' <a href="'.$ftlink.'&ancestor='.$this->post_id.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
 		}
 		
 		$html .= '</td>';
@@ -129,50 +129,31 @@ class node {
 		$html .= '</table>';
 		return $html;
 	}
-	function get_html_old($the_family) {
+	function get_toolbar_div() {
+		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+		$ftlink = wpft_options::get_option('family_tree_link');
+
+		if (strpos($ftlink, '?') === false) {
+			$ftlink = $ftlink.'?ancestor='.$this->post_id;
+		} else {
+			$ftlink = $ftlink.'&ancestor='.$this->post_id;
+		}
+		$permalink = get_permalink($this->post_id);
 		$html = '';
-		$html .= '<p><a href="'.$this->url.'">'.$this->name.'</a></p>';
-		$html .= '<p>Born: '.$this->born.'</p>';	
-		$html .= '<p>Gender: ';
-		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
-		$html .= '</p>';
-		$html .= '<p>Father: ';
-		if (isset($this->name_father)) {
-			$html .= '<a href="'.$this->url_father.'">'.$this->name_father.'</a>';
-		} else {
-			$html .= 'Unspecified';
-		}
-		$html .= '</p>';	
-		$html .= '<p>Mother: ';
-		if (isset($this->name_mother)) {
-			$html .= '<a href="'.$this->url_mother.'">'.$this->name_mother.'</a>';
-		} else {
-			$html .= 'Unspecified';
-		}
-		$html .= '</p>';
-		if (!empty($this->died) && strlen($this->died) > 1) {
-			$html .= '<p>Died: '.	$this->died.'</p>';	
-		}
-//		$html .= '<p>ID: '.		$this->post_id.'</p>';	
-		$html .= '<p>Children: ';
-		if (count($this->children) > 0) {
-			foreach ($this->children as $child) {
-				$html .= '<a href="'.$the_family[$child]->url.'">'.$the_family[$child]->name.'</a> ';
+
+		if (get_option('family_tree_toolbar_enable') == 'Y') {
+			$html .= '<div class="toolbar" id="toolbar'.$this->post_id.'" style="z-index:20;position:absolute;top:0;left:0;width:50px;height:20px;">';
+			if (get_option('family_tree_toolbar_blogpage') == 'Y') {
+				$html .= '<a class="toolbar-blogpage" href="'.$permalink.'" title="View information about '.htmlspecialchars($this->name).'"><img class="toolbar-blogpage" src="'.$plugloc.'open-book.png"></a>';
 			}
-		} else {
-			$html .= 'none';
-		}
-		$html .= '<p>Siblings: ';
-		if (count($this->siblings) > 0) {
-			foreach ($this->siblings as $sibling) {
-				$html .= '<a href="'.$the_family[$sibling]->url.'">'.$the_family[$sibling]->name.'</a> ';
+			if (get_option('family_tree_toolbar_treenav') == 'Y') {
+				$html .= '<a class="toolbar-treenav" href="'.$ftlink.'" title="View the family of '.htmlspecialchars($this->name).'"><img class="toolbar-treenav" src="'.$plugloc.'tree.gif"></a>';
 			}
-		} else {
-			$html .= 'none';
+			$html .= '</div>';
 		}
-		$html .= '</p>';
 		return $html;
 	}
+
 	function get_box_html($the_family) {
 		$html = '';
 		$html .= '<a href="'.$this->url.'">'.$this->name.'</a>';

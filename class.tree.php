@@ -7,6 +7,27 @@ require_once('wpft_options.php');
 
 class tree {
 
+	static function get_id_by_name($name, $tree) {
+		if (is_array($tree)) {
+			foreach ($tree as $node) {
+				if ($node->name == $name) {
+					return $node->post_id;
+				}
+			}
+		}
+		return -1;
+	}
+	static function get_node_by_id($id, $tree) {
+		if (is_array($tree)) {
+			foreach ($tree as $node) {
+				if ($node->post_id == $id) {
+					return $node;
+				}
+			}
+		}
+		return false;
+	}
+
 
 	/* Load and return the entire tree from the database. */
 	static function get_tree()
@@ -29,8 +50,8 @@ class tree {
 //		'post_parent'     => ,
 		'post_status'     => 'publish' );	
 
-		$family_posts = get_posts($args);
-//		$family_posts = get_posts('category_name='.wpft_options::get_option('family_tree_category_key').'&numberposts=-1&orderby=title&order=asc');
+//		$family_posts = get_posts($args);
+		$family_posts = get_posts('category_name='.wpft_options::get_option('family_tree_category_key').'&numberposts=-1&orderby=title&order=asc');
 	
 		$the_family = array();	
 	

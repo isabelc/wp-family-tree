@@ -52,6 +52,11 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.6 =
+
+* Added navigation toolbar for nodes
+* Bug fix: Family tree list now only shows posts that belong to the family category
+
 = 0.5 =
 
 * Added so the tree shows partner/spouse.

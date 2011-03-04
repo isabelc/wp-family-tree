@@ -25,6 +25,11 @@ function family_tree_options_subpanel() {
 		if ($_POST['family_tree_link'] != "")  {
 			update_option('family_tree_link', stripslashes(strip_tags($_POST['family_tree_link'])));
 		}
+
+		update_option('family_tree_toolbar_enable', stripslashes(strip_tags($_POST['family_tree_toolbar_enable'])));
+		update_option('family_tree_toolbar_blogpage', stripslashes(strip_tags($_POST['family_tree_toolbar_blogpage'])));
+		update_option('family_tree_toolbar_treenav', stripslashes(strip_tags($_POST['family_tree_toolbar_treenav'])));
+
 		if ($_POST['canvasbgcol'] != "")  {
 			update_option('canvasbgcol', stripslashes(strip_tags($_POST['canvasbgcol'])));
 		}
@@ -54,8 +59,9 @@ function family_tree_options_subpanel() {
 	if (function_exists('wp_nonce_field')) {
 		wp_nonce_field('family-tree-action_options');
 	}
+	$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 ?>
-	<h3>General</h3>
+	<h3>General settings</h3>
 	<table class="form-table">
 		<tr valign="top">
 			<th scope="row"><label for="family_tree_category_key">Name of category for family members (default: "Family")</label></th>
@@ -64,6 +70,23 @@ function family_tree_options_subpanel() {
 		<tr valign="top">
 			<th scope="row"><label for="family_tree_link">Link to page with family tree</label></th>
 			<td><input name="family_tree_link" type="text" id="family_tree_link" value="<?php echo wpft_options::get_option('family_tree_link'); ?>" size="40" /></td>
+		</tr>
+	</table>
+
+	<h3>Node navigation toolbar</h3>
+	Each node in the family tree can have a toolbar which can show a number of additional options. Here you can define how the toolbar should work.
+	<table class="form-table">
+		<tr valign="top">
+			<th scope="row"><label for="family_tree_toolbar_enable">Enable toolbar</label></th>
+			<td><input name="family_tree_toolbar_enable" type="checkbox" id="family_tree_toolbar_enable" value="Y" <?php echo (wpft_options::get_option('family_tree_toolbar_enable')=='Y')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="family_tree_toolbar_blogpage">Enable blogpage link <img src="<?php echo $plugloc; ?>open-book.png"></label></th>
+			<td><input name="family_tree_toolbar_blogpage" type="checkbox" id="family_tree_toolbar_blogpage" value="Y" <?php echo (wpft_options::get_option('family_tree_toolbar_blogpage')=='Y')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="family_tree_toolbar_treenav">Enable tree nav link <img src="<?php echo $plugloc; ?>tree.gif"></label></th>
+			<td><input name="family_tree_toolbar_treenav" type="checkbox" id="family_tree_toolbar_treenav" value="Y" <?php echo (wpft_options::get_option('family_tree_toolbar_treenav')=='Y')?' checked':''; ?> /></td>
 		</tr>
 	</table>
 
@@ -131,6 +154,12 @@ class wpft_options {
 			return '0.4';		// Node opacity (0 to 1)
 		case "nodetextcolour":
 			return '#000';		// Node text colour
+		case "family_tree_toolbar_enable":
+			return 'Y';		// Show/enable toolbar
+		case "family_tree_toolbar_blogpage":
+			return 'Y';		// Toolbar button for navigating to the node's blog page
+		case "family_tree_toolbar_treenav":
+			return 'Y';		// Toolbar button for navigating to the node's tree
 		} 
 		return '';
 	}

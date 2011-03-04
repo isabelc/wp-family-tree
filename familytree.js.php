@@ -1,8 +1,8 @@
 /**
  * 
  * Author: Sunil Shah
- * (c) Copyright 2010 Sunil Shah
- * (c) Copyright 2010 Esscotti Ltd
+ * (c) Copyright 2010, 2011 Sunil Shah
+ * (c) Copyright 2010, 2011 Esscotti Ltd
  * 
  */
 <?php
@@ -32,12 +32,14 @@
 		m_yLine				= 0,
 		m_iInterBoxSpace 	= 10,
 		m_iBoxBufferSpace 	= 2,
+		m_iNodeRounding		= 4,
 		BOX_Y_DELTA			= 20,
 		BOX_LINE_Y_SIZE		= 100,
 		iMaxHoverPicHeight	= 150,
 		iMaxHoverPicWidth	= 150,
 		aCurrentHoverPic	= null,
-		aFamilyTreeElement 	= null;
+		aFamilyTreeElement 	= null,
+		sUnknownGenderLetter= null;
 	
 
 	var bOneNamePerLine 		= true,
@@ -47,8 +49,10 @@
 //		bDeath 					= true,
 		bSpouse 				= true,
 		bMaidenName 			= true,
-		bGender					= true,
-		bDiagonalConnections	= false;
+		bShowGender				= true,
+		bDiagonalConnections	= false,
+		bRefocusOnClick			= false,
+		bShowToolbar			= true;
 
 	var m_Canvas,
 		m_CanvasRect;
@@ -57,7 +61,7 @@
 		iCanvasHeight = 100;
 	
 	this.familytreemain = function() {
-        aFamilyTreeElement = document.getElementById("familytree");
+		aFamilyTreeElement = document.getElementById("familytree");
 		if (!aFamilyTreeElement) {
 			return;
 		}
@@ -68,9 +72,11 @@
         text_sStartName = document.getElementById("focusperson");
 //        text_sStartName.onkeydown = onKeyDown_Name; 
         hoverpic = document.getElementById("hoverimage");
+//        testdiv = document.getElementById("sunilsdiv1");
         
         createTreeFromArray(tree_txt);
         loadImages();
+        loadDivs();
         loadShortInfo();
         loadLongInfo();
         redrawTree();
@@ -89,6 +95,7 @@
 		iCanvasHeight = 100;
         m_Canvas.clear();
         freeNodesAllocatedTexts();
+        resetObjectStates();
 		m_CanvasRect = m_Canvas.rect(0, 0, iCanvasWidth, iCanvasHeight, 10).attr({fill: canvasbgcol, stroke: "none"}).toBack();
         printTreeFromNode(sPerson);
 	};
@@ -98,11 +105,13 @@
 			m_sName			= "?",
 			m_sImageURL		= null,
 			m_HoverPic		= null,
+			m_MyToolbarDiv	= null,
+//			m_MyDivRaph		= null,
 			m_sShortInfoURL	= null,
 			m_sLongInfoURL	= null,
 			m_sMaiden		= null,
 			m_iBirthYear	= -1,
-			m_sGender 		= null,
+			m_sGender 		= sUnknownGenderLetter,
 			m_nSpouseNode	= null,
 			m_iMyBranchWidth = 0;
 		
@@ -171,13 +180,22 @@
 			return m_sDeathday;
 		};
 
-		this.setGender = function(bIsFemale) {
-			m_sGender 	= bIsFemale ? "f" : "m";
+		this.setGender = function(sGenderLetter) {
+			var tmp = sGenderLetter.toLowerCase();
+			if ((tmp != "f") && (tmp != "m")) {
+				tmp = sUnknownGenderLetter;
+			}
+			m_sGender 	= tmp;
 		};
 				
 		this.setImageURL = function(sURL) {
 			m_sImageURL 	= sURL;
 			m_HoverPic		= new Image();
+		};
+		
+		this.setToolbarDiv = function(sDivName) {
+			m_MyToolbarDiv	= document.getElementById(sDivName);
+//			m_MyDiv			= new Image();
 		};
 		
 		this.setShortInfoURL = function(sURL) {
@@ -220,6 +238,10 @@
 			return m_sImageURL;
 		};
 		
+		this.getToolbarDiv = function() {
+			return m_MyToolbarDiv;
+		};
+
 		this.getImage = function() {
 			return m_HoverPic;
 		};
@@ -331,16 +353,16 @@
 			var	iXFrom, iYFrom, iXTo, iYTo, iYMid;
 			
 			if (bSpouse && this.m_nSpouse != null)
-				iXFrom = m_MyRect.x+m_MyRect.width;
+				iXFrom = m_MyRect.x+m_MyRect.width-1;
 			else
 				iXFrom = m_MyRect.x+m_MyRect.width/2;
-			iYFrom = m_MyRect.y+m_MyRect.height+1;
+			iYFrom = m_MyRect.y+m_MyRect.height-m_iNodeRounding;
 			
 			for (i in m_vChildren) {
 				var n = m_vChildren[i];
 				iXTo = n.getMyRect().x + n.getMyRect().width/2;
 				iYTo = n.getMyRect().y;
-				iYMid = (iYFrom+iYTo)/2;
+				iYMid = Math.round(0.5 + (iYFrom+iYTo)/2);
 				
 				if (bDiagonalConnections) 
 					drawLine(iXFrom, iYFrom, iXTo, iYTo);
@@ -433,17 +455,19 @@
 										"y": r.y,
 										"width": r.width,
 										"height": r.height+1,
-										r: 4
+										r: m_iNodeRounding
 								});
 				this.m_RaphRect.attr({stroke: nodeoutlinecol, fill: nodefillcol, "fill-opacity": nodefillopacity});
 //				m_Canvas.rect(r.x, r.y, r.width, r.height+1, 4)
 //							.attr({stroke: "#ff0", fill: "#0ff", "fill-opacity": .4
 				this.m_RaphRect.show();
 				this.m_RaphRect.click(function () {
-					var n = findRectOwningNode(this);
-					if (n != null) {
-						text_sStartName.value = n.getName();
-						redrawTree();
+					if (bRefocusOnClick) {
+						var n = findRectOwningNode(this);
+						if (n != null) {
+							text_sStartName.value = n.getName();
+							redrawTree();
+						}
 					}
                 }).mouseover(function (ev) {
                     this.animate({"fill-opacity": .75}, 300);
@@ -451,11 +475,12 @@
 					if (n != null) {
 						var im = n.getImage();
 						if (im != null) {
+							var coords = getPageEventCoords(ev);
 							hoverpic.src = encodeURI(n.getImageURL());
 							hoverpic.width = im.width;
 							hoverpic.height = im.height;
-							hoverpic.style.left =  (ev.clientX+20) + 'px';
-							hoverpic.style.top = (ev.clientY-10) + 'px';
+							hoverpic.style.left =  (coords.left+20) + 'px';
+							hoverpic.style.top = (coords.top-10) + 'px';
 							hoverpic.style.visibility="visible";
 						}
 					}                    
@@ -467,7 +492,7 @@
 //				System.out.println("Box corner for "+getName()+" = "+r.x+","+r.y+" w="+r.width+" h="+r.height);
 			}
 			
-			var sGender = (bGender 		&& (m_sGender != null)) ? " ("+m_sGender+")" : "";
+			var sGender = (bShowGender 	&& (m_sGender != null)) ? " ("+m_sGender+")" : "";
 			var sMaiden = (bMaidenName 	&& (m_sMaiden != null)) ? " ("+m_sMaiden+")" : "";
 			
 			if (bOnlyFirstName) {
@@ -528,11 +553,38 @@
 			m_HoverPic = img;
 		};
 		
+		this.setDiv = function(div) {
+			m_MyDiv = div;
+//			m_MyDivRaph = Raphael(div);
+		};
+		
 	}	// End of 'Node' class declaration
 	
 
 	
 	// File global name space
+
+	function getPageEventCoords(evt) {
+		var coords = {left:0, top:0};
+		if (evt.pageX) {
+			coords.left = evt.pageX;
+			coords.top = evt.pageY;
+		} else if (evt.clientX) {
+			coords.left = evt.clientX + document.body.scrollLeft - document.body.clientLeft;
+			coords.top  = evt.clientY + document.body.scrollTop - document.body.clientTop;
+			// include html element space, if applicable
+			if (document.body.parentElement && document.body.parentElement.clientLeft) {
+				var bodParent = document.body.parentElement;
+				coords.left += bodParent.scrollLeft - bodParent.clientLeft;
+				coords.top  += bodParent.scrollTop  - bodParent.clientTop;
+			}
+		}
+		return coords;
+	}
+
+	
+	
+	
 	
 	function findRectOwningNode(rect) {
 		for (arr in m_vAllNodes) {
@@ -711,8 +763,13 @@
 	/*
 	 * makeGraphBox()
 	 * 
-	 * Calculate or Print graph boxes.
-	 * If bPrintIt is true, the box rectangle (theBox) isn't touched. It stays intact.
+	 * This method draws the box virtually or really. (bPrintIt)
+	 * 
+	 * The first time around, we call it with bPrintIt = false, so we can find out
+	 * the resulting size of the box. Next time around, we know where the box will be positioned
+	 * (determined by its size) so we draw it for real.
+	 * 
+	 * Short: If bPrintIt is true, the box rectangle (theBox) isn't touched. It stays intact.
 	 */
 	function makeGraphBox(bPrintIt, theBox, sAddString, node) {
 		// get the advance of my text in this font and render context
@@ -731,11 +788,23 @@
 				y: theBox.y + m_iFontLineHeight + getLine()*getPixelsPerLine()
 			}).toFront();
 			
+			var toolbardiv = node.getToolbarDiv();
+			if (bShowToolbar && (toolbardiv != null)) {
+				// NOTE! For style.width to work on Firefox, the div should include style.width = numberpx!
+				var tbw = parseInt(toolbardiv.style.width);
+				var tbh = parseInt(toolbardiv.style.height);
+				toolbardiv.style.visibility="visible";
+				toolbardiv.style.left = theBox.x + (theBox.width - tbw)/2+'px';
+				toolbardiv.style.top  = theBox.y - tbh/2 -8 +'px';
+			}
+
 			theRaphText.click(function () {
-				var n = findTextOwningNode(this);
-				if (n != null) {
-					text_sStartName.value = n.getName();
-					redrawTree();
+				if (bRefocusOnClick) {
+					var n = findTextOwningNode(this);
+					if (n != null) {
+						text_sStartName.value = n.getName();
+						redrawTree();
+					}
 				}
             }).mouseover(function (ev) {
 				var n = findTextOwningNode(this);
@@ -744,12 +813,13 @@
 					var im = n.getImage();
 	                r.animate({"fill-opacity": .75}, 300);
 					if (im != null) {
+						var coords = getPageEventCoords(ev);
 						hoverpic.src = encodeURI(n.getImageURL());
 						hoverpic.width = im.width;
 						hoverpic.height = im.height;
-						hoverpic.style.left =  (ev.clientX+20) + 'px';
-						hoverpic.style.top = (ev.clientY-10) + 'px';
-						hoverpic.style.visibility="visible";
+						hoverpic.style.left = (coords.left+20) + 'px';
+						hoverpic.style.top = (coords.top-10) + 'px';
+						hoverpic.style.visibility = "visible";
 					}
 				}
             }).mouseout(function () {
@@ -785,11 +855,8 @@
 	
 	function isValidDate(sDate) {
 		var dlen = sDate.length;
-		
 		if ((dlen != 4) && (dlen != 6) && (dlen != 8))
 			return false;
-		
-		
 	}
 	
 	function createTreeFromArray(sArray) {
@@ -805,13 +872,16 @@
 			
 			sKey = sTokens[0].toLowerCase();
 			if (sKey == "esscottiftid") {
-				n = findOrCreate(sTokens[1]);
+				n = findOrCreate(sTokens[1]);	// Guarantees the node exists after receiving "esscottiftid" key
 				
 			} else if (sKey == "name") {
 				n.setName(sTokens[1]);
 
 			} else if (sKey == "imageurl") {
 				n.setImageURL(sTokens[1]);
+				
+			} else if (sKey == "toolbar") {
+				n.setToolbarDiv(sTokens[1]);
 				
 			} else if (sKey == "shortinfourl") {
 				n.setShortInfoURL(sTokens[1]);
@@ -820,13 +890,13 @@
 				n.setLongInfoURL(sTokens[1]);
 				
 			} else if (sKey == "male") {
-				n.setGender(false);
+				n.setGender("m");
 				
 			} else if (sKey == "female") {
-				n.setGender(true);
+				n.setGender("f");
 				
 			} else if (sKey == "spouse") {	// ID!
-				n.setSpouse(sTokens[1]);
+				n.setSpouse(sTokens[1]);			// Guarantees the node exists after receiving "spouse" key
 				
 //bad			} else if (sKey == "spousename") {	// by name - less secure
 //bad				n.setSpouseName(sTokens[1]);
@@ -844,7 +914,7 @@
 				n.setDeathday(sTokens[1]);
 				
 			} else if (sKey == "parent") {	// ID!
-				n.addParent(sTokens[1]);
+				n.addParent(sTokens[1]);			// Guarantees the node exists after receiving "parent" key
 				
 //bad			} else if (sKey == "parentname") {	// by name - less secure
 //bad				n.addParentName(sTokens[1]);
@@ -865,7 +935,38 @@
 		}
 	}
 	
-	function loadImages() {
+	function resetObjectStates() {
+    	hoverpic.style.visibility="hidden";
+		for (i in m_vAllNodes) {
+			var n = m_vAllNodes[i];
+			var aToolbarDiv = n.getToolbarDiv();
+			if (aToolbarDiv == null)
+				continue;
+			aToolbarDiv.style.visibility="hidden";
+		}
+	}
+	
+/*	Not in use, but keep here. May come in handy some time
+
+  	function createDiv(name, content) {
+		var divTag = document.createElement("div");
+		
+		divTag.id = name;
+		divTag.style.position = "absolute";
+//		divTag.setAttribute("align","center");
+		divTag.style.left =  '0px';
+		divTag.style.top = '0px';
+		divTag.style.width = '30px';
+		divTag.style.height = '30px';
+		divTag.style.margin = "0px auto";
+		divTag.style.visibility = "hidden";
+		divTag.className ="dynamicDiv";
+		document.body.appendChild(divTag);
+		divTag.innerHTML = content;
+		return divTag;
+	} */
+
+    function loadImages() {
 		for (i in m_vAllNodes) {
 			var n = m_vAllNodes[i];
 			var sUrl = n.getImageURL();
@@ -906,6 +1007,49 @@
 		}
 	}
 	
+	function loadDivs() {
+		for (i in m_vAllNodes) {
+			var n = m_vAllNodes[i];
+			var aToolbarDiv = n.getToolbarDiv();
+			if (aToolbarDiv == null)
+				continue;
+//			var div = Raphael("someElement", "20%", "20%");//new Image();
+//>>>			var div = createDiv(n.getFTID(), sDivContents);
+//			n.setDiv(Raphael(div, 50, 50));
+
+//			aFamilyTreeElement.appendChild(img);
+			aToolbarDiv.style.visibility="hidden";
+//			div.src = encodeURI(sUrl);
+/*			div.onload = function() {
+			    var max_height = iMaxHoverPicHeight;
+			    var max_width = iMaxHoverPicWidth;
+
+			    var height = this.height;
+			    var width = this.width;
+			    var ratio = height/width;
+
+			    // If height or width are too large, they need to be scaled down
+			    // Multiply height and width by the same value to keep ratio constant
+			    if (height > max_height)
+			    {
+			        ratio = max_height / height;
+			        height = height * ratio;
+			        width = width * ratio;
+			    }
+
+			    if (width > max_width)
+			    {
+			        ratio = max_width / width;
+			        height = height * ratio;
+			        width = width * ratio;
+			    }
+
+			    this.width = width;
+			    this.height = height;
+			}; */
+		}
+	}
+
 	function loadShortInfo() {
 		for (var i in m_vAllNodes) {
 			var n = m_vAllNodes[i];
@@ -943,14 +1087,17 @@
 	this.setMaxHoverPicHeight= function(iHeight) 	{ iMaxHoverPicHeight = iHeight; };
 
 	this.setOneNamePerLine = function(bState) 		{ bOneNamePerLine = bState; 		redrawTree(); };
-	this.setOnlyFirstName = function(bState) 		{ bOnlyFirstName = bState; 		redrawTree(); };
+	this.setOnlyFirstName = function(bState) 		{ bOnlyFirstName = bState; 			redrawTree(); };
 	this.setBirthAndDeathDates = function(bState) 	{ bBirthAndDeathDates = bState; 	redrawTree(); };
-	this.setConcealLivingDates = function(bState)		 	{ bConcealLivingDates = bState; 	redrawTree(); };
-	this.setDeath = function(bState) 				{ bDeath = bState; 				redrawTree(); };
+	this.setConcealLivingDates = function(bState)	{ bConcealLivingDates = bState; 	redrawTree(); };
+	this.setDeath = function(bState) 				{ bDeath = bState; 					redrawTree(); };
 	this.setSpouse = function(bState) 				{ bSpouse = bState; 				redrawTree(); };
 	this.setMaidenName = function(bState) 			{ bMaidenName = bState; 			redrawTree(); };
-	this.setGender = function(bState) 				{ bGender = bState; 				redrawTree(); };
+	this.setShowGender = function(bState) 			{ bShowGender = bState; 			redrawTree(); };
 	this.setDiagonalConnections = function(bState)	{ bDiagonalConnections = bState; 	redrawTree(); };
+	this.setRefocusOnClick = function(bState)		{ bRefocusOnClick = bState; 		redrawTree(); };
+	this.setShowToolbar = function(bState)			{ bShowToolbar = bState; 			redrawTree(); };
+	this.setNodeRounding = function(iRadius)		{ m_iNodeRounding = iRadius;	};
 	this.getOneNamePerLine = function() 			{ return bOneNamePerLine; 		};
 	this.getOnlyFirstName = function() 				{ return bOnlyFirstName; 		};
 	this.getBirthAndDeathDates = function() 		{ return bBirthAndDeathDates; 	};
@@ -958,8 +1105,11 @@
 	this.getDeath = function() 						{ return bDeath; 				};
 	this.getSpouse = function() 					{ return bSpouse; 				};
 	this.getMaidenName = function() 				{ return bMaidenName; 			};
-	this.getGender = function() 					{ return bGender; 				};
-	this.getDiagonalConnections = function() 		{ return bDiagonalConnections; };
+	this.getShowGender = function() 				{ return bShowGender; 			};
+	this.getDiagonalConnections = function() 		{ return bDiagonalConnections; 	};
+	this.getRefocusOnClick = function() 			{ return bRefocusOnClick; 		};
+	this.getShowToolbar = function() 				{ return bShowToolbar; 			};
+	this.getNodeRounding = function() 				{ return m_iNodeRounding;		};
 
 
 	this.onFocusPersonChanged = function(e) {
@@ -986,9 +1136,9 @@
 		} else {
 			$first = false;
 		}
-//		$str  = '"EsscottiFTID='.$node->post_id.'",'."\n";
-		$str  = '"EsscottiFTID='.$node->name.'",'."\n";
-		$str .= '"Name='.$node->name.'",'."\n";
+		$str  = '"EsscottiFTID='.$node->post_id.'",'."\n";
+//		$str  = '"EsscottiFTID='.$node->name.'",'."\n";
+		$str .= '"Name='.addslashes($node->name).'",'."\n";
 		if (!empty($node->thumbsrc)) {
 			$str .= '"ImageURL='.$node->thumbsrc.'",'."\n";
 		}
@@ -1003,11 +1153,17 @@
 		$str .= '",'."\n";
 		$str .= '"Birthday='.$node->born.'",'."\n";
 //		"Spouse=Sunil Shah",
-		if (!empty($node->partner) && !empty($the_family[$node->partner]->name)) {
-			$str .= '"Spouse='.$the_family[$node->partner]->name.'",'."\n";
+//		if (!empty($node->partner) && !empty($the_family[$node->partner]->name)) {
+//			$str .= '"Spouse='.$the_family[$node->partner]->name.'",'."\n";
+//		}
+		if (!empty($node->partner) && !empty($the_family[$node->partner]->post_id)) {
+			$str .= '"Spouse='.$the_family[$node->partner]->post_id.'",'."\n";
 		}
-		$str .= '"Parent='.$the_family[$node->mother]->name.'",'."\n";
-		$str .= '"Parent='.$the_family[$node->father]->name.'"';
+//		$str .= '"Parent='.$the_family[$node->mother]->name.'",'."\n";
+//		$str .= '"Parent='.$the_family[$node->father]->name.'"';
+		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
+		$str .= '"Parent='.$the_family[$node->mother]->post_id.'",'."\n";
+		$str .= '"Parent='.$the_family[$node->father]->post_id.'"';
 
 		$tree_data_js .= $str;	
 
