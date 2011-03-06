@@ -52,6 +52,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.6.1 =
+
+* Bug fix
+
 = 0.6 =
 
 * Added navigation toolbar for nodes

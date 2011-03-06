@@ -50,8 +50,8 @@ class tree {
 //		'post_parent'     => ,
 		'post_status'     => 'publish' );	
 
-//		$family_posts = get_posts($args);
-		$family_posts = get_posts('category_name='.wpft_options::get_option('family_tree_category_key').'&numberposts=-1&orderby=title&order=asc');
+		$family_posts = get_posts($args);
+//		$family_posts = get_posts('category_name='.wpft_options::get_option('family_tree_category_key').'&numberposts=-1&orderby=title&order=asc');
 	
 		$the_family = array();	
 	
