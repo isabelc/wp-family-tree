@@ -35,10 +35,12 @@ class tree {
 	    global $wpdb;
 	
 	$category = wpft_options::get_option('family_tree_category_key');
+	$catid = get_cat_ID( $category );
+	
 	$args = array(
 		'numberposts'     => -1,
 		'offset'          => 0,
-		'category'        => $category,
+		'category'        => $catid,
 		'orderby'         => 'title',
 		'order'           => 'ASC',
 //		'include'         => ,
@@ -51,6 +53,7 @@ class tree {
 		'post_status'     => 'publish' );	
 
 		$family_posts = get_posts($args);
+		
 //		$family_posts = get_posts('category_name='.wpft_options::get_option('family_tree_category_key').'&numberposts=-1&orderby=title&order=asc');
 	
 		$the_family = array();	

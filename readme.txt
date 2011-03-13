@@ -38,8 +38,9 @@ The plugin renders a family tree and serves to gather feedback but expect that t
 3. Create a page and put a [family-tree] shortcode on it; (this is the family tree page).
 4. Create a page and put a {FAMILY-MEMBERS} tag on it; (this is the family list page).
 5. Visit the family tree admin panel and set the family tree link option; (link to family tree page).
-6. Add posts specifying the custom fields available at the bottom of edit posts page, 
-adding the posts to the "Family" category.
+6. Add a post category with the name "Family"
+7. For each family member, add a post specifying the custom fields available at the bottom of edit posts page, 
+making the posts belong to the "Family" category.
 
 Note: You can put the post name/title of the person you wish to be displayed at the root of the family tree as a 
 parameter in the shortcode: [family-tree root='&lt;post title&gt;']
@@ -51,6 +52,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 3. Family list entry with links to each individual's blog post page
 
 == Changelog ==
+
+= 0.6.2 =
+
+* Bug fix: Plugin now shows the correct posts on the {FAMILY-MEMBERS} page
 
 = 0.6.1 =
 
