@@ -46,8 +46,11 @@ function family_tree($root='') {
 
 	$out = '';
 
-	$ancestor = $_GET['ancestor'];
-	if (empty($ancestor)) {
+	$ancestor = '';
+	
+	if (!empty($_GET['ancestor'])) {
+		$ancestor = $_GET['ancestor'];
+	} else { 
 		if (!empty($root)) {
 			$ancestor = $root;
 		} else {

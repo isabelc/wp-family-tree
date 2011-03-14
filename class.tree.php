@@ -5,6 +5,9 @@
 
 require_once('wpft_options.php');
 
+
+$the_family_store = null;
+
 class tree {
 
 	static function get_id_by_name($name, $tree) {
@@ -30,14 +33,17 @@ class tree {
 
 
 	/* Load and return the entire tree from the database. */
-	static function get_tree()
-	{
-	    global $wpdb;
+	static function get_tree() {
+		global $wpdb, $the_family_store;
 	
-	$category = wpft_options::get_option('family_tree_category_key');
-	$catid = get_cat_ID( $category );
+		if (!empty($the_family_store)) {
+			return $the_family_store;
+		}
+		
+		$category = wpft_options::get_option('family_tree_category_key');
+		$catid = get_cat_ID( $category );
 	
-	$args = array(
+		$args = array(
 		'numberposts'     => -1,
 		'offset'          => 0,
 		'category'        => $catid,
@@ -65,15 +71,15 @@ class tree {
 	
 		// Set father/mother child relationships...
 		foreach ($the_family as $fm) {
-			if (isset($fm->father)) {
+			if (isset($fm->father) && !empty($fm->father) && is_int($fm->father)) {
 				$the_family[$fm->post_id]->name_father 	= $the_family[$fm->father]->name;
-				$the_family[$fm->post_id]->url_father 	= $the_family[$fm->father]->url;
+				$the_family[$fm->post_id]->url_father 		= $the_family[$fm->father]->url;
 				$father = $the_family[$fm->father];
 				$father->children[] = $fm->post_id;
 			}
-			if (isset($fm->mother)) {
+			if (isset($fm->mother) && !empty($fm->mother) && is_int($fm->mother)) {
 				$the_family[$fm->post_id]->name_mother 	= $the_family[$fm->mother]->name;
-				$the_family[$fm->post_id]->url_mother 	= $the_family[$fm->mother]->url;
+				$the_family[$fm->post_id]->url_mother 		= $the_family[$fm->mother]->url;
 				$mother = $the_family[$fm->mother];
 				$mother->children[] = $fm->post_id;
 			}
@@ -85,13 +91,13 @@ class tree {
 			$siblings_f = array();
 			$siblings_m = array();
 			
-			if (isset($fm->father)) {
+			if (isset($fm->father) && !empty($fm->father) && is_int($fm->father)) {
 				$father = $the_family[$fm->father];
 				if (is_array($father->children)) {
 					$siblings_f = $father->children; 
 				}
 			}
-			if (isset($fm->mother)) {
+			if (isset($fm->mother) && !empty($fm->mother) && is_int($fm->mother)) {
 				$mother = $the_family[$fm->mother];
 				if (is_array($mother->children)) {
 					$siblings_m = $mother->children; 
@@ -147,7 +153,7 @@ class tree {
 				}
 			}
 		}
-	
+		$the_family_store = $the_family;
 		return $the_family;
 	}	
 	
