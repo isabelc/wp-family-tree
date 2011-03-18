@@ -1137,30 +1137,19 @@
 			$first = false;
 		}
 		$str  = '"EsscottiFTID='.$node->post_id.'",'."\n";
-//		$str  = '"EsscottiFTID='.$node->name.'",'."\n";
 		$str .= '"Name='.addslashes($node->name).'",'."\n";
 		if (!empty($node->thumbsrc)) {
 			$str .= '"ImageURL='.$node->thumbsrc.'",'."\n";
 		}
-//		"ShortInfoURL=http://bpa.esscotti.com/",
-//		"LongInfoURL=http://cpa.esscotti.com/",
-		$str .= '"';
 		if ($node->gender=='m') {
-			$str .= 'Male';
-		} else {
-			$str .= 'Female';
+			$str .= '"Male",'."\n";
+		} else if ($node->gender=='f') {
+			$str .= '"Female",'."\n";
 		}
-		$str .= '",'."\n";
 		$str .= '"Birthday='.$node->born.'",'."\n";
-//		"Spouse=Sunil Shah",
-//		if (!empty($node->partner) && !empty($the_family[$node->partner]->name)) {
-//			$str .= '"Spouse='.$the_family[$node->partner]->name.'",'."\n";
-//		}
 		if (!empty($node->partner) && !empty($the_family[$node->partner]->post_id)) {
 			$str .= '"Spouse='.$the_family[$node->partner]->post_id.'",'."\n";
 		}
-//		$str .= '"Parent='.$the_family[$node->mother]->name.'",'."\n";
-//		$str .= '"Parent='.$the_family[$node->father]->name.'"';
 		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
 		$str .= '"Parent='.$the_family[$node->mother]->post_id.'",'."\n";
 		$str .= '"Parent='.$the_family[$node->father]->post_id.'"';

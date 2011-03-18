@@ -71,13 +71,13 @@ class tree {
 	
 		// Set father/mother child relationships...
 		foreach ($the_family as $fm) {
-			if (isset($fm->father) && !empty($fm->father) && is_int($fm->father)) {
+			if (isset($fm->father) && !empty($fm->father) && is_numeric($fm->father)) {
 				$the_family[$fm->post_id]->name_father 	= $the_family[$fm->father]->name;
 				$the_family[$fm->post_id]->url_father 		= $the_family[$fm->father]->url;
 				$father = $the_family[$fm->father];
 				$father->children[] = $fm->post_id;
 			}
-			if (isset($fm->mother) && !empty($fm->mother) && is_int($fm->mother)) {
+			if (isset($fm->mother) && !empty($fm->mother) && is_numeric($fm->mother)) {
 				$the_family[$fm->post_id]->name_mother 	= $the_family[$fm->mother]->name;
 				$the_family[$fm->post_id]->url_mother 		= $the_family[$fm->mother]->url;
 				$mother = $the_family[$fm->mother];
@@ -91,13 +91,13 @@ class tree {
 			$siblings_f = array();
 			$siblings_m = array();
 			
-			if (isset($fm->father) && !empty($fm->father) && is_int($fm->father)) {
+			if (isset($fm->father) && !empty($fm->father) && is_numeric($fm->father)) {
 				$father = $the_family[$fm->father];
 				if (is_array($father->children)) {
 					$siblings_f = $father->children; 
 				}
 			}
-			if (isset($fm->mother) && !empty($fm->mother) && is_int($fm->mother)) {
+			if (isset($fm->mother) && !empty($fm->mother) && is_numeric($fm->mother)) {
 				$mother = $the_family[$fm->mother];
 				if (is_array($mother->children)) {
 					$siblings_m = $mother->children; 

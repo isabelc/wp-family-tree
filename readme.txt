@@ -53,6 +53,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.6.3 =
+
+* Bug fix: There was a bug in the previous version that made family members show up as undefined, this is now fixed..
+
 = 0.6.2 =
 
 * Bug fix: Plugin now shows the correct posts on the {FAMILY-MEMBERS} page
