@@ -141,12 +141,12 @@ class node {
 		$permalink = get_permalink($this->post_id);
 		$html = '';
 
-		if (get_option('family_tree_toolbar_enable') == 'Y') {
+		if (wpft_options::get_option('bShowToolbar') == 'true') {
 			$html .= '<div class="toolbar" id="toolbar'.$this->post_id.'" style="z-index:20;position:absolute;top:0;left:0;width:50px;height:20px;">';
-			if (get_option('family_tree_toolbar_blogpage') == 'Y') {
+			if (wpft_options::get_option('family_tree_toolbar_blogpage') == 'Y') {
 				$html .= '<a class="toolbar-blogpage" href="'.$permalink.'" title="View information about '.htmlspecialchars($this->name).'"><img class="toolbar-blogpage" src="'.$plugloc.'open-book.png"></a>';
 			}
-			if (get_option('family_tree_toolbar_treenav') == 'Y') {
+			if (wpft_options::get_option('family_tree_toolbar_treenav') == 'Y') {
 				$html .= '<a class="toolbar-treenav" href="'.$ftlink.'" title="View the family of '.htmlspecialchars($this->name).'"><img class="toolbar-treenav" src="'.$plugloc.'tree.gif"></a>';
 			}
 			$html .= '</div>';

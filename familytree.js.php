@@ -27,6 +27,7 @@
 	var nodefillopacity = <?php echo wpft_options::get_option('nodefillopacity'); ?>;
 	var nodetextcolour = "<?php echo wpft_options::get_option('nodetextcolour'); ?>";
 	
+	
 	var	m_iFontLineHeight 	= 0,
 		m_iFontLineDescent 	= 0,
 		m_yLine				= 0,
@@ -40,19 +41,20 @@
 		aCurrentHoverPic	= null,
 		aFamilyTreeElement 	= null,
 		sUnknownGenderLetter= null;
-	
 
-	var bOneNamePerLine 		= true,
-		bOnlyFirstName 			= false,
-		bBirthAndDeathDates 	= true,
-		bConcealLivingDates 	= true,
-//		bDeath 					= true,
-		bSpouse 				= true,
-		bMaidenName 			= true,
-		bShowGender				= true,
-		bDiagonalConnections	= false,
-		bRefocusOnClick			= false,
-		bShowToolbar			= true;
+
+	var bOneNamePerLine 			= <?php echo wpft_options::get_option('bOneNamePerLine'); ?>;
+	var bOnlyFirstName 			= <?php echo wpft_options::get_option('bOnlyFirstName'); ?>;
+	var bBirthAndDeathDates 	= <?php echo wpft_options::get_option('bBirthAndDeathDates'); ?>;
+	var bConcealLivingDates 	= <?php echo wpft_options::get_option('bConcealLivingDates'); ?>;
+	var bShowSpouse 				= <?php echo wpft_options::get_option('bShowSpouse'); ?>;
+	var bShowOneSpouse			= <?php echo wpft_options::get_option('bShowOneSpouse'); ?>;
+	var bVerticalSpouses			= <?php echo wpft_options::get_option('bVerticalSpouses'); ?>;
+	var bMaidenName 				= <?php echo wpft_options::get_option('bMaidenName'); ?>;
+	var bShowGender				= <?php echo wpft_options::get_option('bShowGender'); ?>;
+	var bDiagonalConnections	= <?php echo wpft_options::get_option('bDiagonalConnections'); ?>;
+	var bRefocusOnClick			= <?php echo wpft_options::get_option('bRefocusOnClick'); ?>;
+	var bShowToolbar				= <?php echo wpft_options::get_option('bShowToolbar'); ?>;
 
 	var m_Canvas,
 		m_CanvasRect;
@@ -112,11 +114,12 @@
 			m_sMaiden		= null,
 			m_iBirthYear	= -1,
 			m_sGender 		= sUnknownGenderLetter,
-			m_nSpouseNode	= null,
+//			m_nSpouse	= null,
 			m_iMyBranchWidth = 0;
 		
 		var m_vParents		= new Array(), 		// Guess this will be 0, 1 or 2 nodes only
-			m_vChildren		= new Array();
+			m_vChildren		= new Array(),
+			m_vSpouses		= new Array();
 		var	m_MyRect 		= new Rect(),		// bounding box for this node
 			m_BothRect 		= new Rect();		// bounding box for this node + spouse node
 		var m_RaphRect,							// Raphael's graphics box on canvas
@@ -270,10 +273,22 @@
 			return m_BothRect;
 		};
 
-		this.getSpouseName = function() {
-			return m_nSpouse == null ? "" : m_nSpouse.getName();
-		};
+//		this.getSpouseName = function() {
+//			return m_nSpouse == null ? "" : m_nSpouse.getName();
+//		};
 		
+		this.getSpouses = function() {
+			return m_vSpouses;
+		}
+		
+		this.hasPartner = function(n) {
+			for (sp in m_vSpouses) {
+				if (m_vSpouses[sp] == n)
+					return true;
+			}
+			return false;
+		};
+
 		//private int countParentGenerations() {
 		this.countParentGenerations = function() {
 			var iCurrentDepth = 0;
@@ -352,7 +367,7 @@
 		this.graphConnections = function() {
 			var	iXFrom, iYFrom, iXTo, iYTo, iYMid;
 			
-			if (bSpouse && this.m_nSpouse != null)
+			if (bShowSpouse && this.getSpouses().length != 0)
 				iXFrom = m_MyRect.x+m_MyRect.width-1;
 			else
 				iXFrom = m_MyRect.x+m_MyRect.width/2;
@@ -412,7 +427,43 @@
 			m_BothRect.width 	= m_MyRect.width;
 			m_BothRect.height 	= m_MyRect.height;
 			
-			if (bSpouse && (this.m_nSpouse != null)) {
+			var mySpouses = this.getSpouses();
+			if (bShowSpouse && (mySpouses.length != 0)) {
+				var iTotalSpouseHeight = 0;
+				var iTotalSpouseWidth = 0;
+				var iSpHeight = 0;
+				var aSpouse;
+				for (sp in mySpouses) {
+					aSpouse = m_vSpouses[sp];
+					aSpouse.getGraphBox(0, 0);	// set m_vSpouses[sp].m_MyRect
+					iSpHeight = aSpouse.getMyRect().height;
+					iSpWidth  = aSpouse.getMyRect().width;
+					if (bVerticalSpouses) {
+						iTotalSpouseHeight += iSpHeight;
+						iTotalSpouseWidth = Math.max(iTotalSpouseWidth, iSpWidth);
+					} else {
+						iTotalSpouseHeight = Math.max(iTotalSpouseHeight, iSpHeight);
+						iTotalSpouseWidth  += iSpWidth; 
+					}
+					if (bShowOneSpouse)
+						break;			// We will only use first spouse in list
+				}
+				iTotalSpouseHeight = Math.max(m_MyRect.height, iTotalSpouseHeight);
+				m_BothRect.width += iTotalSpouseWidth;
+				m_BothRect.height = iTotalSpouseHeight;
+				m_MyRect.height = iTotalSpouseHeight;
+			}
+				for (sp in mySpouses) {
+					aSpouse = mySpouses[sp];
+					if (bVerticalSpouses) {
+						aSpouse.getMyRect().width = iTotalSpouseWidth;
+					} else {
+						aSpouse.getMyRect().height = iTotalSpouseHeight;
+					}
+					if (bShowOneSpouse)
+						break;
+				}
+/*			if (bShowSpouse && (this.m_nSpouse != null)) {
 				this.m_nSpouse.getGraphBox(0, 0);	// set m_nSpouse.m_MyRect
 //				System.out.println("Got spouses rectwidth ("+m_nSpouse.getName()+") = "+m_nSpouse.m_MyRect.width);
 				var iLargestHeight = Math.max(m_MyRect.height, this.m_nSpouse.getMyRect().height);
@@ -420,7 +471,7 @@
 				m_BothRect.height = iLargestHeight;
 				m_MyRect.height = iLargestHeight;
 				this.m_nSpouse.getMyRect().height = iLargestHeight;
-			}
+			}*/
 			
 //			if (m_MyRect.height > m_iLargestBoxHeight)
 //				m_iLargestBoxHeight = m_MyRect.height;
@@ -428,7 +479,7 @@
 				
 		/*
 		 * Calculate the size of this node and print it
-	 	 * Formatting flags: bOneNamePerLine bOnlyFirstName bBirthAndDeathDates bDeath bSpouse bMaidenName bShowGender bDiagonalLines		
+	 	 * Formatting flags: bOneNamePerLine bOnlyFirstName bBirthAndDeathDates bDeath bShowSpouse bMaidenName bShowGender bDiagonalLines		
 		 */
 		this.getGraphBox = function(X, Y) {
 			var bPrint = (X != 0) || (Y != 0);
@@ -541,12 +592,39 @@
 				m_MyRect.height = r.height;
 //			}
 
-			if (bPrint && bSpouse && (this.m_nSpouse != null)) {
-				// Print this node's spouse
-				bSpouse = false;	// so we don't get an infinite loop
-				this.m_nSpouse.getGraphBox(r.x+r.width /*+m_nSpouse.m_MyRect.width/2 */, r.y);
-				bSpouse = true;
+			if (bPrint && bShowSpouse) {
+				
+				var mySpouses = this.getSpouses();
+				var aSpouse;
+				var iH, iW;
+				var xpos = r.x+r.width; /*+m_nSpouse.m_MyRect.width/2 */
+				var ypos = r.y;
+				for (sp in mySpouses) {
+					aSpouse = mySpouses[sp];
+					iH = aSpouse.getMyRect().height;
+					iW = aSpouse.getMyRect().width;
+					// Print this node's spouses
+					bShowSpouse = false;	// so we don't get an infinite loop
+					aSpouse.getGraphBox(xpos, ypos);
+					bShowSpouse = true;
+				
+					if (bShowOneSpouse)		// Only showing ONE spouse
+						break;
+
+					if (bVerticalSpouses) {
+						ypos += iH;
+					} else {
+						xpos += iW;
+					}					
+				}
 			}
+
+//			if (bPrint && bShowSpouse && (this.m_nSpouse != null)) {
+//				// Print this node's spouse
+//				bShowSpouse = false;	// so we don't get an infinite loop
+//				this.m_nSpouse.getGraphBox(r.x+r.width /*+m_nSpouse.m_MyRect.width/2 */, r.y);
+//				bShowSpouse = true;
+//			}
 		};
 		
 		this.setImage = function(img) {
@@ -702,15 +780,15 @@
 	}
 	
 	function connectSpouses(s1, s2) {	// connect Nodes s1 and s2
-		if (s1.m_nSpouse == null)
-			s1.m_nSpouse = s2;
-		else if (s1.m_nSpouse != s2)
-			alert("Error in tree: "+s1.getName()+" already has spouse "+s1.m_nSpouse.getName()+". Not connecting "+s2.getName());
+		if (s1.hasPartner(s2))
+			; //alert("Error in tree: "+s1.getName()+" already connected to "+s2.getName());
+		else
+			s1.getSpouses().push(s2);
 		
-		if (s2.m_nSpouse == null)
-			s2.m_nSpouse = s1;
-		else if (s2.m_nSpouse != s1)
-			alert("Error in tree: "+s2.getName()+" already has spouse "+s2.m_nSpouse.getName()+". Not connecting "+s1.getName());
+		if (s2.hasPartner(s1))
+			; //alert("Error in tree: "+s2.getName()+" already connected to "+s1.getName());
+		else
+			s2.getSpouses().push(s1);
 	}
 	
 	function printTreeFromNode(sID) {
@@ -1091,7 +1169,9 @@
 	this.setBirthAndDeathDates = function(bState) 	{ bBirthAndDeathDates = bState; 	redrawTree(); };
 	this.setConcealLivingDates = function(bState)	{ bConcealLivingDates = bState; 	redrawTree(); };
 	this.setDeath = function(bState) 				{ bDeath = bState; 					redrawTree(); };
-	this.setSpouse = function(bState) 				{ bSpouse = bState; 				redrawTree(); };
+	this.setShowSpouse = function(bState) 			{ bShowSpouse = bState; 			redrawTree(); };
+	this.setShowOneSpouse = function(bState) 		{ bShowOneSpouse = bState; 			redrawTree(); };
+	this.setVerticalSpouses = function(bState) 		{ bVerticalSpouses = bState; 		redrawTree(); };
 	this.setMaidenName = function(bState) 			{ bMaidenName = bState; 			redrawTree(); };
 	this.setShowGender = function(bState) 			{ bShowGender = bState; 			redrawTree(); };
 	this.setDiagonalConnections = function(bState)	{ bDiagonalConnections = bState; 	redrawTree(); };
@@ -1103,7 +1183,9 @@
 	this.getBirthAndDeathDates = function() 		{ return bBirthAndDeathDates; 	};
 	this.getConcealLivingDates = function() 		{ return bConcealLivingDates; 	};
 	this.getDeath = function() 						{ return bDeath; 				};
-	this.getSpouse = function() 					{ return bSpouse; 				};
+	this.getShowSpouse = function() 				{ return bShowSpouse; 			};
+	this.getShowOneSpouse = function() 				{ return bShowOneSpouse;		};
+	this.getVerticalSpouses = function() 			{ return bVerticalSpouses;		};
 	this.getMaidenName = function() 				{ return bMaidenName; 			};
 	this.getShowGender = function() 				{ return bShowGender; 			};
 	this.getDiagonalConnections = function() 		{ return bDiagonalConnections; 	};
@@ -1126,6 +1208,7 @@
 		if (code == 13)
 			redrawTree();*/
 	};
+	
 <?php
 	$tree_data_js = "var tree_txt = new Array(\n";	
 	$the_family = tree::get_tree();
@@ -1147,6 +1230,9 @@
 			$str .= '"Female",'."\n";
 		}
 		$str .= '"Birthday='.$node->born.'",'."\n";
+		if (!empty($node->died) && $node->died != '-') {
+			$str .= '"Deathday='.$node->died.'",'."\n";
+		}
 		if (!empty($node->partner) && !empty($the_family[$node->partner]->post_id)) {
 			$str .= '"Spouse='.$the_family[$node->partner]->post_id.'",'."\n";
 		}

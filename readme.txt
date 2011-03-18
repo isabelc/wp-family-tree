@@ -53,6 +53,12 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.7 =
+
+* Added support for showing multiple spouses
+* Added a few configuration options such as Show/hide gender, Show/hide living dates, Conceal living dates for
+those still alive, Diagonal lines, Wrap names
+
 = 0.6.3 =
 
 * Bug fix: There was a bug in the previous version that made family members show up as undefined, this is now fixed..

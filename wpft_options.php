@@ -26,9 +26,21 @@ function family_tree_options_subpanel() {
 			update_option('family_tree_link', stripslashes(strip_tags($_POST['family_tree_link'])));
 		}
 
-		update_option('family_tree_toolbar_enable', stripslashes(strip_tags($_POST['family_tree_toolbar_enable'])));
 		update_option('family_tree_toolbar_blogpage', stripslashes(strip_tags($_POST['family_tree_toolbar_blogpage'])));
 		update_option('family_tree_toolbar_treenav', stripslashes(strip_tags($_POST['family_tree_toolbar_treenav'])));
+
+		update_option('bOneNamePerLine', 		($_POST['bOneNamePerLine']=='Y')?'true':'false');
+		update_option('bOnlyFirstName', 			($_POST['bOnlyFirstName']=='Y')?'true':'false');
+		update_option('bBirthAndDeathDates', 	($_POST['bBirthAndDeathDates']=='Y')?'true':'false');
+		update_option('bConcealLivingDates', 	($_POST['bConcealLivingDates']=='Y')?'true':'false');
+		update_option('bShowSpouse', 				($_POST['bShowSpouse']=='Y')?'true':'false');
+		update_option('bShowOneSpouse', 			($_POST['bShowOneSpouse']=='Y')?'true':'false');
+		update_option('bVerticalSpouses', 		($_POST['bVerticalSpouses']=='Y')?'true':'false');
+		update_option('bMaidenName', 				($_POST['bMaidenName']=='Y')?'true':'false');
+		update_option('bShowGender', 				($_POST['bShowGender']=='Y')?'true':'false');
+		update_option('bDiagonalConnections', 	($_POST['bDiagonalConnections']=='Y')?'true':'false');
+		update_option('bRefocusOnClick', 		($_POST['bRefocusOnClick']=='Y')?'true':'false');
+		update_option('bShowToolbar', 			($_POST['bShowToolbar']=='Y')?'true':'false');
 
 		if ($_POST['canvasbgcol'] != "")  {
 			update_option('canvasbgcol', stripslashes(strip_tags($_POST['canvasbgcol'])));
@@ -73,12 +85,62 @@ function family_tree_options_subpanel() {
 		</tr>
 	</table>
 
+	<h3>Family tree options</h3>
+	<table class="form-table">
+		<tr valign="top">
+			<th scope="row"><label for="bOneNamePerLine">Wrap names</label></th>
+			<td><input name="bOneNamePerLine" type="checkbox" id="bOneNamePerLine" value="Y" <?php echo (wpft_options::get_option('bOneNamePerLine')=='true')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="bOnlyFirstName">Only show first name</label></th>
+			<td><input name="bOnlyFirstName" type="checkbox" id="bOnlyFirstName" value="Y" <?php echo (wpft_options::get_option('bOnlyFirstName')=='true')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="bBirthAndDeathDates">Show living dates</label></th>
+			<td><input name="bBirthAndDeathDates" type="checkbox" id="bBirthAndDeathDates" value="Y" <?php echo (wpft_options::get_option('bBirthAndDeathDates')=='true')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="bConcealLivingDates">Conceal living dates for those alive</label></th>
+			<td><input name="bConcealLivingDates" type="checkbox" id="bConcealLivingDates" value="Y" <?php echo (wpft_options::get_option('bConcealLivingDates')=='true')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="bShowSpouse">Show spouse</label></th>
+			<td><input name="bShowSpouse" type="checkbox" id="bShowSpouse" value="Y" <?php echo (wpft_options::get_option('bShowSpouse')=='true')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="bShowOneSpouse">Show only one spouse</label></th>
+			<td><input name="bShowOneSpouse" type="checkbox" id="bShowOneSpouse" value="Y" <?php echo (wpft_options::get_option('bShowOneSpouse')=='true')?' checked':''; ?> /> - Developer comment: In the future we will add a way to decide which spouse to show..</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="bVerticalSpouses">Display spouses vertically</label></th>
+			<td><input name="bVerticalSpouses" type="checkbox" id="bVerticalSpouses" value="Y" <?php echo (wpft_options::get_option('bVerticalSpouses')=='true')?' checked':''; ?> /></td>
+		</tr>
+<!--
+		<tr valign="top">
+			<th scope="row"><label for="bMaidenName">Maiden name</label></th>
+			<td><input name="bMaidenName" type="checkbox" id="bMaidenName" value="Y" <?php echo (wpft_options::get_option('bMaidenName')=='true')?' checked':''; ?> /></td>
+		</tr>
+-->
+		<tr valign="top">
+			<th scope="row"><label for="bShowGender">Show gender</label></th>
+			<td><input name="bShowGender" type="checkbox" id="bShowGender" value="Y" <?php echo (wpft_options::get_option('bShowGender')=='true')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="bDiagonalConnections">Diagonal connections</label></th>
+			<td><input name="bDiagonalConnections" type="checkbox" id="bDiagonalConnections" value="Y" <?php echo (wpft_options::get_option('bDiagonalConnections')=='true')?' checked':''; ?> /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="bRefocusOnClick">Refocus on click</label></th>
+			<td><input name="bRefocusOnClick" type="checkbox" id="bRefocusOnClick" value="Y" <?php echo (wpft_options::get_option('bRefocusOnClick')=='true')?' checked':''; ?> /></td>
+		</tr>
+	</table>
+
 	<h3>Node navigation toolbar</h3>
 	Each node in the family tree can have a toolbar which can show a number of additional options. Here you can define how the toolbar should work.
 	<table class="form-table">
 		<tr valign="top">
-			<th scope="row"><label for="family_tree_toolbar_enable">Enable toolbar</label></th>
-			<td><input name="family_tree_toolbar_enable" type="checkbox" id="family_tree_toolbar_enable" value="Y" <?php echo (wpft_options::get_option('family_tree_toolbar_enable')=='Y')?' checked':''; ?> /></td>
+			<th scope="row"><label for="bShowToolbar">Enable toolbar</label></th>
+			<td><input name="bShowToolbar" type="checkbox" id="bShowToolbar" value="Y" <?php echo (wpft_options::get_option('bShowToolbar')=='true')?' checked':''; ?> /></td>
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="family_tree_toolbar_blogpage">Enable blogpage link <img src="<?php echo $plugloc; ?>open-book.png"></label></th>
@@ -155,11 +217,36 @@ class wpft_options {
 		case "nodetextcolour":
 			return '#000';		// Node text colour
 		case "family_tree_toolbar_enable":
-			return 'Y';		// Show/enable toolbar
+			return 'Y';			// Show/enable toolbar
 		case "family_tree_toolbar_blogpage":
-			return 'Y';		// Toolbar button for navigating to the node's blog page
+			return 'Y';			// Toolbar button for navigating to the node's blog page
 		case "family_tree_toolbar_treenav":
-			return 'Y';		// Toolbar button for navigating to the node's tree
+			return 'Y';			// Toolbar button for navigating to the node's tree
+
+		case "bOneNamePerLine":		// Wrap names
+			return 'true';
+		case "bOnlyFirstName":	
+			return 'false';
+		case "bBirthAndDeathDates":	
+			return 'true';
+		case "bConcealLivingDates":	
+			return 'true';
+		case "bShowSpouse":	
+			return 'true';
+		case "bShowOneSpouse":	
+			return 'false';
+		case "bVerticalSpouses":	
+			return 'true';
+		case "bMaidenName":	
+			return 'true';
+		case "bShowGender":	
+			return 'true';
+		case "bDiagonalConnections":	
+			return 'false';
+		case "bRefocusOnClick":	
+			return 'false';
+		case "bShowToolbar":	
+			return 'true';
 		} 
 		return '';
 	}
