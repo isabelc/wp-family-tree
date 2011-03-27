@@ -25,6 +25,7 @@ function family_tree_options_subpanel() {
 		if ($_POST['family_tree_link'] != "")  {
 			update_option('family_tree_link', stripslashes(strip_tags($_POST['family_tree_link'])));
 		}
+		update_option('show_biodata_on_posts_page', 		($_POST['show_biodata_on_posts_page']=='Y')?'true':'false');
 
 		update_option('family_tree_toolbar_blogpage', stripslashes(strip_tags($_POST['family_tree_toolbar_blogpage'])));
 		update_option('family_tree_toolbar_treenav', stripslashes(strip_tags($_POST['family_tree_toolbar_treenav'])));
@@ -57,6 +58,12 @@ function family_tree_options_subpanel() {
 		if ($_POST['nodetextcolour'] != "")  {
 			update_option('nodetextcolour', stripslashes(strip_tags($_POST['nodetextcolour'])));
 		}
+		if ($_POST['nodecornerradius'] != "")  {
+			update_option('nodecornerradius', stripslashes(strip_tags($_POST['nodecornerradius'])));
+		}
+		if ($_POST['nodeminwidth'] != "")  {
+			update_option('nodeminwidth', stripslashes(strip_tags($_POST['nodeminwidth'])));
+		}
 		echo '<div class="updated"><p>Options saved.</p></div>';
 	}
 
@@ -82,6 +89,10 @@ function family_tree_options_subpanel() {
 		<tr valign="top">
 			<th scope="row"><label for="family_tree_link">Link to page with family tree</label></th>
 			<td><input name="family_tree_link" type="text" id="family_tree_link" value="<?php echo wpft_options::get_option('family_tree_link'); ?>" size="40" /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="show_biodata_on_posts_page">Show biodata info on posts pages</label></th>
+			<td><input name="show_biodata_on_posts_page" type="checkbox" id="show_biodata_on_posts_page" value="Y" <?php echo (wpft_options::get_option('show_biodata_on_posts_page')=='true')?' checked':''; ?> /></td>
 		</tr>
 	</table>
 
@@ -177,6 +188,14 @@ function family_tree_options_subpanel() {
 			<th scope="row"><label for="nodetextcolour">Node text colour (#rgb)</label></th>
 			<td><input name="nodetextcolour" type="text" id="nodetextcolour" value="<?php echo wpft_options::get_option('nodetextcolour'); ?>" size="40" /></td>
 		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="nodetextcolour">Node corner radius (pixels)</label></th>
+			<td><input name="nodecornerradius" type="text" id="nodecornerradius" value="<?php echo wpft_options::get_option('nodecornerradius'); ?>" size="40" /></td>
+		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="nodeminwidth">Node minimum width (pixels)</label></th>
+			<td><input name="nodeminwidth" type="text" id="nodeminwidth" value="<?php echo wpft_options::get_option('nodeminwidth'); ?>" size="40" /></td>
+		</tr>
 	</table>
 
 	<p class="submit">
@@ -206,12 +225,14 @@ class wpft_options {
 			return '/family-tree/';	// Default link to where the family tree sits
 		case "family_tree_category_key":
 			return 'Family';	// Default category for posts included in the tree
+		case "show_biodata_on_posts_page":
+			return 'true';	// Whether or not to show table with bio data on posts page
 		case "canvasbgcol":
 			return '#fff';		// Background colour for tree canvas
 		case "nodeoutlinecol":
-			return '#000';		// Outline colour for nodes
+			return '#05c';		// Outline colour for nodes
 		case "nodefillcol":
-			return '#fff';		// Fill colour for nodes
+			return '#5cf';		// Fill colour for nodes
 		case "nodefillopacity":
 			return '0.4';		// Node opacity (0 to 1)
 		case "nodetextcolour":
@@ -247,6 +268,10 @@ class wpft_options {
 			return 'false';
 		case "bShowToolbar":	
 			return 'true';
+		case "nodecornerradius":	
+			return '5';
+		case "nodeminwidth":	
+			return '75';
 		} 
 		return '';
 	}

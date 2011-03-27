@@ -1,7 +1,7 @@
 === WP Family Tree ===
 Contributors: the_arv
 Donate link: http://www.esscotti.com/wp-family-tree-plugin/
-Tags: family tree, genealogy
+Tags: family tree, genealogy, pedigree
 Requires at least: 2.8.6
 Tested up to: 3.0.0
 Stable tag: trunk
@@ -36,8 +36,8 @@ The plugin renders a family tree and serves to gather feedback but expect that t
 1. Copy the family tree plugin directory to the '/wp-content/plugins/' directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Create a page and put a [family-tree] shortcode on it; (this is the family tree page).
-4. Create a page and put a {FAMILY-MEMBERS} tag on it; (this is the family list page).
-5. Visit the family tree admin panel and set the family tree link option; (link to family tree page).
+4. Create a page and put a [family-members] shortcode on it; (this is the family list page).
+5. Visit the family tree admin panel and set the family tree link option; (Link to page with family tree).
 6. Add a post category with the name "Family"
 7. For each family member, add a post specifying the custom fields available at the bottom of edit posts page, 
 making the posts belong to the "Family" category.
@@ -53,10 +53,17 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.8 =
+
+* Added styling options - minimum node width, and node corner radius
+* Improved toolbar placement
+* Fixed "Headers already sent" issue / conflict with other plugins
+* Added option to show/hide biodata info on posts pages
+
 = 0.7 =
 
 * Added support for showing multiple spouses
-* Added a few configuration options such as Show/hide gender, Show/hide living dates, Conceal living dates for
+* Added a few configuration options such as Show/hide gender, Show/hide living dates, Conceal birth date for
 those still alive, Diagonal lines, Wrap names
 
 = 0.6.3 =

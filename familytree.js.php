@@ -5,11 +5,6 @@
  * (c) Copyright 2010, 2011 Esscotti Ltd
  * 
  */
-<?php
-	require_once("../../../wp-blog-header.php");
-	require_once('class.tree.php');
-	require_once('wpft_options.php');
-?>
 (function () {
 	
 	function Rect() {
@@ -21,12 +16,11 @@
 	
 	var m_vAllNodes = new Array();
 
-	var canvasbgcol = "<?php echo wpft_options::get_option('canvasbgcol'); ?>";
-	var nodeoutlinecol = "<?php echo wpft_options::get_option('nodeoutlinecol'); ?>";
-	var nodefillcol	= "<?php echo wpft_options::get_option('nodefillcol'); ?>";
-	var nodefillopacity = <?php echo wpft_options::get_option('nodefillopacity'); ?>;
-	var nodetextcolour = "<?php echo wpft_options::get_option('nodetextcolour'); ?>";
-	
+//	var canvasbgcol = "#55c";
+//	var nodeoutlinecol = "#ff0";
+//	var nodefillcol	= "#0ff";
+//	var nodefillopacity = .4;
+//	var nodetextcolour = "#000";
 	
 	var	m_iFontLineHeight 	= 0,
 		m_iFontLineDescent 	= 0,
@@ -34,27 +28,34 @@
 		m_iInterBoxSpace 	= 10,
 		m_iBoxBufferSpace 	= 2,
 		m_iNodeRounding		= 4,
-		BOX_Y_DELTA			= 20,
+		m_iTallestBoxSize	= 0,
+		m_iToolbarYPad		= 15,
+		m_iMinBoxWidth		= 40,
+		m_iToolbarXPos		= 0,
+		m_iToolbarYPos		= 0,
+		m_bCornered			= false,
+		BOX_Y_DELTA			= 40,
 		BOX_LINE_Y_SIZE		= 100,
 		iMaxHoverPicHeight	= 150,
 		iMaxHoverPicWidth	= 150,
 		aCurrentHoverPic	= null,
 		aFamilyTreeElement 	= null,
 		sUnknownGenderLetter= null;
+	
 
-
-	var bOneNamePerLine 			= <?php echo wpft_options::get_option('bOneNamePerLine'); ?>;
-	var bOnlyFirstName 			= <?php echo wpft_options::get_option('bOnlyFirstName'); ?>;
-	var bBirthAndDeathDates 	= <?php echo wpft_options::get_option('bBirthAndDeathDates'); ?>;
-	var bConcealLivingDates 	= <?php echo wpft_options::get_option('bConcealLivingDates'); ?>;
-	var bShowSpouse 				= <?php echo wpft_options::get_option('bShowSpouse'); ?>;
-	var bShowOneSpouse			= <?php echo wpft_options::get_option('bShowOneSpouse'); ?>;
-	var bVerticalSpouses			= <?php echo wpft_options::get_option('bVerticalSpouses'); ?>;
-	var bMaidenName 				= <?php echo wpft_options::get_option('bMaidenName'); ?>;
-	var bShowGender				= <?php echo wpft_options::get_option('bShowGender'); ?>;
-	var bDiagonalConnections	= <?php echo wpft_options::get_option('bDiagonalConnections'); ?>;
-	var bRefocusOnClick			= <?php echo wpft_options::get_option('bRefocusOnClick'); ?>;
-	var bShowToolbar				= <?php echo wpft_options::get_option('bShowToolbar'); ?>;
+	var bOneNamePerLine 		= true,
+		bOnlyFirstName 			= false,
+		bBirthAndDeathDates 	= true,
+		bConcealLivingDates 	= true,
+//		bDeath 					= true,
+		bShowSpouse 			= true,
+		bShowOneSpouse			= false,
+		bVerticalSpouses		= false,
+		bMaidenName 			= true,
+		bShowGender				= true,
+		bDiagonalConnections	= false,
+		bRefocusOnClick			= false,
+		bShowToolbar			= true;
 
 	var m_Canvas,
 		m_CanvasRect;
@@ -393,6 +394,7 @@
 		};
 		
 		this.getBoxY = function(iRow) {
+//			return iRow*m_iTallestBoxSize + BOX_Y_DELTA;
 			return iRow*BOX_LINE_Y_SIZE + BOX_Y_DELTA;
 			
 	/*		if (iRow == 0)
@@ -452,7 +454,7 @@
 				m_BothRect.width += iTotalSpouseWidth;
 				m_BothRect.height = iTotalSpouseHeight;
 				m_MyRect.height = iTotalSpouseHeight;
-			}
+			
 				for (sp in mySpouses) {
 					aSpouse = mySpouses[sp];
 					if (bVerticalSpouses) {
@@ -463,6 +465,10 @@
 					if (bShowOneSpouse)
 						break;
 				}
+			}
+			
+			m_iTallestBoxSize = Math.max(m_iTallestBoxSize, m_MyRect.height);
+
 /*			if (bShowSpouse && (this.m_nSpouse != null)) {
 				this.m_nSpouse.getGraphBox(0, 0);	// set m_nSpouse.m_MyRect
 //				System.out.println("Got spouses rectwidth ("+m_nSpouse.getName()+") = "+m_nSpouse.m_MyRect.width);
@@ -487,8 +493,8 @@
 			resetLine();	// Which line our "cursor" is on while printing in box.
 
 			if (!bPrint) {
-				m_MyRect.width = 0;
-				m_MyRect.height = 0;
+				m_MyRect.width = m_iMinBoxWidth;
+				m_MyRect.height = m_iToolbarYPad;
 				m_BothRect.width = 0;
 				m_BothRect.height = 0;
 			}
@@ -799,6 +805,7 @@
 		// get the height of a line of text in this font and render context
 		m_iFontLineHeight = 10;	//X m_FontMetrics.getHeight();
 		m_iFontLineDescent = 4;	//X m_FontMetrics.getDescent();
+		m_iTallestBoxSize = 0;
 		
 		if (n == null) {
 			alert("Sorry, \'"+sID + "\' is not part of the tree");
@@ -854,16 +861,18 @@
 				
 		if (bPrintIt) {
 			var w = 0;
+//FONT			var h = 0;
 			var theRaphText = m_Canvas.text(0, 0, sAddString != null ? decodeURI(sAddString) : "");
-//			theRaphText.attr({"font": '24px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif '});
+//FONT			theRaphText.attr({"font": '18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif '});
 			theRaphText.attr({"fill": nodetextcolour});
 			node.getRaphTexts().push(theRaphText);
 			
 			w = theRaphText.getBBox().width;
+//FONT			h = theRaphText.getBBox().height;
 			w = 0;	//X Remove this line if Java!
 			theRaphText.attr({
-				x: theBox.x + (theBox.width - w)/2 + m_iBoxBufferSpace, 
-				y: theBox.y + m_iFontLineHeight + getLine()*getPixelsPerLine()
+				x: theBox.x + (theBox.width - w)/2 + m_iBoxBufferSpace - 2, 
+				y: m_iToolbarYPad + theBox.y + m_iFontLineHeight + getLine()*getPixelsPerLine()		// h + getLine()*h  //FONT
 			}).toFront();
 			
 			var toolbardiv = node.getToolbarDiv();
@@ -872,8 +881,14 @@
 				var tbw = parseInt(toolbardiv.style.width);
 				var tbh = parseInt(toolbardiv.style.height);
 				toolbardiv.style.visibility="visible";
-				toolbardiv.style.left = theBox.x + (theBox.width - tbw)/2+'px';
-				toolbardiv.style.top  = theBox.y - tbh/2 -8 +'px';
+				if (m_bCornered) {
+					toolbardiv.style.left = m_iToolbarXPos + theBox.x + 'px';
+					toolbardiv.style.top  = m_iToolbarYPos + theBox.y + 'px';					
+				} else {
+					toolbardiv.style.left = m_iToolbarXPos + theBox.x + (theBox.width - tbw)/2+'px';
+					toolbardiv.style.top  = m_iToolbarYPos + theBox.y /* - tbh/2*/ +'px';
+				}
+				
 			}
 
 			theRaphText.click(function () {
@@ -914,18 +929,23 @@
 
 		} else {
 			var w = 0;
+//FONT			var h = 0;
 			if (sAddString != null) {
 				var temptxt = m_Canvas.text(0, 0, decodeURI(sAddString));
+//FONT				temptxt.attr({"font": '18px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif '});
 //				temptxt.attr({"font": '24px "Helvetica Neue", Helvetica, "Arial Unicode MS", Arial, sans-serif '});
 //				temptxt.attr({"color": '#0f0'});
 				w = temptxt.hide().getBBox().width;
+//FONT				h = temptxt.hide().getBBox().height;
 				temptxt.remove();
 			}
 			w += 2*m_iBoxBufferSpace+1;
+//			if (w < m_iMinBoxWidth)
+//				w = m_iMinBoxWidth;
 			if (w > theBox.width)
 				theBox.width = w;
 	
-			theBox.height += getPixelsPerLine();
+			theBox.height += getPixelsPerLine(); //h; //FONT
 		}
 		
 		return theBox;
@@ -1164,20 +1184,38 @@
 	this.setMaxHoverPicWidth = function(iWidth) 	{ iMaxHoverPicWidth = iWidth; 	};
 	this.setMaxHoverPicHeight= function(iHeight) 	{ iMaxHoverPicHeight = iHeight; };
 
-	this.setOneNamePerLine = function(bState) 		{ bOneNamePerLine = bState; 		redrawTree(); };
-	this.setOnlyFirstName = function(bState) 		{ bOnlyFirstName = bState; 			redrawTree(); };
-	this.setBirthAndDeathDates = function(bState) 	{ bBirthAndDeathDates = bState; 	redrawTree(); };
-	this.setConcealLivingDates = function(bState)	{ bConcealLivingDates = bState; 	redrawTree(); };
-	this.setDeath = function(bState) 				{ bDeath = bState; 					redrawTree(); };
-	this.setShowSpouse = function(bState) 			{ bShowSpouse = bState; 			redrawTree(); };
-	this.setShowOneSpouse = function(bState) 		{ bShowOneSpouse = bState; 			redrawTree(); };
-	this.setVerticalSpouses = function(bState) 		{ bVerticalSpouses = bState; 		redrawTree(); };
-	this.setMaidenName = function(bState) 			{ bMaidenName = bState; 			redrawTree(); };
-	this.setShowGender = function(bState) 			{ bShowGender = bState; 			redrawTree(); };
-	this.setDiagonalConnections = function(bState)	{ bDiagonalConnections = bState; 	redrawTree(); };
-	this.setRefocusOnClick = function(bState)		{ bRefocusOnClick = bState; 		redrawTree(); };
-	this.setShowToolbar = function(bState)			{ bShowToolbar = bState; 			redrawTree(); };
+	this.setOneNamePerLine = function(bState) 		{ bOneNamePerLine = bState; 			//redrawTree(); 
+	};
+	this.setOnlyFirstName = function(bState) 		{ bOnlyFirstName = bState; 				//redrawTree(); 
+	};
+	this.setBirthAndDeathDates = function(bState) 	{ bBirthAndDeathDates = bState; 		//redrawTree(); 
+	};
+	this.setConcealLivingDates = function(bState)	{ bConcealLivingDates = bState; 		//redrawTree(); 
+	};
+	this.setDeath = function(bState) 				{ bDeath = bState; 							//redrawTree(); 
+	};
+	this.setShowSpouse = function(bState) 			{ bShowSpouse = bState; 					//redrawTree(); 
+	};
+	this.setShowOneSpouse = function(bState) 		{ bShowOneSpouse = bState; 				//redrawTree(); 
+	};
+	this.setVerticalSpouses = function(bState) 		{ bVerticalSpouses = bState; 			//redrawTree(); 
+	};
+	this.setMaidenName = function(bState) 			{ bMaidenName = bState; 					//redrawTree(); 
+	};
+	this.setShowGender = function(bState) 			{ bShowGender = bState; 					//redrawTree(); 
+	};
+	this.setDiagonalConnections = function(bState)	{ bDiagonalConnections = bState; 	//redrawTree(); 
+	};
+	this.setRefocusOnClick = function(bState)		{ bRefocusOnClick = bState; 				//redrawTree(); 
+	};
+	this.setShowToolbar = function(bState)			{ bShowToolbar = bState; 					//redrawTree(); 
+	};
 	this.setNodeRounding = function(iRadius)		{ m_iNodeRounding = iRadius;	};
+	this.setToolbarYPad = function(iYPad)			{ m_iToolbarYPad = iYPad; 		};
+	this.setMinBoxWidth = function(iMinWidth)		{ m_iMinBoxWidth = iMinWidth;	};
+	this.setToolbarPos = function(bCorner, iX, iY)	{ m_bCornered = bCorner; m_iToolbarXPos = iX; m_iToolbarYPos = iY; //redrawTree(); 
+	};
+
 	this.getOneNamePerLine = function() 			{ return bOneNamePerLine; 		};
 	this.getOnlyFirstName = function() 				{ return bOnlyFirstName; 		};
 	this.getBirthAndDeathDates = function() 		{ return bBirthAndDeathDates; 	};
@@ -1192,7 +1230,12 @@
 	this.getRefocusOnClick = function() 			{ return bRefocusOnClick; 		};
 	this.getShowToolbar = function() 				{ return bShowToolbar; 			};
 	this.getNodeRounding = function() 				{ return m_iNodeRounding;		};
-
+	this.getNodeRounding = function()				{ return m_iNodeRounding = iRadius;	};
+	this.getToolbarYPad = function()				{ return m_iToolbarYPad; 	};
+	this.getMinBoxWidth = function()				{ return m_iMinBoxWidth;	};
+	this.getToolbarPosX = function()				{ return m_iToolbarXPos;	};
+	this.getToolbarPosY = function()				{ return m_iToolbarYPos; 	};
+	this.getToolbarCornered = function()			{ return m_bCornered; 		};
 
 	this.onFocusPersonChanged = function(e) {
 //		value = value.replace("\n", "");
@@ -1209,43 +1252,5 @@
 			redrawTree();*/
 	};
 	
-<?php
-	$tree_data_js = "var tree_txt = new Array(\n";	
-	$the_family = tree::get_tree();
-	$first = true;
-	foreach ($the_family as $node) {
-		if (!$first) {
-			$tree_data_js .= ','."\n";
-		} else {
-			$first = false;
-		}
-		$str  = '"EsscottiFTID='.$node->post_id.'",'."\n";
-		$str .= '"Name='.addslashes($node->name).'",'."\n";
-		if (!empty($node->thumbsrc)) {
-			$str .= '"ImageURL='.$node->thumbsrc.'",'."\n";
-		}
-		if ($node->gender=='m') {
-			$str .= '"Male",'."\n";
-		} else if ($node->gender=='f') {
-			$str .= '"Female",'."\n";
-		}
-		$str .= '"Birthday='.$node->born.'",'."\n";
-		if (!empty($node->died) && $node->died != '-') {
-			$str .= '"Deathday='.$node->died.'",'."\n";
-		}
-		if (!empty($node->partner) && !empty($the_family[$node->partner]->post_id)) {
-			$str .= '"Spouse='.$the_family[$node->partner]->post_id.'",'."\n";
-		}
-		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
-		$str .= '"Parent='.$the_family[$node->mother]->post_id.'",'."\n";
-		$str .= '"Parent='.$the_family[$node->father]->post_id.'"';
-
-		$tree_data_js .= $str;	
-
-	}
-	$tree_data_js .= ');'."\n";
-
-	echo $tree_data_js;
-?>
-
+	
 })();

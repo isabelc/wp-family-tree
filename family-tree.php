@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.7
+ * @version 0.8
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.7
+Version: 0.8
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -73,7 +73,77 @@ function family_tree($root='') {
 			$ancestor = $node->mother;
 		}
 	}
+	
+	$out .= "<script type='text/javascript'>";	
 
+	// Generate javascript tree text...
+	$tree_data_js = "var tree_txt = new Array(\n";	
+	$the_family = tree::get_tree();
+	$first = true;
+	foreach ($the_family as $node) {
+		if (!$first) {
+			$tree_data_js .= ','."\n";
+		} else {
+			$first = false;
+		}
+		$str  = '"EsscottiFTID='.$node->post_id.'",'."\n";
+		$str .= '"Name='.addslashes($node->name).'",'."\n";
+		if (!empty($node->thumbsrc)) {
+			$str .= '"ImageURL='.$node->thumbsrc.'",'."\n";
+		}
+		if ($node->gender=='m') {
+			$str .= '"Male",'."\n";
+		} else if ($node->gender=='f') {
+			$str .= '"Female",'."\n";
+		}
+		$str .= '"Birthday='.$node->born.'",'."\n";
+		if (!empty($node->died) && $node->died != '-') {
+			$str .= '"Deathday='.$node->died.'",'."\n";
+		}
+		if (!empty($node->partner) && !empty($the_family[$node->partner]->post_id)) {
+			$str .= '"Spouse='.$the_family[$node->partner]->post_id.'",'."\n";
+		}
+		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
+		$str .= '"Parent='.$the_family[$node->mother]->post_id.'",'."\n";
+		$str .= '"Parent='.$the_family[$node->father]->post_id.'"';
+		$tree_data_js .= $str;	
+	}
+	$tree_data_js .= ');'."\n";
+	$out .= $tree_data_js;
+	// End generate javascript tree text.
+	
+	$out .= 'canvasbgcol = "'. 	wpft_options::get_option('canvasbgcol').'";'."\n";
+	$out .= 'nodeoutlinecol = "'.wpft_options::get_option('nodeoutlinecol').'";'."\n";
+	$out .= 'nodefillcol	= "'. wpft_options::get_option('nodefillcol').'";'."\n";
+	$out .= 'nodefillopacity = '.wpft_options::get_option('nodefillopacity').';'."\n";
+	$out .= 'nodetextcolour = "'.wpft_options::get_option('nodetextcolour').'";'."\n";
+	$out .= 'setOneNamePerLine('.wpft_options::get_option('bOneNamePerLine').');'."\n";
+	$out .= 'setOnlyFirstName('.wpft_options::get_option('bOnlyFirstName').');'."\n";
+	$out .= 'setBirthAndDeathDates('.wpft_options::get_option('bBirthAndDeathDates').');'."\n";
+	$out .= 'setConcealLivingDates('.wpft_options::get_option('bConcealLivingDates').');'."\n";
+	$out .= 'setShowSpouse('.wpft_options::get_option('bShowSpouse').');'."\n";
+	$out .= 'setShowOneSpouse('.wpft_options::get_option('bShowOneSpouse').');'."\n";	
+	$out .= 'setVerticalSpouses('.wpft_options::get_option('bVerticalSpouses').');'."\n";
+	$out .= 'setMaidenName('.wpft_options::get_option('bMaidenName').');'."\n";
+	$out .= 'setShowGender('.wpft_options::get_option('bShowGender').');'."\n";
+	$out .= 'setDiagonalConnections('.wpft_options::get_option('bDiagonalConnections').');'."\n";
+	$out .= 'setRefocusOnClick('.wpft_options::get_option('bRefocusOnClick').');'."\n";
+	$out .= 'setShowToolbar('.wpft_options::get_option('bShowToolbar').');'."\n";
+	$out .= 'setNodeRounding('.wpft_options::get_option('nodecornerradius').');'."\n";
+
+	if (wpft_options::get_option('bShowToolbar') == 'true') {
+		$out .= 'setToolbarYPad(20);'."\n";
+	} else {
+		$out .= 'setToolbarYPad(0);'."\n";
+	}
+	$out .= 'setToolbarPos(true, 3, 3);'."\n";
+	$out .= 'setMinBoxWidth('.wpft_options::get_option('nodeminwidth').');'."\n";
+
+	$out .= '</script>';	
+
+/*
+	setDeath = function(bState) 				
+*/
 	$out .= '<input type="hidden" size="30" name="focusperson" id="focusperson" value="'.$ancestor.'">';
 
 	$out .= '<div id="tree-container">';
@@ -230,7 +300,18 @@ function wpft_family_tree_shortcode($atts, $content=NULL) {
 	return $ft_output;
 }
 
+function wpft_family_members_shortcode($atts, $content=NULL) {
+	$root = $atts['root'];
+	$ft_output = family_tree($root);
+	$ft_output = family_list();
+		
+	wpft_options::check_options();
+
+	return $ft_output;
+}
+
 add_shortcode('family-tree', 'wpft_family_tree_shortcode');
+add_shortcode('family-members', 'wpft_family_members_shortcode');
 
 
 add_action('admin_menu', 'family_tree_options_page');
@@ -249,7 +330,11 @@ function addFooterCode() {
 // Enable the ability for the family tree to be loaded from pages
 add_filter('the_content','family_list_insert');
 add_filter('the_content','family_tree_insert');
-add_filter('the_content','bio_data_insert');
+
+
+if (wpft_options::get_option('show_biodata_on_posts_page') == 'true') {
+	add_filter('the_content','bio_data_insert');
+}
 
 add_action('init', 'wpft_addHeaderCode');
 add_action('edit_post', 'family_tree_update_post');

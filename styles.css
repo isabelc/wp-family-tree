@@ -41,7 +41,27 @@
 
 .toolbar {
 	border:0px solid blue;
+	z-index:20;
+	position:absolute;
+	top:0;
+	left:0;
+	width:70px;
+	height:20px;
 }
+.toolbar a {
+	padding:0;
+	margin:0;
+}
+.toolbar a img {
+	padding:0;
+	margin:0;
+}
+img.toolbar-treenav {
+	
+}
+img.toolbar-blogpage {
+}
+
 
 .dynamicDiv {
     border:solid 1px #c0c0c0;
@@ -53,8 +73,3 @@
 }
 
 
-img.toolbar-treenav {
-	
-}
-img.toolbar-blogpage {
-}
