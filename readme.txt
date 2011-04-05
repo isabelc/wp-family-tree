@@ -50,8 +50,14 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 1. Family tree as drawn on a page using the short code [family-tree]. Thumbnail shown where mouse is hovering.
 2. Here are the custom fields that are added to the posts
 3. Family list entry with links to each individual's blog post page
+4. Family tree with other styling options and showing spouses
 
 == Changelog ==
+
+= 0.9 =
+
+* Added ability to specify spouse manually (if there are no children) 
+* Ability to specify the primary/current spouse if there are multiple spouses
 
 = 0.8 =
 

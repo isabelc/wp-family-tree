@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.8
+ * @version 0.9
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.8
+Version: 0.9
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -100,9 +100,14 @@ function family_tree($root='') {
 		if (!empty($node->died) && $node->died != '-') {
 			$str .= '"Deathday='.$node->died.'",'."\n";
 		}
-		if (!empty($node->partner) && !empty($the_family[$node->partner]->post_id)) {
-			$str .= '"Spouse='.$the_family[$node->partner]->post_id.'",'."\n";
+
+		if (isset($node->partners) && is_array($node->partners)) {
+			foreach ($node->partners as $partner) {
+				$str .= '"Spouse='.$the_family[$partner]->post_id.'",'."\n";
+			}
 		}
+
+
 		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
 		$str .= '"Parent='.$the_family[$node->mother]->post_id.'",'."\n";
 		$str .= '"Parent='.$the_family[$node->father]->post_id.'"';
@@ -154,7 +159,9 @@ function family_tree($root='') {
 	$out .= '</div><div id="familytree"></div>';
 	$out .= '<img name="hoverimage" id="hoverimage" style="visibility:hidden;" >';
 	$out .= '</div>';
-	
+	if (wpft_options::get_option('showcreditlink') == 'true') {
+		$out .= '<p style="text-align:left"><small>powered by <a target="_blank" href="http://www.esscotti.com/wp-family-tree-plugin">WP Family Tree</a></small></p>';
+	}
 	return $out;
 }
 function bio_data() {
@@ -199,6 +206,7 @@ function family_tree_edit_page_form()
 	$gender = get_post_meta($post->ID, 'gender', true);
 	$mother = get_post_meta($post->ID, 'mother', true);
 	$father = get_post_meta($post->ID, 'father', true);
+	$spouse = get_post_meta($post->ID, 'spouse', true);
 ?>
 	<tr><td>Gender:</td><td> 
     <select name="gender" id="gender">
@@ -234,11 +242,48 @@ function family_tree_edit_page_form()
 	</select>
 	</td></tr>
 
+    <tr><td>Spouse:</td><td>
+    <select style="width:200px" name="spouse" id="spouse">
+    <option value="-" <?php if (empty($spouse) || $spouse=="-") echo "selected=\"selected\""; ?>> </option>
+<?php
+/*
+	if ($gender == "f") {
+		foreach ($males as $f) {
+			echo '<option value="'.$f->ID.'" ';
+			if ($f->ID == $spouse) echo "selected=\"selected\"";
+			echo '>'.$f->post_title.'</option>';
+		}
+	} else if ($gender == "m") {
+		foreach ($females as $f) {
+			echo '<option value="'.$f->ID.'" ';
+			if ($f->ID == $spouse) echo "selected=\"selected\"";
+			echo '>'.$f->post_title.'</option>';
+		}
+	} else {
+*/
+		foreach ($family as $f) {
+			echo '<option value="'.$f->ID.'" ';
+			if ($f->ID == $spouse) echo "selected=\"selected\"";
+			echo '>'.$f->post_title.'</option>';
+		}
+//	}
+?>
+	</select>
+	</td></tr>
+
     </table>
     </div>
     </div>
     <?php
 }
+
+
+// Javascript data picker
+// Facebook page, skype id, IM etc
+// Occupation
+// Locations: birthplace, died at, current location
+// Spouse
+
 
 function family_tree_update_post($id)
 {
@@ -246,12 +291,14 @@ function family_tree_update_post($id)
     $died   = stripslashes(strip_tags($_POST['died']));
     $mother = stripslashes(strip_tags($_POST['mother']));
     $father = stripslashes(strip_tags($_POST['father']));
+    $spouse = stripslashes(strip_tags($_POST['spouse']));
     $gender = stripslashes(strip_tags($_POST['gender']));
 
     if (!empty($born)) { delete_post_meta($id, 'born'); 	add_post_meta($id, 'born', $born); 		} //else { add_post_meta($id, 'born', $born); 		}
     if (!empty($died)) { delete_post_meta($id, 'died'); 	add_post_meta($id, 'died', $died); 		} //else { add_post_meta($id, 'died', $died); 		}
     if (!empty($mother)) { delete_post_meta($id, 'mother'); add_post_meta($id, 'mother', $mother); 	} //else ( add_post_meta($id, 'mother', $mother); 	}
     if (!empty($father)) { delete_post_meta($id, 'father'); add_post_meta($id, 'father', $father); 	} //else { add_post_meta($id, 'father', $father); 	}
+    if (!empty($spouse)) { delete_post_meta($id, 'spouse'); add_post_meta($id, 'spouse', $spouse); 	} //else { add_post_meta($id, 'father', $father); 	}
     if (!empty($gender)) { delete_post_meta($id, 'gender'); add_post_meta($id, 'gender', $gender); 	} //else { add_post_meta($id, 'gender', $gender); 	}
 }
 

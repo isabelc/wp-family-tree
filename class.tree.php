@@ -111,11 +111,15 @@ class tree {
 
 		// Set partner...
 		foreach ($the_family as $fm) {
-			if (!empty($fm->partner)) {
-				continue;	// If partner has been set (by database meta data) then leave as-is
+			$fm->partners = array();
+
+			// If partner has been set (by database meta data) then add that one first
+			if (!empty($fm->spouse)) {
+				$fm->partners[] = $fm->spouse;
 			}
+		
 			if (is_array($fm->children)) {
-				$partners = array();
+				// Calculate the other partners as parents of your children...
 				foreach ($fm->children as $childid) {
 					$prospective_partner = "";
 					
@@ -130,26 +134,18 @@ class tree {
 							$prospective_partner = $child->father;
 						}
 					}
-
-					if (!empty($prospective_partner)) {
-						if (!isset($partners[$prospective_partner])) {
-							$partners[$prospective_partner] = 1;
-						} else {
-							$partners[$prospective_partner]++;
+					if (!empty($prospective_partner) && is_numeric($prospective_partner)) {
+						$found = false;
+						foreach ($fm->partners as $p) {
+							if ($p == $prospective_partner) {
+								$found = true;
+								break;
+							}
+						}
+						if (!$found) {
+							$fm->partners[] = $prospective_partner;
 						}
 					}
-				}
-				
-				$max = 0;
-				$partner = 0;
-				foreach ($partners as $partnerid => $num) {
-					if ($num > $max) {
-						$max = $num;
-						$partner = $partnerid;
-					}
-				}
-				if (!empty($partner)) {
-					$fm->partner = $partner;
 				}
 			}
 		}

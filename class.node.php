@@ -6,7 +6,8 @@
 class node {
 	var $post_id;
 	var $gender;
-	var $partner;
+	var $spouse;
+	var $partners;
 	var $father;
 	var $mother;
 	var $born;
@@ -34,9 +35,9 @@ class node {
 		$fm->name 		= $post_detail->post_title;
 		$fm->url		= get_permalink($post_detail->ID);			
 		$fm->gender	= get_post_meta($post_detail->ID, 'gender', true);
-		$fm->partner= get_post_meta($post_detail->ID, 'partner', true);
 		$fm->father	= get_post_meta($post_detail->ID, 'father', true);
 		$fm->mother	= get_post_meta($post_detail->ID, 'mother', true);
+		$fm->spouse	= get_post_meta($post_detail->ID, 'spouse', true);
 		$fm->born	= get_post_meta($post_detail->ID, 'born', true);
 		$fm->died	= get_post_meta($post_detail->ID, 'died', true);
 		if (function_exists('get_post_thumbnail_id')) {
@@ -69,9 +70,9 @@ class node {
 		
 		$ftlink = wpft_options::get_option('family_tree_link');
 		if (strpos($ftlink, '?') === false) {
-			$html .=' <a href="'.$ftlink.'?ancestor='.$this->post_id.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+			$html .=' <a href="'.$ftlink.'?ancestor='.$this->post_id.'"><img border="0" alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
 		} else {
-			$html .=' <a href="'.$ftlink.'&ancestor='.$this->post_id.'"><img alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
+			$html .=' <a href="'.$ftlink.'&ancestor='.$this->post_id.'"><img border="0" alt="View tree" title="View tree" src="'.$plugloc.'icon-tree-small.gif"/></a>';
 		}
 		
 		$html .= '</td>';
@@ -144,10 +145,10 @@ class node {
 		if (wpft_options::get_option('bShowToolbar') == 'true') {
 			$html .= '<div class="toolbar" id="toolbar'.$this->post_id.'">';
 			if (wpft_options::get_option('family_tree_toolbar_blogpage') == 'Y') {
-				$html .= '<a class="toolbar-blogpage" href="'.$permalink.'" title="View information about '.htmlspecialchars($this->name).'"><img class="toolbar-blogpage" src="'.$plugloc.'open-book.png"></a>';
+				$html .= '<a class="toolbar-blogpage" href="'.$permalink.'" title="View information about '.htmlspecialchars($this->name).'"><img border="0" class="toolbar-blogpage" src="'.$plugloc.'open-book.png"></a>';
 			}
 			if (wpft_options::get_option('family_tree_toolbar_treenav') == 'Y') {
-				$html .= '<a class="toolbar-treenav" href="'.$ftlink.'" title="View the family of '.htmlspecialchars($this->name).'"><img class="toolbar-treenav" src="'.$plugloc.'tree.gif"></a>';
+				$html .= '<a class="toolbar-treenav" href="'.$ftlink.'" title="View the family of '.htmlspecialchars($this->name).'"><img border="0" class="toolbar-treenav" src="'.$plugloc.'tree.gif"></a>';
 			}
 			$html .= '</div>';
 		}

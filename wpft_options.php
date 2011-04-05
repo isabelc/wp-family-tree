@@ -30,6 +30,7 @@ function family_tree_options_subpanel() {
 		update_option('family_tree_toolbar_blogpage', stripslashes(strip_tags($_POST['family_tree_toolbar_blogpage'])));
 		update_option('family_tree_toolbar_treenav', stripslashes(strip_tags($_POST['family_tree_toolbar_treenav'])));
 
+		update_option('showcreditlink', 			($_POST['showcreditlink']=='Y')?'true':'false');
 		update_option('bOneNamePerLine', 		($_POST['bOneNamePerLine']=='Y')?'true':'false');
 		update_option('bOnlyFirstName', 			($_POST['bOnlyFirstName']=='Y')?'true':'false');
 		update_option('bBirthAndDeathDates', 	($_POST['bBirthAndDeathDates']=='Y')?'true':'false');
@@ -96,6 +97,15 @@ function family_tree_options_subpanel() {
 		</tr>
 	</table>
 
+	<h3>Credit link</h3>
+<p>If you use this plugin then we would be very grateful for some appreciation. <b>Appreciation makes us happy.</b> If you don't want to link to us from the bottom of the family tree then please consider these other options - <b>i)</b> send us an <a target="_blank" href="http://www.esscotti.com/wp-family-tree-plugin">email</a> and let us know about your family tree website (that would inspire us), <b>ii)</b> include a link to <a target="_blank" href="http://www.esscotti.com">www.esscotti.com</a> from some other location of your site (that would help us feed our children), <b>iii)</b> Give us a good rating at the <a target="_blank" href="http://wordpress.org/extend/plugins/wp-family-tree/">Wordpress plugin site</a>.</p>
+	<table class="form-table">
+		<tr valign="top">
+			<th scope="row"><label for="showcreditlink">Show powered-by link</label></th>
+			<td><input name="showcreditlink" type="checkbox" id="showcreditlink" value="Y" <?php echo (wpft_options::get_option('showcreditlink')=='true')?' checked':''; ?> /></td>
+		</tr>
+	</table>
+
 	<h3>Family tree options</h3>
 	<table class="form-table">
 		<tr valign="top">
@@ -120,7 +130,7 @@ function family_tree_options_subpanel() {
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="bShowOneSpouse">Show only one spouse</label></th>
-			<td><input name="bShowOneSpouse" type="checkbox" id="bShowOneSpouse" value="Y" <?php echo (wpft_options::get_option('bShowOneSpouse')=='true')?' checked':''; ?> /> - Developer comment: In the future we will add a way to decide which spouse to show..</td>
+			<td><input name="bShowOneSpouse" type="checkbox" id="bShowOneSpouse" value="Y" <?php echo (wpft_options::get_option('bShowOneSpouse')=='true')?' checked':''; ?> /></td>
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="bVerticalSpouses">Display spouses vertically</label></th>
@@ -197,7 +207,7 @@ function family_tree_options_subpanel() {
 			<td><input name="nodeminwidth" type="text" id="nodeminwidth" value="<?php echo wpft_options::get_option('nodeminwidth'); ?>" size="40" /></td>
 		</tr>
 	</table>
-
+	
 	<p class="submit">
 	<input type="hidden" name="action" value="update" />
 <!--
@@ -228,7 +238,7 @@ class wpft_options {
 		case "show_biodata_on_posts_page":
 			return 'true';	// Whether or not to show table with bio data on posts page
 		case "canvasbgcol":
-			return '#fff';		// Background colour for tree canvas
+			return '#f3f3f3';		// Background colour for tree canvas
 		case "nodeoutlinecol":
 			return '#05c';		// Outline colour for nodes
 		case "nodefillcol":
@@ -271,7 +281,9 @@ class wpft_options {
 		case "nodecornerradius":	
 			return '5';
 		case "nodeminwidth":	
-			return '75';
+			return '0';
+		case "showcreditlink":	
+			return 'true';
 		} 
 		return '';
 	}
