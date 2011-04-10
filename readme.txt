@@ -54,6 +54,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.9.1 =
+
+* Fixed a bug that made some boxes contain '?'
+
 = 0.9 =
 
 * Added ability to specify spouse manually (if there are no children) 

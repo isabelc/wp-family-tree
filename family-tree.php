@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.9
+ * @version 0.9.1
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.9
+Version: 0.9.1
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -103,7 +103,9 @@ function family_tree($root='') {
 
 		if (isset($node->partners) && is_array($node->partners)) {
 			foreach ($node->partners as $partner) {
-				$str .= '"Spouse='.$the_family[$partner]->post_id.'",'."\n";
+				if (is_numeric($partner)) {
+					$str .= '"Spouse='.$the_family[$partner]->post_id.'",'."\n";
+				}
 			}
 		}
 
