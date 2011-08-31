@@ -155,6 +155,21 @@ class node {
 		return $html;
 	}
 
+	function get_thumbnail_div() {
+		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+
+		$html = '';
+		$html .= '<div class="thumbnail" id="thumbnail'.$this->post_id.'">';
+//		$html .= 'Thumbnail-'.$this->post_id;
+		if (!empty($this->thumbsrc)) {
+			$html .= '<img src="'.$this->thumbsrc.'">';
+		}
+		$html .= '</div>';
+
+		return $html;
+	}
+
+
 	function get_box_html($the_family) {
 		$html = '';
 		$html .= '<a href="'.$this->url.'">'.$this->name.'</a>';

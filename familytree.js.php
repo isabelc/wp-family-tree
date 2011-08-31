@@ -21,6 +21,9 @@
 //	var nodefillcol	= "#0ff";
 //	var nodefillopacity = .4;
 //	var nodetextcolour = "#000";
+
+//	var BOX_LINE_Y_SIZE		= 100;
+
 	
 	var	m_iFontLineHeight 	= 0,
 		m_iFontLineDescent 	= 0,
@@ -35,7 +38,6 @@
 		m_iToolbarYPos		= 0,
 		m_bCornered			= false,
 		BOX_Y_DELTA			= 40,
-		BOX_LINE_Y_SIZE		= 100,
 		iMaxHoverPicHeight	= 150,
 		iMaxHoverPicWidth	= 150,
 		aCurrentHoverPic	= null,
@@ -109,6 +111,7 @@
 			m_sImageURL		= null,
 			m_HoverPic		= null,
 			m_MyToolbarDiv	= null,
+			m_MyThumbnailDiv	= null,
 //			m_MyDivRaph		= null,
 			m_sShortInfoURL	= null,
 			m_sLongInfoURL	= null,
@@ -201,6 +204,10 @@
 			m_MyToolbarDiv	= document.getElementById(sDivName);
 //			m_MyDiv			= new Image();
 		};
+
+		this.setThumbnailDiv = function(sDivName) {
+			m_MyThumbnailDiv	= document.getElementById(sDivName);
+		};
 		
 		this.setShortInfoURL = function(sURL) {
 			m_sShortInfoURL	= sURL;
@@ -244,6 +251,10 @@
 		
 		this.getToolbarDiv = function() {
 			return m_MyToolbarDiv;
+		};
+
+		this.getThumbnailDiv = function() {
+			return m_MyThumbnailDiv;
 		};
 
 		this.getImage = function() {
@@ -891,6 +902,19 @@
 				
 			}
 
+			var thumbnaildiv = node.getThumbnailDiv();
+//			if (bShowToolbar && (toolbardiv != null)) {
+				// NOTE! For style.width to work on Firefox, the div should include style.width = numberpx!
+				var tbw = parseInt(thumbnaildiv.style.width);
+				var tbh = parseInt(thumbnaildiv.style.height);
+				thumbnaildiv.style.visibility="hidden";
+				thumbnaildiv.style.left = m_iToolbarXPos + theBox.x + 50 + 'px';
+				thumbnaildiv.style.top  = m_iToolbarYPos + theBox.y + 50 + 'px';					
+				
+//			}
+
+
+
 			theRaphText.click(function () {
 				if (bRefocusOnClick) {
 					var n = findTextOwningNode(this);
@@ -900,11 +924,16 @@
 					}
 				}
             }).mouseover(function (ev) {
+
 				var n = findTextOwningNode(this);
 				if (n != null) {
-					var r = n.getRaphRect();
+					var tnd = n.getThumbnailDiv();
+					tnd.style.visibility = "visible";
+				}
+				
+/*					var r = n.getRaphRect();
 					var im = n.getImage();
-	                r.animate({"fill-opacity": .75}, 300);
+               r.animate({"fill-opacity": .75}, 300);
 					if (im != null) {
 						var coords = getPageEventCoords(ev);
 						hoverpic.src = encodeURI(n.getImageURL());
@@ -915,14 +944,22 @@
 						hoverpic.style.visibility = "visible";
 					}
 				}
+*/
             }).mouseout(function () {
-            	hoverpic.style.visibility="hidden";
-	
-				var n = findTextOwningNode(this);
-				if (n != null) {
-					var r = n.getRaphRect();
-	                r.animate({"fill-opacity": .4}, 300);
-				}
+
+					var n = findTextOwningNode(this);
+					if (n != null) {
+						var tnd = n.getThumbnailDiv();
+						tnd.style.visibility = "hidden";
+					}
+/*
+            	hoverpic.style.visibility="hidden";	
+					var n = findTextOwningNode(this);
+					if (n != null) {
+						var r = n.getRaphRect();
+	               r.animate({"fill-opacity": .4}, 300);
+					}
+*/
             });
 			
 			incLine();
@@ -980,6 +1017,9 @@
 				
 			} else if (sKey == "toolbar") {
 				n.setToolbarDiv(sTokens[1]);
+				
+			} else if (sKey == "thumbnaildiv") {
+				n.setThumbnailDiv(sTokens[1]);
 				
 			} else if (sKey == "shortinfourl") {
 				n.setShortInfoURL(sTokens[1]);

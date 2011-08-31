@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.9.1
+ * @version 0.10
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.9.1
+Version: 0.10
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -88,9 +88,9 @@ function family_tree($root='') {
 		}
 		$str  = '"EsscottiFTID='.$node->post_id.'",'."\n";
 		$str .= '"Name='.addslashes($node->name).'",'."\n";
-		if (!empty($node->thumbsrc)) {
-			$str .= '"ImageURL='.$node->thumbsrc.'",'."\n";
-		}
+//		if (!empty($node->thumbsrc)) {
+//			$str .= '"ImageURL='.$node->thumbsrc.'",'."\n";
+//		}
 		if ($node->gender=='m') {
 			$str .= '"Male",'."\n";
 		} else if ($node->gender=='f') {
@@ -111,6 +111,8 @@ function family_tree($root='') {
 
 
 		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
+		$str .= '"Thumbnaildiv=thumbnail'.$node->post_id.'",'."\n";
+
 		$str .= '"Parent='.$the_family[$node->mother]->post_id.'",'."\n";
 		$str .= '"Parent='.$the_family[$node->father]->post_id.'"';
 		$tree_data_js .= $str;	
@@ -119,6 +121,8 @@ function family_tree($root='') {
 	$out .= $tree_data_js;
 	// End generate javascript tree text.
 	
+
+	$out .= 'BOX_LINE_Y_SIZE = "'. 	wpft_options::get_option('generationheight').'";'."\n";
 	$out .= 'canvasbgcol = "'. 	wpft_options::get_option('canvasbgcol').'";'."\n";
 	$out .= 'nodeoutlinecol = "'.wpft_options::get_option('nodeoutlinecol').'";'."\n";
 	$out .= 'nodefillcol	= "'. wpft_options::get_option('nodefillcol').'";'."\n";
@@ -151,19 +155,37 @@ function family_tree($root='') {
 /*
 	setDeath = function(bState) 				
 */
-	$out .= '<input type="hidden" size="30" name="focusperson" id="focusperson" value="'.$ancestor.'">';
+	$out .= '<input type="hidden" size="30" name="focusperson" id="focusperson" value="'.$ancestor.'">'."\n";
 
-	$out .= '<div id="tree-container">';
-	$out .= '<div id="toolbar-container">';
+	$out .= '<div id="borderBox">'."\n";
+   $out .= '<div id="dragableElement">';
+	$out .= '<div id="tree-container">'."\n";
+	$out .= '<div id="toolbar-container">'."\n";
 	foreach ($the_family as $node) {
 		$out .= $node->get_toolbar_div();
 	}
-	$out .= '</div><div id="familytree"></div>';
-	$out .= '<img name="hoverimage" id="hoverimage" style="visibility:hidden;" >';
-	$out .= '</div>';
-	if (wpft_options::get_option('showcreditlink') == 'true') {
-		$out .= '<p style="text-align:left"><small>powered by <a target="_blank" href="http://www.esscotti.com/wp-family-tree-plugin">WP Family Tree</a></small></p>';
+	$out .= '</div>'."\n";
+	$out .= '<div id="thumbnail-container">'."\n";
+	foreach ($the_family as $node) {
+		$out .= $node->get_thumbnail_div();
 	}
+	$out .= '</div>'."\n";
+	$out .= '<div id="familytree"></div>'."\n";
+	$out .= '<img name="hoverimage" id="hoverimage" style="visibility:hidden;" >'."\n";
+	$out .= '</div>'."\n"; // tree-container
+	$out .= '</div>'."\n"; // borderBox
+	$out .= '</div>'."\n"; // dragableElement
+	if (wpft_options::get_option('showcreditlink') == 'true') {
+		$out .= '<p style="text-align:left"><small>powered by <a target="_blank" href="http://www.esscotti.com/wp-family-tree-plugin">WP Family Tree</a></small></p>'."\n";
+	}
+/*
+	$out .='<script type="text/javascript">';
+	$out .='	var el = document.getElementById(\'tree-container\');';
+	$out .='	var leftEdge = el.parentNode.clientWidth - el.clientWidth;';
+	$out .='	var topEdge = el.parentNode.clientHeight - el.clientHeight;';
+	$out .='	var dragObj = new dragObject(el, null, new Position(leftEdge, topEdge), new Position(0, 0));';
+	$out .='</script>';
+*/	
 	return $out;
 }
 function bio_data() {
@@ -369,6 +391,7 @@ function wpft_addHeaderCode() {
 	$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 	wp_enqueue_script('raphael', $plugloc.'raphael.js');
 	wp_enqueue_script('familytree', $plugloc.'familytree.js.php');
+	wp_enqueue_script('dragobject', $plugloc.'dragobject.js');
 	wp_enqueue_script('onload', $plugloc.'onload.js');
 	wp_enqueue_style('ft-style', $plugloc.'styles.css');
 }

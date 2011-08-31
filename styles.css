@@ -10,6 +10,20 @@
 */
 	border:0px solid blue;
 }
+#borderBox {
+	position:relative;
+	border:1px solid grey;
+	width:630px;
+	height:630px;
+	overflow:hidden;
+}
+#dragableElement {
+	width:10240px;height:10240px;
+	top:0px;
+	left:0px;
+	position:absolute;
+	cursor:move;
+}
 #focusperson {
 	height: 2em;
 	padding: 0;
@@ -25,9 +39,11 @@
 }
 
 #tree-container {
-	border:0px solid black;
+	border:0px solid green;
+/*
 	width:630px;
 	overflow:auto;
+*/
 	text-align:left;
 }
 #toolbar-container {
@@ -62,6 +78,21 @@ img.toolbar-treenav {
 img.toolbar-blogpage {
 }
 
+#thumbnail-container {
+	position: relative;
+}
+
+.thumbnail {
+	border:0px solid blue;
+	z-index:20;
+	position:absolute;
+	top:0;
+	left:0;
+	width:70px;
+	height:20px;
+	visibility:hidden;
+}
+
 
 .dynamicDiv {
     border:solid 1px #c0c0c0;
@@ -73,3 +104,15 @@ img.toolbar-blogpage {
 }
 
 
+/* Print Styles */
+@media print {
+
+body { width:auto; background:white; color:black; margin:0 }
+
+#wrapper { width:auto; margin:0;padding:0;}
+
+#borderBox {
+	overflow:visible; border:1px solid black;
+}
+
+}

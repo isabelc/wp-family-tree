@@ -65,6 +65,9 @@ function family_tree_options_subpanel() {
 		if ($_POST['nodeminwidth'] != "")  {
 			update_option('nodeminwidth', stripslashes(strip_tags($_POST['nodeminwidth'])));
 		}
+		if ($_POST['generationheight'] != "")  {
+			update_option('generationheight', stripslashes(strip_tags($_POST['generationheight'])));
+		}
 		echo '<div class="updated"><p>Options saved.</p></div>';
 	}
 
@@ -206,6 +209,10 @@ function family_tree_options_subpanel() {
 			<th scope="row"><label for="nodeminwidth">Node minimum width (pixels)</label></th>
 			<td><input name="nodeminwidth" type="text" id="nodeminwidth" value="<?php echo wpft_options::get_option('nodeminwidth'); ?>" size="40" /></td>
 		</tr>
+		<tr valign="top">
+			<th scope="row"><label for="generationheight">Height of generations (pixels)</label></th>
+			<td><input name="generationheight" type="text" id="generationheight" value="<?php echo wpft_options::get_option('generationheight'); ?>" size="40" /> * This parameter is useful if spouses are displayed vertically..</td>
+		</tr>
 	</table>
 	
 	<p class="submit">
@@ -284,6 +291,8 @@ class wpft_options {
 			return '0';
 		case "showcreditlink":	
 			return 'true';
+		case "generationheight":	
+			return '100';
 		} 
 		return '';
 	}

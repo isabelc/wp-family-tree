@@ -54,6 +54,12 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.10 =
+
+* Added print view css to enable printing of larger family trees
+* Replaced scroll bars for larger trees with click + drag functionality
+* Added option to set height of generations
+
 = 0.9.1 =
 
 * Fixed a bug that made some boxes contain '?'
