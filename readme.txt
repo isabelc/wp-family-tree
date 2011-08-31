@@ -3,7 +3,7 @@ Contributors: the_arv
 Donate link: http://www.esscotti.com/wp-family-tree-plugin/
 Tags: family tree, genealogy, pedigree
 Requires at least: 2.8.6
-Tested up to: 3.1.1
+Tested up to: 3.2.1
 Stable tag: trunk
 
 WP Family Tree is a graphical family tree generator plugin for Wordpress. Each family member have their own blog post.
