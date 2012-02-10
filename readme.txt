@@ -54,6 +54,11 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.11 =
+
+* Fixed bugs in javascript files
+* other enhancements coming soon... :)
+
 = 0.10 =
 
 * Added print view css to enable printing of larger family trees

@@ -294,8 +294,10 @@
 		}
 		
 		this.hasPartner = function(n) {
-			for (sp in m_vSpouses) {
-				if (m_vSpouses[sp] == n)
+			var i = 0;
+			var len = m_vSpouses.length;
+			while (i < len) { 
+				if (m_vSpouses[i++] == n)
 					return true;
 			}
 			return false;
@@ -304,9 +306,13 @@
 		//private int countParentGenerations() {
 		this.countParentGenerations = function() {
 			var iCurrentDepth = 0;
-			for (i in this.m_vParents) {
-				var p = this.m_vParents[i]; 
-				iCurrentDepth = Math.max(iCurrentDepth, p.countParentGenerations());
+			if (this.m_vParents != undefined) {
+				var i = 0;
+				var len = this.m_vParents.length;
+				while (i < len) { 
+					var p = this.m_vParents[i++]; 
+					iCurrentDepth = Math.max(iCurrentDepth, p.countParentGenerations());
+				}
 			}
 			return 1+iCurrentDepth;
 		};
@@ -314,10 +320,11 @@
 
 		//private int countChildrenGenerations() {
 		this.countChildrenGenerations = function() {
-			var iCurrentDepth = 0,
-				iNumChildren = m_vChildren.length;
-			for (i in m_vChildren) {
-				iCurrentDepth = Math.max(iCurrentDepth, m_vChildren[i].countChildrenGenerations());
+			var iCurrentDepth = 0, iNumChildren = m_vChildren.length;
+			var i = 0;
+			var len = m_vChildren.length;
+			while (i < len) { 
+				iCurrentDepth = Math.max(iCurrentDepth, m_vChildren[i++].countChildrenGenerations());
 			}
 			if (iNumChildren != 0)
 				return 1+iCurrentDepth;
@@ -338,8 +345,10 @@
 			var iMyWidth = m_iInterBoxSpace + m_BothRect.width;
 
 			this.m_iMyBranchWidth = 0;
-			for (i in m_vChildren) {
-				this.m_iMyBranchWidth += m_vChildren[i].calcChildrenBranchWidths();
+			var i = 0;
+			var len = m_vChildren.length;
+			while (i < len) { 
+				this.m_iMyBranchWidth += m_vChildren[i++].calcChildrenBranchWidths();
 			}
 			
 			if (iMyWidth > this.m_iMyBranchWidth)
@@ -359,20 +368,25 @@
 		
 		this.graphChildren = function(iRelativePos, iGeneration) {
 			var iTotWidth = 0;
-			for (i in m_vChildren) {
-				var n = m_vChildren[i];
+			var i = 0;
+			var len = m_vChildren.length;
+			while (i < len) { 
+				var n = m_vChildren[i++];
 				iTotWidth += n.m_iMyBranchWidth;
 			}
 
 			var iY = this.getBoxY(iGeneration),
 				iX = iRelativePos-iTotWidth/2;
 			
-			for (i in m_vChildren) {
+			i = 0;
+			var len = m_vChildren.length;
+			while (i < len) { 
 				var n = m_vChildren[i];
 				iX += n.m_iMyBranchWidth/2;
 				m_vChildren[i].getGraphBox(iX, iY);
 				m_vChildren[i].graphChildren(iX, 1+iGeneration);
 				iX += n.m_iMyBranchWidth/2;
+				i++;
 			}
 		};
 
@@ -385,8 +399,10 @@
 				iXFrom = m_MyRect.x+m_MyRect.width/2;
 			iYFrom = m_MyRect.y+m_MyRect.height-m_iNodeRounding;
 			
-			for (i in m_vChildren) {
-				var n = m_vChildren[i];
+			var i = 0;
+			var len = m_vChildren.length;
+			while (i < len) { 
+				var n = m_vChildren[i++];
 				iXTo = n.getMyRect().x + n.getMyRect().width/2;
 				iYTo = n.getMyRect().y;
 				iYMid = Math.round(0.5 + (iYFrom+iYTo)/2);
@@ -446,8 +462,12 @@
 				var iTotalSpouseWidth = 0;
 				var iSpHeight = 0;
 				var aSpouse;
-				for (sp in mySpouses) {
-					aSpouse = m_vSpouses[sp];
+				
+				var i = 0;
+				var len = mySpouses.length;
+				while (i < len) { 
+//					aSpouse = m_vSpouses[i++];
+					aSpouse = mySpouses[i++];
 					aSpouse.getGraphBox(0, 0);	// set m_vSpouses[sp].m_MyRect
 					iSpHeight = aSpouse.getMyRect().height;
 					iSpWidth  = aSpouse.getMyRect().width;
@@ -466,8 +486,10 @@
 				m_BothRect.height = iTotalSpouseHeight;
 				m_MyRect.height = iTotalSpouseHeight;
 			
-				for (sp in mySpouses) {
-					aSpouse = mySpouses[sp];
+				var i = 0;
+				var len = mySpouses.length;
+				while (i < len) { 
+					aSpouse = mySpouses[i++];
 					if (bVerticalSpouses) {
 						aSpouse.getMyRect().width = iTotalSpouseWidth;
 					} else {
@@ -616,8 +638,10 @@
 				var iH, iW;
 				var xpos = r.x+r.width; /*+m_nSpouse.m_MyRect.width/2 */
 				var ypos = r.y;
-				for (sp in mySpouses) {
-					aSpouse = mySpouses[sp];
+				var i = 0;
+				var len = mySpouses.length;
+				while (i < len) { 
+					aSpouse = mySpouses[i++];
 					iH = aSpouse.getMyRect().height;
 					iW = aSpouse.getMyRect().width;
 					// Print this node's spouses
@@ -682,8 +706,10 @@
 	
 	
 	function findRectOwningNode(rect) {
-		for (arr in m_vAllNodes) {
-			var anode = m_vAllNodes[arr],
+		var i = 0;
+		var len = m_vAllNodes.length;
+		while (i < len) { 
+			var anode = m_vAllNodes[i++],
 				bnode = anode.getRaphRect(); 
 			if (bnode != null) {
 				if (bnode == rect)
@@ -694,12 +720,16 @@
 	}
 	
 	function findTextOwningNode(textobj) {
-		for (arr in m_vAllNodes) {
-			var anode = m_vAllNodes[arr];
+		var i = 0;
+		var len = m_vAllNodes.length;
+		while (i < len) { 
+			var anode = m_vAllNodes[i++];
 			var	texts = anode.getRaphTexts();
 
-			for (var j in texts) {	
-				if (texts[j] == textobj) 
+			var j = 0;
+			var len = texts.length;
+			while (j < len) { 
+				if (texts[j++] == textobj) 
 					return anode;
 			}
 		}
@@ -771,9 +801,13 @@
 	function connectParentChild(p, c) {	// connect Node p (parent) and Node c (child)
 		var bFound = false;
 		var ch = p.getChildren();
-		for (i in ch) {
-			if (ch[i] == c) {
+
+		var i = 0;
+		var len = ch.length;
+		while (i < len) { 
+			if (ch[i++] == c) {
 				bFound = true;
+				break;
 			}
 		}
 		if (bFound == false)
@@ -787,8 +821,10 @@
 		
 		bFound = false;
 		var pa = c.getParents();
-		for (i in pa) {
-			if (pa[i] == p) {
+		var i = 0;
+		var len = pa.length;
+		while (i < len) { 
+			if (pa[i++] == p) {
 				bFound = true;
 			}
 		}
@@ -997,9 +1033,11 @@
 	function createTreeFromArray(sArray) {
        
 		var n = null,
-			sKey = null;
-        for (var i in sArray) {
-        	var sLine = sArray[i];
+		sKey = null;
+		var i = 0;
+		var len = sArray.length;
+		while (i < len) {
+        	var sLine = sArray[i++];
         	var sTokens = sLine.split("=");
 
 			if ((sTokens.length < 1) || (sTokens[0].charAt(0) == '#'))
@@ -1063,20 +1101,26 @@
 
 			} else
 				alert("Error in family tree file: " + sTokens[0]+" "+sTokens[1]);
+
 		}
 	}	
 	
 	function freeNodesAllocatedTexts() {
-		for (i in m_vAllNodes) {
+		var i = 0;
+		var len = m_vAllNodes.length;
+		while (i < len) { 
 			m_vAllNodes[i].setRaphTexts(null);
 			m_vAllNodes[i].setRaphTexts(new Array());
+			i++;
 		}
 	}
 	
 	function resetObjectStates() {
     	hoverpic.style.visibility="hidden";
-		for (i in m_vAllNodes) {
-			var n = m_vAllNodes[i];
+		var i = 0;
+		var len = m_vAllNodes.length;
+		while (i < len) { 
+			var n = m_vAllNodes[i++];
 			var aToolbarDiv = n.getToolbarDiv();
 			if (aToolbarDiv == null)
 				continue;
@@ -1105,8 +1149,10 @@
 	} */
 
     function loadImages() {
-		for (i in m_vAllNodes) {
-			var n = m_vAllNodes[i];
+        var i = 0;
+        var len = m_vAllNodes.length;
+        while (i < len) { 
+			var n = m_vAllNodes[i++];
 			var sUrl = n.getImageURL();
 			if (sUrl == null)
 				continue;
@@ -1146,8 +1192,10 @@
 	}
 	
 	function loadDivs() {
-		for (i in m_vAllNodes) {
-			var n = m_vAllNodes[i];
+        var i = 0;
+        var len = m_vAllNodes.length;
+        while (i < len) { 
+			var n = m_vAllNodes[i++];
 			var aToolbarDiv = n.getToolbarDiv();
 			if (aToolbarDiv == null)
 				continue;
@@ -1189,8 +1237,10 @@
 	}
 
 	function loadShortInfo() {
-		for (var i in m_vAllNodes) {
-			var n = m_vAllNodes[i];
+        var i = 0;
+        var len = m_vAllNodes.length;
+        while (i < len) { 
+			var n = m_vAllNodes[i++];
 			var sUrl = n.getShortInfoURL();
 			if (sUrl == null)
 				continue;
@@ -1200,8 +1250,10 @@
 	};
 	
 	function loadLongInfo() {
-		for (var i in m_vAllNodes) {
-			var n = m_vAllNodes[i];
+        var i = 0;
+        var len = m_vAllNodes.length;
+        while (i < len) { 
+			var n = m_vAllNodes[i++];
 			var sUrl = n.getLongInfoURL();
 			if (sUrl == null)
 				continue;
