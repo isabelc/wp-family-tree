@@ -14,6 +14,6 @@
 	}
 	
 	AddOnload(familytreemain);
-	AddOnload(add_drag);
+//	AddOnload(add_drag);
 
 	

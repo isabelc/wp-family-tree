@@ -54,10 +54,13 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.12 =
+
+* Fixed bug that caused featured image popup to not show.
+
 = 0.11 =
 
 * Fixed bugs in javascript files
-* other enhancements coming soon... :)
 
 = 0.10 =
 

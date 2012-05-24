@@ -727,8 +727,8 @@
 			var	texts = anode.getRaphTexts();
 
 			var j = 0;
-			var len = texts.length;
-			while (j < len) { 
+			var len2 = texts.length;
+			while (j < len2) { 
 				if (texts[j++] == textobj) 
 					return anode;
 			}
