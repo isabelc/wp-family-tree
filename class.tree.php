@@ -149,11 +149,24 @@ class tree {
 				}
 			}
 		}
-		$the_family_store = $the_family;
-		return $the_family;
+
+		$cmp = function($a, $b) {
+			$at = strtotime($a->born);
+			$bt = strtotime($b->born);
+			return $at-$bt;
+		};		
+		usort(&$the_family, $cmp);
+
+		$family_sorted = array();
+		foreach ($the_family as $f) {
+			$family_sorted[$f->post_id] = $f;
+		}
+		
+		$the_family_store = $family_sorted;
+		return $the_family_store;
+//		$the_family_store = $the_family;
+//		return $the_family;
 	}	
-	
-	
 }
 
 

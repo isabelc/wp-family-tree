@@ -56,7 +56,7 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 = 0.12 =
 
-* Fixed bug that caused featured image popup to not show.
+* Siblings are now ordered by age left to right
 
 = 0.11 =
 

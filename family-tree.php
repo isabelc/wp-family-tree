@@ -45,7 +45,6 @@ function family_tree($root='') {
 	$the_family = tree::get_tree();
 
 	$out = '';
-
 	$ancestor = '';
 	
 	if (!empty($_GET['ancestor'])) {
