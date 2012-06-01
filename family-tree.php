@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.13
+ * @version 0.14
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.13
+Version: 0.14
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -84,9 +84,6 @@ function family_tree($root='') {
 		}
 		$str  = '"EsscottiFTID='.$node->post_id.'",'."\n";
 		$str .= '"Name='.addslashes($node->name).'",'."\n";
-//		if (!empty($node->thumbsrc)) {
-//			$str .= '"ImageURL='.$node->thumbsrc.'",'."\n";
-//		}
 		if ($node->gender=='m') {
 			$str .= '"Male",'."\n";
 		} else if ($node->gender=='f') {
@@ -105,7 +102,6 @@ function family_tree($root='') {
 			}
 		}
 
-
 		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
 		$str .= '"Thumbnaildiv=thumbnail'.$node->post_id.'",'."\n";
 
@@ -116,7 +112,6 @@ function family_tree($root='') {
 	$tree_data_js .= ');'."\n";
 	$out .= $tree_data_js;
 	// End generate javascript tree text.
-	
 
 	$out .= 'AddOnload(add_drag);'."\n";
 	$out .= 'BOX_LINE_Y_SIZE = "'. 	wpft_options::get_option('generationheight').'";'."\n";

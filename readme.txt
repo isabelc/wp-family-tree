@@ -54,6 +54,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.14 =
+
+* Fixed bug relating to ordering of siblings.
+
 = 0.13 =
 
 * Fixed issue which caused problems with older versions of PHP.

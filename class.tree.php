@@ -152,25 +152,29 @@ class tree {
 
 		uasort(&$the_family, "cmp_birthdates");
 
-/*
-		$family_sorted = array();
-		foreach ($the_family as $f) {
-			$family_sorted[$f->post_id] = $f;
-		}
-		
-		$the_family_store = $family_sorted;
-		return $the_family_store;
-*/
 		$the_family_store = $the_family;
 		return $the_family;
 	}	
 }
 
 
-function cmp_birthdates($a, $b) {
-	$at = strtotime($a->born);
-	$bt = strtotime($b->born);
-	return $at-$bt;
+function cmp_birthdates($a, $b) {	
+	$a = explode("-", $a->born); 
+	$b = explode("-", $b->born); 
+//	print_r($a);
+//	print_r($b);
+	$yd = $a[0] - $b[0];	// check year difference..
+	if ($yd != 0) {
+		return $yd;
+	} else {
+		$md = $a[1] - $b[1];
+		if ($md != 0) {		// check month difference...
+			return $md;
+		} else {
+			$dd = $a[2] - $b[2];
+			return $dd;		// check day difference...
+		}
+	}
 }
 
 
