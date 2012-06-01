@@ -54,6 +54,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 0.13 =
+
+* Fixed issue which caused problems with older versions of PHP.
+
 = 0.12 =
 
 * Siblings are now ordered by age left to right

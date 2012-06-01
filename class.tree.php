@@ -150,13 +150,9 @@ class tree {
 			}
 		}
 
-		$cmp = function($a, $b) {
-			$at = strtotime($a->born);
-			$bt = strtotime($b->born);
-			return $at-$bt;
-		};		
-		usort(&$the_family, $cmp);
+		uasort(&$the_family, "cmp_birthdates");
 
+/*
 		$family_sorted = array();
 		foreach ($the_family as $f) {
 			$family_sorted[$f->post_id] = $f;
@@ -164,13 +160,18 @@ class tree {
 		
 		$the_family_store = $family_sorted;
 		return $the_family_store;
-//		$the_family_store = $the_family;
-//		return $the_family;
+*/
+		$the_family_store = $the_family;
+		return $the_family;
 	}	
 }
 
 
-
+function cmp_birthdates($a, $b) {
+	$at = strtotime($a->born);
+	$bt = strtotime($b->born);
+	return $at-$bt;
+}
 
 
 
