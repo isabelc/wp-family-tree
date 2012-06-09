@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 0.14
+ * @version 1.0
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 0.14
+Version: 1.0
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010,2011 Arvind Shah
@@ -17,7 +17,6 @@ WP Family Tree is released under the GNU General Public
 License (GPL) http://www.gnu.org/licenses/gpl.txt
 
 */
-
 require_once('wpft_options.php');
 require_once('class.node.php');
 require_once('class.tree.php');
@@ -150,7 +149,7 @@ function family_tree($root='') {
 	$out .= '<input type="hidden" size="30" name="focusperson" id="focusperson" value="'.$ancestor.'">'."\n";
 
 	$out .= '<div id="borderBox">'."\n";
-   $out .= '<div id="dragableElement">';
+	$out .= '<div id="dragableElement">';
 	$out .= '<div id="tree-container">'."\n";
 	$out .= '<div id="toolbar-container">'."\n";
 	foreach ($the_family as $node) {

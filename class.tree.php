@@ -42,33 +42,19 @@ class tree {
 		
 		$category = wpft_options::get_option('family_tree_category_key');
 		$catid = get_cat_ID( $category );
-	
-		$args = array(
-		'numberposts'     => -1,
-		'offset'          => 0,
-		'category'        => $catid,
-		'orderby'         => 'title',
-		'order'           => 'ASC',
-//		'include'         => ,
-//		'exclude'         => ,
-//		'meta_key'        => ,
-//		'meta_value'      => ,
-		'post_type'       => 'post',
-//		'post_mime_type'  => ,
-//		'post_parent'     => ,
-		'post_status'     => 'publish' );	
 
-		$family_posts = get_posts($args);
-		
-//		$family_posts = get_posts('category_name='.wpft_options::get_option('family_tree_category_key').'&numberposts=-1&orderby=title&order=asc');
-	
+		$q = new WP_Query();
+		$q->query('cat='.$catid.'&showposts=-1');
+		$q->get_posts();
+
 		$the_family = array();	
-	
-		foreach($family_posts as $post_detail) {
-			// print_r($post_detail);
-			$the_family[$post_detail->ID] = node::get_node($post_detail);
+		foreach ($q->posts as $post) {
+//			echo $post->ID."<br>";
+//			echo $post->post_title."<br>";
+			$the_family[$post->ID] = node::get_node($post);
 		}
-	
+		wp_reset_postdata();
+		
 		// Set father/mother child relationships...
 		foreach ($the_family as $fm) {
 			if (isset($fm->father) && !empty($fm->father) && is_numeric($fm->father)) {

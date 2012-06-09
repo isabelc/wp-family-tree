@@ -150,6 +150,9 @@ class node {
 			if (wpft_options::get_option('family_tree_toolbar_treenav') == 'Y') {
 				$html .= '<a class="toolbar-treenav" href="'.$ftlink.'" title="View the family of '.htmlspecialchars($this->name).'"><img border="0" class="toolbar-treenav" src="'.$plugloc.'tree.gif"></a>';
 			}
+			if (!empty($this->thumbsrc)) {
+				$html .= '<img border="0" class="toolbar-treenav" src="'.$plugloc.'camera.gif">';
+			}
 			$html .= '</div>';
 		}
 		return $html;

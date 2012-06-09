@@ -54,6 +54,11 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 1.0 =
+
+* Added icon to show if a person has a featured image attached.
+* Fixed a couple of bugs
+
 = 0.14 =
 
 * Fixed bug relating to ordering of siblings.

@@ -939,7 +939,7 @@
 			}
 
 			var thumbnaildiv = node.getThumbnailDiv();
-//			if (bShowToolbar && (toolbardiv != null)) {
+			if (thumbnaildiv != null) {
 				// NOTE! For style.width to work on Firefox, the div should include style.width = numberpx!
 				var tbw = parseInt(thumbnaildiv.style.width);
 				var tbh = parseInt(thumbnaildiv.style.height);
@@ -947,7 +947,7 @@
 				thumbnaildiv.style.left = m_iToolbarXPos + theBox.x + 50 + 'px';
 				thumbnaildiv.style.top  = m_iToolbarYPos + theBox.y + 50 + 'px';					
 				
-//			}
+			}
 
 
 
