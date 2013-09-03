@@ -82,7 +82,7 @@ img.toolbar-blogpage {
 	position: relative;
 }
 
-.thumbnail {
+.wpft_thumbnail {
 	border:0px solid blue;
 	z-index:20;
 	position:absolute;

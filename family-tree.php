@@ -2,17 +2,17 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 1.0
+ * @version 1.0.1
  */
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 1.0
+Version: 1.0.1
 Author URI: http://www.esscotti.com/
 
-Copyright (c) 2010,2011 Arvind Shah
+Copyright (c) 2010 - 2013 Arvind Shah
 WP Family Tree is released under the GNU General Public
 License (GPL) http://www.gnu.org/licenses/gpl.txt
 
@@ -340,7 +340,7 @@ function bio_data_insert($content) {
 	$category = wpft_options::get_option('family_tree_category_key');
 	$cats = get_the_category();	// get array of category objects that apply to this post
 	foreach ($cats as $cat) {
-		if ($cat->name == $category) {
+		if ($cat->slug == $category) {
 			// This post is a family member post so do the work...
 			$the_family = tree::get_tree();
 			if (isset($the_family[$post->ID])) {

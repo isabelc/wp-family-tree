@@ -162,7 +162,7 @@ class node {
 		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 
 		$html = '';
-		$html .= '<div class="thumbnail" id="thumbnail'.$this->post_id.'">';
+		$html .= '<div class="wpft_thumbnail" id="thumbnail'.$this->post_id.'">';
 //		$html .= 'Thumbnail-'.$this->post_id;
 		if (!empty($this->thumbsrc)) {
 			$html .= '<img src="'.$this->thumbsrc.'">';

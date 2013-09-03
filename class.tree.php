@@ -136,7 +136,7 @@ class tree {
 			}
 		}
 
-		uasort(&$the_family, "cmp_birthdates");
+		uasort($the_family, "cmp_birthdates");
 
 		$the_family_store = $the_family;
 		return $the_family;

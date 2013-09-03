@@ -24,12 +24,9 @@ For support please visit the
 
 Released under the terms of the GNU GPL, version 3.
 
-Copyright (c) Arvind Shah
+Copyright (c) 2013 Arvind Shah
 
 Any suggestions for future enhancements welcome.
-
-NOTE: All releases of this plugin up to V1.0 are considered unfinished or incomplete. 
-The plugin renders a family tree and serves to gather feedback but expect that there will be some features missing.
 
 == Installation ==
 
@@ -53,6 +50,11 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 4. Family tree with other styling options and showing spouses
 
 == Changelog ==
+
+= 1.0.1 =
+
+* modified thumbnail css
+* tested for recent versions of Wordpress
 
 = 1.0 =
 
