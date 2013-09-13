@@ -51,6 +51,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 1.0.2 =
+
+* minor bug fix (relating to rendering biodata on family member posts)
+
 = 1.0.1 =
 
 * modified thumbnail css
