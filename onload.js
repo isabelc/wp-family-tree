@@ -13,7 +13,7 @@
 			window.attachEvent('onload', myfunc);
 	}
 	
-	AddOnload(familytreemain);
+//	AddOnload(familytreemain);
 //	AddOnload(add_drag);
 
 	

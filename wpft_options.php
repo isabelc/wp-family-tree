@@ -75,8 +75,10 @@ function family_tree_options_subpanel() {
 	<div class="wrap">
 	<h2>WP Family Tree Options</h2>
 
-	<a href="http://www.esscotti.com/wp-family-tree-plugin/"><img width="150" height="50" alt="Visit WP Family Tree home" align="right" src="<?php echo get_option('siteurl'); ?>/wp-content/plugins/wp-family-tree/logo.jpg"/></a>
+	<a href="http://www.wpfamilytree.com/"><img width="150" height="50" alt="Visit WP Family Tree home" align="right" src="<?php echo get_option('siteurl'); ?>/wp-content/plugins/wp-family-tree/logo.jpg"/></a>
 
+	<div class="updated settings-error"><p><strong>There is now a PRO version of this plugin that offers support for larger family trees, printing, gedcom, custom fields, and more. Please visit <a target="_blank" href="http://www.wpfamilytree.com/">our website for more information</a>...</strong></p></div>
+	
 	<form name="ft_main" method="post">
 <?php
 	if (function_exists('wp_nonce_field')) {

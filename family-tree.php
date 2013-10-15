@@ -2,14 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 1.0.2
+ * @version 1.0.3
  */
 /*
 Plugin Name: WP Family Tree
-Plugin URI: http://www.esscotti.com/wp-family-tree-plugin/
+Plugin URI: http://www.wpfamilytree.com/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 1.0.2
+Version: 1.0.3
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010 - 2013 Arvind Shah
@@ -112,7 +112,7 @@ function family_tree($root='') {
 	$out .= $tree_data_js;
 	// End generate javascript tree text.
 
-	$out .= 'AddOnload(add_drag);'."\n";
+//	$out .= 'AddOnload(add_drag);'."\n";
 	$out .= 'BOX_LINE_Y_SIZE = "'. 	wpft_options::get_option('generationheight').'";'."\n";
 	$out .= 'canvasbgcol = "'. 	wpft_options::get_option('canvasbgcol').'";'."\n";
 	$out .= 'nodeoutlinecol = "'.wpft_options::get_option('nodeoutlinecol').'";'."\n";
@@ -141,6 +141,13 @@ function family_tree($root='') {
 	$out .= 'setToolbarPos(true, 3, 3);'."\n";
 	$out .= 'setMinBoxWidth('.wpft_options::get_option('nodeminwidth').');'."\n";
 
+	$out .= 'jQuery(document).ready(function($){'."\n";
+	$out .= '	add_drag();'."\n";
+	$out .= '	familytreemain();'."\n";
+	$out .= "	var midpos = $('#familytree svg').width()/2 - $('#borderBox').width()/2;"."\n";
+	$out .= "	$('#dragableElement').css('left', -midpos);"."\n";	
+	$out .= '});'."\n";
+	
 	$out .= '</script>';	
 
 /*

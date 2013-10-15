@@ -1,6 +1,6 @@
 === WP Family Tree ===
 Contributors: the_arv
-Donate link: http://www.esscotti.com/wp-family-tree-plugin/
+Donate link: http://www.wpfamilytree.com/
 Tags: family tree, genealogy, pedigree
 Requires at least: 2.8.6
 Tested up to: 3.2.1
@@ -20,7 +20,7 @@ Specify a 'featured image' for the post and the image thumbnail will be used in 
 the family tree. Please see the screenshots.
 
 For support please visit the 
-[WordPress Family Tree Plugin](http://www.esscotti.com/wp-family-tree-plugin/ "Wordpress Family Tree Plugin") homepage
+[WordPress Family Tree Plugin](http://www.wpfamilytree.com/ "Wordpress Family Tree Plugin") homepage
 
 Released under the terms of the GNU GPL, version 3.
 
@@ -50,6 +50,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 4. Family tree with other styling options and showing spouses
 
 == Changelog ==
+
+= 1.0.3 =
+
+* made it so the family tree is centered around the ancestor on loading the page
 
 = 1.0.2 =
 
@@ -160,11 +164,4 @@ the problem and providing a solution)
 * Added ability to display list of family members and their relations by adding the {FAMILY-MEMBERS} 
 tag to pages
 * Added Admin page and ability to change the name of the "Family" category
-
-
-== Roadmap ==
-
-- GEDCOM import/export
-- Family tree in printable form(PDF?)
-- Please suggest.. :)
 
