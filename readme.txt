@@ -51,6 +51,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 1.0.4 =
+
+* bug fix: added jquery to list of included scripts
+
 = 1.0.3 =
 
 * made it so the family tree is centered around the ancestor on loading the page
