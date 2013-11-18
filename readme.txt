@@ -51,6 +51,10 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 1.0.5 =
+
+* bug fix: change filename of familytree.js.php
+
 = 1.0.4 =
 
 * bug fix: added jquery to list of included scripts
