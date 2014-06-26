@@ -85,16 +85,16 @@ class node {
 		$html .= '</tr>';
 		$html .= '<tr><td colspan="2">Father: ';
 		if (isset($this->name_father)) {
-			$html .= '<a href="'.$this->url_father.'">'.$this->name_father.'</a>';
+			$html .= '<a href="'.$this->url_father.'">'.$this->name_father.'</a> ';
 		} else {
-			$html .= 'Unspecified';
+			$html .= 'Unspecified ';
 		}
 		$html .= '</td>';	
 		$html .= '<td colspan="2">Mother: ';
 		if (isset($this->name_mother)) {
-			$html .= '<a href="'.$this->url_mother.'">'.$this->name_mother.'</a>';
+			$html .= '<a href="'.$this->url_mother.'">'.$this->name_mother.'</a> ';
 		} else {
-			$html .= 'Unspecified';
+			$html .= 'Unspecified ';
 		}
 		$html .= '</td></tr>';
 		$html .= '<tr><td colspan="4">Children: ';
