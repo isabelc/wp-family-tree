@@ -106,10 +106,10 @@ class node {
 				} else {
 					$first = false;
 				}
-				$html .= '<a href="'.$the_family[$child]->url.'">'.$the_family[$child]->name.'</a>';
+				$html .= '<a href="'.$the_family[$child]->url.'">'.$the_family[$child]->name.'</a> ';
 			}
 		} else {
-			$html .= 'none';
+			$html .= 'none ';
 		}
 		$html .= '</td></tr>';
 		$html .= '<tr><td colspan="4">Siblings: ';
@@ -121,10 +121,10 @@ class node {
 				} else {
 					$first = false;
 				}
-				$html .= '<a href="'.$the_family[$sibling]->url.'">'.$the_family[$sibling]->name.'</a>';
+				$html .= '<a href="'.$the_family[$sibling]->url.'">'.$the_family[$sibling]->name.'</a> ';
 			}
 		} else {
-			$html .= 'none';
+			$html .= 'none ';
 		}
 		$html .= '</td></tr>';
 		$html .= '</table>';
