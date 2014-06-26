@@ -76,9 +76,9 @@ class node {
 		}
 		
 		$html .= '</td>';
-		$html .= '<td style="vertical-align:bottom">Born: '.$this->born.'</td>';
+		$html .= '<td style="vertical-align:bottom">Born: '.$this->born.' </td>';
 		if (!empty($this->died) && strlen($this->died) > 1) {
-			$html .= '<td style="vertical-align:bottom">Died: '.	$this->died.'</td>';	
+			$html .= '<td style="vertical-align:bottom">Died: '.	$this->died.' </td>';	
 		} else {
 			$html .= '<td></td>';	
 		}
