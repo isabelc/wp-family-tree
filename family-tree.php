@@ -2,8 +2,7 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 1.0.5
- */
+ * @version 1.0.6-rc-1
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.wpfamilytree.com/
