@@ -44,18 +44,18 @@ class node {
 			$thumbid = get_post_thumbnail_id($post_detail->ID);
 			$thumbsrc = wp_get_attachment_image_src($thumbid, 'thumbnail');
 			$fm->thumbsrc = $thumbsrc[0];
-			$fm->thumbhtml = get_the_post_thumbnail($post_detail->ID, 'thumbnail');
+			$fm->thumbhtml = get_the_post_thumbnail($post_detail->ID, 'thumbnail',array('itemprop' => 'image'));
 		}
 		return $fm;
 	}
 	function get_html($the_family) {
 
-		$html = '<table border="0" width="100%">';
+		$html = '<table border="0" width="100%" itemscope itemtype="http://schema.org/Person">';
 		$html .= '<tr><td width="150" style="vertical-align:bottom"><b><a href="'.$this->url.'">';
 		if (!empty($this->thumbhtml)) {
 			$html .= "<br>".$this->thumbhtml;
 		}
-		$html .= $this->name.'</a></b></td>';
+		$html .= '<span itemprop="name">'.$this->name.'</span></a></b> </td>';
 		$html .= '<td width="80" style="vertical-align:bottom">';
 		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
 //		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
@@ -76,23 +76,23 @@ class node {
 		}
 		
 		$html .= '</td>';
-		$html .= '<td style="vertical-align:bottom">Born: '.$this->born.' </td>';
+		$html .= '<td style="vertical-align:bottom">Born: <span itemprop="birthDate">'.$this->born.' </span> </td>';
 		if (!empty($this->died) && strlen($this->died) > 1) {
-			$html .= '<td style="vertical-align:bottom">Died: '.	$this->died.' </td>';	
+			$html .= '<td style="vertical-align:bottom">Died: <span itemprop="deathDate">'. $this->died.' </span> </td>';
 		} else {
 			$html .= '<td></td>';	
 		}
 		$html .= '</tr>';
 		$html .= '<tr><td colspan="2">Father: ';
 		if (isset($this->name_father)) {
-			$html .= '<a href="'.$this->url_father.'">'.$this->name_father.'</a> ';
+			$html .= '<a href="'.$this->url_father.'" itemprop="parent">'.$this->name_father.'</a> ';
 		} else {
 			$html .= 'Unspecified ';
 		}
 		$html .= '</td>';	
 		$html .= '<td colspan="2">Mother: ';
 		if (isset($this->name_mother)) {
-			$html .= '<a href="'.$this->url_mother.'">'.$this->name_mother.'</a> ';
+			$html .= '<a href="'.$this->url_mother.'" itemprop="parent">'.$this->name_mother.'</a> ';
 		} else {
 			$html .= 'Unspecified ';
 		}
@@ -106,7 +106,7 @@ class node {
 				} else {
 					$first = false;
 				}
-				$html .= '<a href="'.$the_family[$child]->url.'">'.$the_family[$child]->name.'</a> ';
+				$html .= '<a href="'.$the_family[$child]->url.'" itemprop="children">'.$the_family[$child]->name.'</a> ';
 			}
 		} else {
 			$html .= 'none ';
@@ -121,7 +121,7 @@ class node {
 				} else {
 					$first = false;
 				}
-				$html .= '<a href="'.$the_family[$sibling]->url.'">'.$the_family[$sibling]->name.'</a> ';
+				$html .= '<a href="'.$the_family[$sibling]->url.'" itemprop="sibling">'.$the_family[$sibling]->name.'</a>';
 			}
 		} else {
 			$html .= 'none ';
