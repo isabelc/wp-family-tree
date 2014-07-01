@@ -85,14 +85,14 @@ class node {
 		$html .= '</tr>';
 		$html .= '<tr><td colspan="2">Father: ';
 		if (isset($this->name_father)) {
-			$html .= '<a href="'.$this->url_father.'" itemprop="parent">'.$this->name_father.'</a> ';
+			$html .= '<span itemprop="parent" itemscope="" itemtype="http://schema.org/Person"><a href="'.$this->url_father.'" itemprop="sameAs"><span itemptop="name">'.$this->name_father.'</span></a></span> ';
 		} else {
 			$html .= 'Unspecified ';
 		}
 		$html .= '</td>';	
 		$html .= '<td colspan="2">Mother: ';
 		if (isset($this->name_mother)) {
-			$html .= '<a href="'.$this->url_mother.'" itemprop="parent">'.$this->name_mother.'</a> ';
+			$html .= '<span itemprop="parent" itemscope="" itemtype="http://schema.org/Person"><a href="'.$this->url_mother.'" itemprop="sameAs"><span itemptop="name">'.$this->name_mother.'</span></a></span> ';
 		} else {
 			$html .= 'Unspecified ';
 		}
@@ -106,7 +106,7 @@ class node {
 				} else {
 					$first = false;
 				}
-				$html .= '<a href="'.$the_family[$child]->url.'" itemprop="children">'.$the_family[$child]->name.'</a> ';
+				$html .= '<span itemprop="children" itemscope="" itemtype="http://schema.org/Person"><a href="'.$the_family[$child]->url.'" itemprop="children" itemprop="sameAs"><span itemptop="name">'.$the_family[$child]->name.'</span></a></span> ';
 			}
 		} else {
 			$html .= 'none ';
@@ -185,6 +185,4 @@ class node {
 		
 	}
 }
-
-
 ?>
