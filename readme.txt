@@ -1,10 +1,10 @@
 === WP Family Tree ===
-Contributors: the_arv
+Contributors: the_arv, isabel104
 Donate link: http://www.wpfamilytree.com/
 Tags: family tree, genealogy, pedigree
 Requires at least: 3.7
 Tested up to: 3.9.1
-Stable tag: 1.0.6f-rc-1
+Stable tag: 1.0.6mod-rc-1
 
 WP Family Tree is a graphical family tree generator plugin for Wordpress. Each family member have their own blog post.
 
@@ -51,7 +51,7 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
-= 1.0.6 =
+= 1.0.6mod-rc-1 =
 * New - Added schema.org microdata for person to the single family member pages, and on the family members directory list page. Person properties include name, birth date, death date, parent, children, sibling, and image.
 * Tweak - Added spaces between names and dates in tables for better description snippets in search results.
 
