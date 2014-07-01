@@ -2,13 +2,14 @@
 /**
  * @package WP Family Tree
  * @author Arvind Shah
- * @version 1.0.6f-rc-1
+ * @contributor by Isabel Castillo
+ * @version 1.0.6mod-rc-1
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.wpfamilytree.com/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 1.0.6f-rc-1
+Version: 1.0.6mod-rc-1
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010 - 2013 Arvind Shah
