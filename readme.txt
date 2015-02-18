@@ -51,6 +51,9 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 1.0.6mod-rc-3 =
+* Fix - Removed PHP error notice for deprecated use of User Levels instead of capabilites.
+
 = 1.0.6mod-rc-1 =
 * New - Added schema.org microdata for person to the single family member pages, and on the family members directory list page. Person properties include name, birth date, death date, parent, children, sibling, and image.
 * Tweak - Added spaces between names and dates in tables for better description snippets in search results.

@@ -7,7 +7,7 @@ License (GPL) http://www.gnu.org/licenses/gpl.txt
 
 function family_tree_options_page() {
 	if (function_exists('add_options_page')) {
-		add_options_page('WP Family Tree', 'WP Family Tree', 10, 'wp-family-tree', 'family_tree_options_subpanel');
+		add_options_page('WP Family Tree', 'WP Family Tree', 'manage_options', 'wp-family-tree', 'family_tree_options_subpanel');
 	}
 }
 function family_tree_options_subpanel() {
