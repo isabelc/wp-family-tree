@@ -414,4 +414,3 @@ add_action('publish_post', 'family_tree_update_post');
 add_action('edit_page_form', 'family_tree_edit_page_form');
 add_action('edit_form_advanced', 'family_tree_edit_page_form');
 add_action('simple_edit_form', 'family_tree_edit_page_form');
-?>
