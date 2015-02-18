@@ -1,21 +1,18 @@
 <?php
-/**
- * @package WP Family Tree
- * @author Arvind Shah
- * @contributor by Isabel Castillo
- * @version 1.0.6mod-rc-1
 /*
 Plugin Name: WP Family Tree
 Plugin URI: http://www.wpfamilytree.com/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 1.0.6mod-rc-1
+Version: 1.0.6mod-rc-2
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010 - 2013 Arvind Shah
 WP Family Tree is released under the GNU General Public
 License (GPL) http://www.gnu.org/licenses/gpl.txt
 
+* @contributor Isabel Castillo
+* Modified by Isabel Castillo
 */
 require_once('wpft_options.php');
 require_once('class.node.php');
