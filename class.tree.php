@@ -146,20 +146,25 @@ class tree {
 
 function cmp_birthdates($a, $b) {	
 	$a = explode("-", $a->born); 
-	$b = explode("-", $b->born); 
-//	print_r($a);
-//	print_r($b);
+	$b = explode("-", $b->born);
+	// print_r($a);
+	// print_r($b);
 	$yd = $a[0] - $b[0];	// check year difference..
 	if ($yd != 0) {
 		return $yd;
 	} else {
-		$md = $a[1] - $b[1];
-		if ($md != 0) {		// check month difference...
-			return $md;
-		} else {
-			$dd = $a[2] - $b[2];
-			return $dd;		// check day difference...
+		
+		if ( isset($a[1]) && isset($b[1]) ) {// @test
+
+			$md = $a[1] - $b[1];
+			if ($md != 0) {		// check month difference...
+				return $md;
+			} else {
+				$dd = $a[2] - $b[2];
+				return $dd;		// check day difference...
+			}
 		}
+
 	}
 }
 

@@ -101,8 +101,19 @@ function family_tree($root='') {
 		$str .= '"Toolbar=toolbar'.$node->post_id.'",'."\n";
 		$str .= '"Thumbnaildiv=thumbnail'.$node->post_id.'",'."\n";
 
-		$str .= '"Parent='.$the_family[$node->mother]->post_id.'",'."\n";
-		$str .= '"Parent='.$the_family[$node->father]->post_id.'"';
+		$str .= '"Parent=';
+		if ( isset($the_family[$node->mother]) ) {
+			$str .= $the_family[$node->mother]->post_id;
+		}
+		$str .= '",'."\n";
+
+		$str .= '"Parent=';
+		if ( isset($the_family[$node->father]) ) {
+			$str .= $the_family[$node->father]->post_id;
+
+		}
+		$str .= '"';
+
 		$tree_data_js .= $str;	
 	}
 	$tree_data_js .= ');'."\n";
