@@ -4,7 +4,7 @@ Plugin Name: WP Family Tree
 Plugin URI: http://www.wpfamilytree.com/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 1.0.6-mod-6
+Version: 1.0.6-mod-8
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010 - 2013 Arvind Shah
@@ -243,10 +243,13 @@ function family_tree_edit_page_form()
 		}
 	}
 
-	$gender = get_post_meta($post->ID, 'gender', true);
-	$mother = get_post_meta($post->ID, 'mother', true);
-	$father = get_post_meta($post->ID, 'father', true);
-	$spouse = get_post_meta($post->ID, 'spouse', true);
+	// @todo do attachments get uploaded on import w my new plugin?
+	// @todo localize.
+
+	$gender = get_post_meta( $post->ID, 'gender', true );
+	$mother = get_post_meta( $post->ID, 'mother', true );
+	$father = get_post_meta( $post->ID, 'father', true );
+	$spouse = get_post_meta( $post->ID, 'spouse', true );
 ?>
 	<tr><td>Gender:</td><td> 
     <select name="gender" id="gender">
@@ -254,8 +257,8 @@ function family_tree_edit_page_form()
     <option value="m" <?php if ($gender == "m") echo "selected=\"selected\""; ?>>Male</option>
     <option value="f" <?php if ($gender == "f") echo "selected=\"selected\""; ?>>Female</option>
 	</select></td></tr>
-    <tr><td>Born (YYYY-MM-DD):</td><td><input type="text" name="born" value="<?php echo wp_specialchars(get_post_meta($post->ID, 'born', true), true) ?>" id="born" size="80" /></td></tr>
-    <tr><td>Died (YYYY-MM-DD):</td><td><input type="text" name="died" value="<?php echo wp_specialchars(get_post_meta($post->ID, 'died', true), true) ?>" id="died" size="80" /></td></tr>
+    <tr><td>Born (YYYY-MM-DD):</td><td><input type="text" name="born" value="<?php echo esc_html( get_post_meta( $post->ID, 'born', true ), true ) ?>" id="born" size="80" /></td></tr>
+    <tr><td>Died (YYYY-MM-DD):</td><td><input type="text" name="died" value="<?php echo esc_html( get_post_meta( $post->ID, 'died', true ), true ) ?>" id="died" size="80" /></td></tr>
     <tr><td>Mother:</td><td>
     <select style="width:200px" name="mother" id="mother">
     <option value="" <?php if (empty($mother)) echo "selected=\"selected\""; ?>> </option>
@@ -326,12 +329,12 @@ function family_tree_edit_page_form()
 
 
 function family_tree_update_post( $id ) {
-    $born   = stripslashes( strip_tags( $_POST['born'] ) );
-    $died   = stripslashes( strip_tags( $_POST['died'] ) );
-    $mother = stripslashes( strip_tags( $_POST['mother'] ) );
-    $father = stripslashes( strip_tags( $_POST['father'] ) );
-    $spouse = stripslashes( strip_tags( $_POST['spouse'] ) );
-    $gender = stripslashes( strip_tags( $_POST['gender'] ) );
+    $born   = empty( $_POST['born'] ) ? '' : stripslashes( strip_tags( $_POST['born'] ) );
+    $died   = empty( $_POST['died'] ) ? '' : stripslashes( strip_tags( $_POST['died'] ) );
+    $mother = empty( $_POST['mother'] ) ? '' : stripslashes( strip_tags( $_POST['mother'] ) );
+    $father = empty( $_POST['father'] ) ? '' : stripslashes( strip_tags( $_POST['father'] ) );
+    $spouse = empty( $_POST['spouse'] ) ? '' : stripslashes( strip_tags( $_POST['spouse'] ) );
+    $gender = empty( $_POST['gender'] ) ? '' : stripslashes( strip_tags( $_POST['gender'] ) );
 
     if ( ! empty( $born ) ) { update_post_meta( $id, 'born', $born); } else { delete_post_meta($id, 'born'); 		}
     if ( ! empty( $died ) ) { update_post_meta( $id, 'died', $died); } else { delete_post_meta($id, 'died', $died); 	}
