@@ -25,23 +25,53 @@ function family_tree_options_subpanel() {
 		if ($_POST['family_tree_link'] != "")  {
 			update_option('family_tree_link', stripslashes(strip_tags($_POST['family_tree_link'])));
 		}
+
 		update_option('show_biodata_on_posts_page', 		($_POST['show_biodata_on_posts_page']=='Y')?'true':'false');
 
 		update_option('family_tree_toolbar_blogpage', stripslashes(strip_tags($_POST['family_tree_toolbar_blogpage'])));
 		update_option('family_tree_toolbar_treenav', stripslashes(strip_tags($_POST['family_tree_toolbar_treenav'])));
-
-		update_option('showcreditlink', 			($_POST['showcreditlink']=='Y')?'true':'false');
+		if ( isset( $_POST['showcreditlink'] ) ) {
+			$showcreditlink = $_POST['showcreditlink'] == 'Y' ? 'true' : 'false';
+			update_option('showcreditlink', $showcreditlink );
+		} else {
+			update_option('showcreditlink', 'false' );
+		}
 		update_option('bOneNamePerLine', 		($_POST['bOneNamePerLine']=='Y')?'true':'false');
-		update_option('bOnlyFirstName', 			($_POST['bOnlyFirstName']=='Y')?'true':'false');
+		if ( isset( $_POST['bOnlyFirstName'] ) ) {
+			$bOnlyFirstName = $_POST['bOnlyFirstName'] == 'Y' ? 'true' : 'false';
+			update_option('bOnlyFirstName', $bOnlyFirstName );
+		} else {
+			update_option( 'bOnlyFirstName', 'false' );
+		}
+
+
 		update_option('bBirthAndDeathDates', 	($_POST['bBirthAndDeathDates']=='Y')?'true':'false');
 		update_option('bConcealLivingDates', 	($_POST['bConcealLivingDates']=='Y')?'true':'false');
 		update_option('bShowSpouse', 				($_POST['bShowSpouse']=='Y')?'true':'false');
-		update_option('bShowOneSpouse', 			($_POST['bShowOneSpouse']=='Y')?'true':'false');
+		if ( isset( $_POST['bShowOneSpouse'] ) ) {
+			$bShowOneSpouse = $_POST['bShowOneSpouse'] == 'Y' ? 'true' : 'false';
+			update_option('bShowOneSpouse', $bShowOneSpouse );
+		} else {
+			update_option( 'bShowOneSpouse', 'false' );
+		}		
 		update_option('bVerticalSpouses', 		($_POST['bVerticalSpouses']=='Y')?'true':'false');
-		update_option('bMaidenName', 				($_POST['bMaidenName']=='Y')?'true':'false');
+		// @todo see why this is not used anymore update_option('bMaidenName', 				($_POST['bMaidenName']=='Y')?'true':'false');
 		update_option('bShowGender', 				($_POST['bShowGender']=='Y')?'true':'false');
-		update_option('bDiagonalConnections', 	($_POST['bDiagonalConnections']=='Y')?'true':'false');
-		update_option('bRefocusOnClick', 		($_POST['bRefocusOnClick']=='Y')?'true':'false');
+
+
+
+		if ( isset( $_POST['bDiagonalConnections'] ) ) {
+			$bDiagonalConnections = $_POST['bDiagonalConnections'] == 'Y' ? 'true' : 'false';
+			update_option( 'bDiagonalConnections', $bDiagonalConnections );
+		} else {
+			update_option( 'bDiagonalConnections', 'false' );
+		}
+		if ( isset( $_POST['bRefocusOnClick'] ) ) {
+			$bRefocusOnClick = $_POST['bRefocusOnClick'] == 'Y' ? 'true' : 'false';
+			update_option('bRefocusOnClick', $bRefocusOnClick );
+		} else {
+			update_option( 'bRefocusOnClick', 'false' );
+		}
 		update_option('bShowToolbar', 			($_POST['bShowToolbar']=='Y')?'true':'false');
 
 		if ($_POST['canvasbgcol'] != "")  {
@@ -144,7 +174,8 @@ function family_tree_options_subpanel() {
 <!--
 		<tr valign="top">
 			<th scope="row"><label for="bMaidenName">Maiden name</label></th>
-			<td><input name="bMaidenName" type="checkbox" id="bMaidenName" value="Y" <?php echo (wpft_options::get_option('bMaidenName')=='true')?' checked':''; ?> /></td>
+			<td><input name="bMaidenName" type="checkbox" id="bMaidenName" value="Y" <?php 
+			// echo (wpft_options::get_option('bMaidenName')=='true')?' checked':''; ?> /></td>
 		</tr>
 -->
 		<tr valign="top">
