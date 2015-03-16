@@ -5,11 +5,13 @@ This is a modified version of [WP Family Tree plugin](https://wordpress.org/plug
 
 These are the changes from the original plugin:
 
-* New - Added schema.org microdata for person to the single family member pages, and on the family members directory list page. Person properties include name, birth date, death date, spouse, parent, children, sibling, and image.
+* New - The family list is now in alphabetical order by first name.
 
 * New - Show the spouse with the bio data for each member.
 
 * New - In addition to spouse, show "Partners" (if any) with the bio data. Partners are people who the person has common children with.
+
+* New - Added schema.org microdata for person to the single family member pages, and on the family members directory list page. Person properties include name, birth date, death date, spouse, parent, children, sibling, and image.
 
 * Fix: Family tree post meta was not able to be erased.
 
