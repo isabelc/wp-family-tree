@@ -315,21 +315,20 @@ function family_tree_edit_page_form()
 // Spouse
 
 
-function family_tree_update_post($id)
-{
-    $born   = stripslashes(strip_tags($_POST['born']));
-    $died   = stripslashes(strip_tags($_POST['died']));
-    $mother = stripslashes(strip_tags($_POST['mother']));
-    $father = stripslashes(strip_tags($_POST['father']));
-    $spouse = stripslashes(strip_tags($_POST['spouse']));
-    $gender = stripslashes(strip_tags($_POST['gender']));
+function family_tree_update_post( $id ) {
+    $born   = stripslashes( strip_tags( $_POST['born'] ) );
+    $died   = stripslashes( strip_tags( $_POST['died'] ) );
+    $mother = stripslashes( strip_tags( $_POST['mother'] ) );
+    $father = stripslashes( strip_tags( $_POST['father'] ) );
+    $spouse = stripslashes( strip_tags( $_POST['spouse'] ) );
+    $gender = stripslashes( strip_tags( $_POST['gender'] ) );
 
-    if (!empty($born)) { delete_post_meta($id, 'born'); 	add_post_meta($id, 'born', $born); 		} //else { add_post_meta($id, 'born', $born); 		}
-    if (!empty($died)) { delete_post_meta($id, 'died'); 	add_post_meta($id, 'died', $died); 		} //else { add_post_meta($id, 'died', $died); 		}
-    if (!empty($mother)) { delete_post_meta($id, 'mother'); add_post_meta($id, 'mother', $mother); 	} //else ( add_post_meta($id, 'mother', $mother); 	}
-    if (!empty($father)) { delete_post_meta($id, 'father'); add_post_meta($id, 'father', $father); 	} //else { add_post_meta($id, 'father', $father); 	}
-    if (!empty($spouse)) { delete_post_meta($id, 'spouse'); add_post_meta($id, 'spouse', $spouse); 	} //else { add_post_meta($id, 'father', $father); 	}
-    if (!empty($gender)) { delete_post_meta($id, 'gender'); add_post_meta($id, 'gender', $gender); 	} //else { add_post_meta($id, 'gender', $gender); 	}
+    if ( ! empty( $born ) ) { update_post_meta( $id, 'born', $born); } else { delete_post_meta($id, 'born'); 		}
+    if ( ! empty( $died ) ) { update_post_meta( $id, 'died', $died); } else { delete_post_meta($id, 'died', $died); 	}
+    if ( ! empty( $mother ) ) { update_post_meta( $id, 'mother', $mother); } else { delete_post_meta($id, 'mother', $mother ); 	}
+    if ( ! empty( $father ) ) { update_post_meta( $id, 'father', $father ); } else { delete_post_meta($id, 'father', $father ); 	}
+    if ( ! empty( $spouse ) ) { update_post_meta( $id, 'spouse', $spouse ); } else { delete_post_meta($id, 'spouse', $father ); 	}
+    if ( ! empty( $gender ) ) { update_post_meta( $id, 'gender', $gender ); } else { delete_post_meta($id, 'gender', $gender ); 	}
 }
 
 
