@@ -52,7 +52,9 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 == Changelog ==
 
 = 1.0.6-mod-4 =
-* New - Show the spouse name and link with the other data for each member. Also added the spouse property to the microdata.
+* Fix: Family tree post meta was not able to be erased.
+* New - Show the spouse name and link with the other bio data for each member. Also added the spouse microdata item property.
+* New - In addition to spouse, show Partners with the bio data. Partners are people who the person has common children with.
 
 = 1.0.6mod-rc-3 =
 * Fix - Removed PHP error notice for deprecated use of User Levels instead of capabilites.
