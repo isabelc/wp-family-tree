@@ -24,6 +24,8 @@ class node {
 	var $url;
 	var $url_father;
 	var $url_mother;
+	var $name_spouse;
+	var $url_spouse;
 
 	function __construct() {
 		$children = array();
@@ -126,8 +128,16 @@ class node {
 		} else {
 			$html .= 'none ';
 		}
-		$html .= '</td></tr>';
-		$html .= '</table>';
+		$html .= '</td></tr><tr><td colspan="4">Spouse: ';
+
+		if (isset($this->name_spouse)) {
+			$html .= '<span itemprop="spouse" itemscope="" itemtype="http://schema.org/Person"><a href="' . $this->url_spouse . '" itemprop="sameAs"><span itemptop="name">' . $this->name_spouse . '</span></a> </span> ';
+		} else {
+			$html .= 'Unspecified ';
+		}
+
+
+		$html .= '</td></tr></table>';
 		return $html;
 	}
 	function get_toolbar_div() {

@@ -102,6 +102,9 @@ class tree {
 			// If partner has been set (by database meta data) then add that one first
 			if (!empty($fm->spouse)) {
 				$fm->partners[] = $fm->spouse;
+				
+				$the_family[$fm->post_id]->name_spouse = $the_family[$fm->spouse]->name;
+				$the_family[$fm->post_id]->url_spouse = $the_family[$fm->spouse]->url;
 			}
 		
 			if (is_array($fm->children)) {
