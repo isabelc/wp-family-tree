@@ -1,7 +1,7 @@
 Modified version of WP Family Tree
 ==================================
 
-This is a modified version of [WP Family Tree plugin](https://wordpress.org/plugins/wp-family-tree/) by the_arv.
+This is a modified version of [WP Family Tree plugin](https://wordpress.org/plugins/wp-family-tree/) (version Version: 1.0.5) by the_arv.
 
 These are the changes from the original plugin:
 
