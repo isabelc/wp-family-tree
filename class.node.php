@@ -137,7 +137,32 @@ class node {
 		}
 
 
-		$html .= '</td></tr></table>';
+		$html .= '</td></tr>';
+
+		// other partners - people you've had children with
+
+		if ( is_array( $this->partners ) ) {
+			// remove the one official spouse from partners array 
+			$temp = array();
+			$temp[] = $this->spouse;
+			$other_partners = array_diff( $this->partners, $temp );
+		}
+
+		if ( count( $other_partners ) > 0 ) {
+			$html .= '<tr><td colspan="4">Partners: ';
+			$first = true; 
+			foreach ( $other_partners as $partner ) {
+				if ( !$first ) {
+					$html .= ', ';
+				} else {
+					$first = false;
+				}
+				$html .= '<a href="'.$the_family[$partner]->url.'">'.$the_family[$partner]->name.'</a>';
+			}
+			$html .= '</td></tr>';
+		}
+
+		$html .= '</table>';
 		return $html;
 	}
 	function get_toolbar_div() {
