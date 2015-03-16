@@ -5,7 +5,13 @@ This is a modified version of [WP Family Tree plugin](https://wordpress.org/plug
 
 These are the changes from the original plugin:
 
-* New - Added schema.org microdata for person to the single family member pages, and on the family members directory list page. Person properties include name, birth date, death date, parent, children, sibling, and image.
+* New - Added schema.org microdata for person to the single family member pages, and on the family members directory list page. Person properties include name, birth date, death date, spouse, parent, children, sibling, and image.
+
+* New - Show the spouse with the bio data for each member.
+
+* New - In addition to spouse, show "Partners" (if any) with the bio data. Partners are people who the person has common children with.
+
+* Fix: Family tree post meta was not able to be erased.
 
 * Tweak - Added spaces between names and dates in tables for better description snippets in search results. Otherwise, without these spaces, if you use the excerpt for the description meta tag, the [names and dates run together](http://isabelcastillo.com/add-spaces-wp-family-tree).
 
