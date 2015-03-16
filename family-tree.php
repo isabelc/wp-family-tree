@@ -25,7 +25,9 @@ function family_list() {
 
 	$the_family = tree::get_tree();
 	
-	$html = "";
+	$total = count( $the_family );
+
+	$html = '<p>' . sprintf( __( 'This list currently includes %d family members.', 'wp-family-tree' ), $total ) . '</p>';
 	// Print information about each family member...
 	foreach ($the_family as $fm) {
 		$html .= $fm->get_html($the_family);
