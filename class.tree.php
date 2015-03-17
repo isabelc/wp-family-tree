@@ -96,15 +96,16 @@ class tree {
 		}
 
 		// Set partner...
-		foreach ($the_family as $fm) {
+		foreach ( $the_family as $fm ) {
 			$fm->partners = array();
 
 			// If partner has been set (by database meta data) then add that one first
 			if (!empty($fm->spouse)) {
 				$fm->partners[] = $fm->spouse;
+
+				$the_family[$fm->post_id]->name_spouse = empty( $the_family[$fm->spouse]->name ) ? '' : $the_family[$fm->spouse]->name;
 				
-				$the_family[$fm->post_id]->name_spouse = $the_family[$fm->spouse]->name;
-				$the_family[$fm->post_id]->url_spouse = $the_family[$fm->spouse]->url;
+				$the_family[$fm->post_id]->url_spouse = empty( $the_family[$fm->spouse]->url ) ? '' : $the_family[$fm->spouse]->url;
 			}
 		
 			if (is_array($fm->children)) {
