@@ -4,7 +4,7 @@ Plugin Name: WP Family Tree
 Plugin URI: http://www.wpfamilytree.com/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 1.0.6-mod-8
+Version: 1.0.6-mod-9
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010 - 2013 Arvind Shah
@@ -243,7 +243,6 @@ function family_tree_edit_page_form()
 		}
 	}
 
-	// @todo do attachments get uploaded on import w my new plugin?
 	// @todo localize.
 
 	$gender = get_post_meta( $post->ID, 'gender', true );
@@ -321,28 +320,56 @@ function family_tree_edit_page_form()
 }
 
 
-// Javascript data picker
-// Facebook page, skype id, IM etc
-// Occupation
-// Locations: birthplace, died at, current location
-// Spouse
+// @todo Occupation
+// @todo Locations: birthplace, died at, current location
 
 
-function family_tree_update_post( $id ) {
-    $born   = empty( $_POST['born'] ) ? '' : stripslashes( strip_tags( $_POST['born'] ) );
-    $died   = empty( $_POST['died'] ) ? '' : stripslashes( strip_tags( $_POST['died'] ) );
-    $mother = empty( $_POST['mother'] ) ? '' : stripslashes( strip_tags( $_POST['mother'] ) );
-    $father = empty( $_POST['father'] ) ? '' : stripslashes( strip_tags( $_POST['father'] ) );
-    $spouse = empty( $_POST['spouse'] ) ? '' : stripslashes( strip_tags( $_POST['spouse'] ) );
-    $gender = empty( $_POST['gender'] ) ? '' : stripslashes( strip_tags( $_POST['gender'] ) );
+/**
+ * Update the family post meta. Called on post save_post.
+ *
+ * @param int $id The post ID.
+ * @param post $post The post object.
+ * @param bool $update Whether this is an existing post being updated or not.
+ */
+function family_tree_update_post( $id, $post, $update ) {
 
-    if ( ! empty( $born ) ) { update_post_meta( $id, 'born', $born); } else { delete_post_meta($id, 'born'); 		}
-    if ( ! empty( $died ) ) { update_post_meta( $id, 'died', $died); } else { delete_post_meta($id, 'died', $died); 	}
-    if ( ! empty( $mother ) ) { update_post_meta( $id, 'mother', $mother); } else { delete_post_meta($id, 'mother', $mother ); 	}
-    if ( ! empty( $father ) ) { update_post_meta( $id, 'father', $father ); } else { delete_post_meta($id, 'father', $father ); 	}
-    if ( ! empty( $spouse ) ) { update_post_meta( $id, 'spouse', $spouse ); } else { delete_post_meta($id, 'spouse', $father ); 	}
-    if ( ! empty( $gender ) ) { update_post_meta( $id, 'gender', $gender ); } else { delete_post_meta($id, 'gender', $gender ); 	}
+	// Avoid running this for large picture gallery imports. Only update meta if this is a family tree post.
+	
+	$family_category = wpft_options::get_option('family_tree_category_key');
+	$cats = get_the_category( $id );	// get array of category objects that apply to this post
+	foreach ($cats as $cat) {
+		if ($cat->slug == $category || $cat->name == $category) {
+			// This post is a family member post so do the work...
+
+			// - Update the post's metadata. @test
+
+			if ( isset( $_POST['born'] ) ) {
+				update_post_meta( $id, 'born', sanitize_text_field( $_POST['born'] ) );
+			}
+
+			if ( isset( $_POST['died'] ) ) {
+				update_post_meta( $id, 'died', sanitize_text_field( $_POST['died'] ) );
+			}
+
+			if ( isset( $_POST['mother'] ) ) {
+				update_post_meta( $id, 'mother', sanitize_text_field( $_POST['mother'] ) );
+			}
+
+			if ( isset( $_POST['father'] ) ) {
+				update_post_meta( $id, 'father', sanitize_text_field( $_POST['father'] ) );
+			}
+
+			if ( isset( $_POST['spouse'] ) ) {
+				update_post_meta( $id, 'spouse', sanitize_text_field( $_POST['spouse'] ) );
+			}
+
+			if ( isset( $_POST['gender'] ) ) {
+				update_post_meta( $id, 'gender', sanitize_text_field( $_POST['gender'] ) );
+			}
+		}
+	}
 }
+
 
 
 // Function to deal with showing the family tree on pages
@@ -427,9 +454,13 @@ if (wpft_options::get_option('show_biodata_on_posts_page') == 'true') {
 }
 
 add_action('init', 'wpft_addHeaderCode');
-add_action('edit_post', 'family_tree_update_post');
-add_action('save_post', 'family_tree_update_post');
-add_action('publish_post', 'family_tree_update_post');
+
+// @test remove add_action('edit_post', 'family_tree_update_post');
+
+// @test replace with below lineadd_action('save_post', 'family_tree_update_post');
+add_action( 'save_post', 'family_tree_update_post', 10, 3 );// @test this fro WP
+
+// @test remove add_action('publish_post', 'family_tree_update_post');// @test does it still work on publish?
 
 add_action('edit_page_form', 'family_tree_edit_page_form');
 add_action('edit_form_advanced', 'family_tree_edit_page_form');
