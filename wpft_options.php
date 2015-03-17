@@ -46,7 +46,13 @@ function family_tree_options_subpanel() {
 
 
 		update_option('bBirthAndDeathDates', 	($_POST['bBirthAndDeathDates']=='Y')?'true':'false');
-		update_option('bConcealLivingDates', 	($_POST['bConcealLivingDates']=='Y')?'true':'false');
+
+		if ( isset( $_POST['bConcealLivingDates'] ) ) {
+			$bConcealLivingDates = $_POST['bConcealLivingDates'] == 'Y' ? 'true' : 'false';
+			update_option('bConcealLivingDates', $bConcealLivingDates );
+		} else {
+			update_option( 'bConcealLivingDates', 'false' );
+		}
 		update_option('bShowSpouse', 				($_POST['bShowSpouse']=='Y')?'true':'false');
 		if ( isset( $_POST['bShowOneSpouse'] ) ) {
 			$bShowOneSpouse = $_POST['bShowOneSpouse'] == 'Y' ? 'true' : 'false';
