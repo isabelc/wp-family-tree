@@ -45,7 +45,7 @@ function family_list() {
 }
 
 /* Render the tree. */
-function family_tree($root='') {
+function family_tree( $root = '' ) {
 	$the_family = tree::get_tree();
 	$out = '';
 	$ancestor = '';
@@ -408,7 +408,7 @@ function bio_data_insert($content) {
 }
 
 function wpft_family_tree_shortcode($atts, $content=NULL) {
-	$root = $atts['root'];
+	$root = isset( $atts['root'] ) ? $atts['root'] : '';
 	$ft_output = family_tree($root);
 
 	wpft_options::check_options();
