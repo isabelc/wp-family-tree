@@ -326,51 +326,51 @@ function family_tree_edit_page_form()
 
 /**
  * Update the family post meta. Called on post save_post.
- *
- * @param int $id The post ID.
+ * @param int $post_id The post ID.
  * @param post $post The post object.
- * @param bool $update Whether this is an existing post being updated or not.
  */
-function family_tree_update_post( $id, $post, $update ) {
+function family_tree_update_post( $post_id, $post = false ) {
+
+	if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		return;
+	}
 
 	// Avoid running this for large picture gallery imports. Only update meta if this is a family tree post.
-	
+
 	$family_category = wpft_options::get_option('family_tree_category_key');
-	$cats = get_the_category( $id );	// get array of category objects that apply to this post
-	foreach ($cats as $cat) {
-		if ($cat->slug == $category || $cat->name == $category) {
-			// This post is a family member post so do the work...
+	$cats = get_the_category( $post_id );	// get array of category objects that apply to this post
+	if ( is_array( $cats ) ) {
+		foreach ( $cats as $cat ) {
+			if ( $cat->slug == $family_category || $cat->name == $family_category ) {
+				// This post is a family member post so do the work...
 
-			// - Update the post's metadata. @test
+				if ( isset( $_POST['born'] ) ) {
+					update_post_meta( $post_id, 'born', sanitize_text_field( $_POST['born'] ) );
+				}
 
-			if ( isset( $_POST['born'] ) ) {
-				update_post_meta( $id, 'born', sanitize_text_field( $_POST['born'] ) );
-			}
+				if ( isset( $_POST['died'] ) ) {
+					update_post_meta( $post_id, 'died', sanitize_text_field( $_POST['died'] ) );
+				}
 
-			if ( isset( $_POST['died'] ) ) {
-				update_post_meta( $id, 'died', sanitize_text_field( $_POST['died'] ) );
-			}
+				if ( isset( $_POST['mother'] ) ) {
+					update_post_meta( $post_id, 'mother', sanitize_text_field( $_POST['mother'] ) );
+				}
 
-			if ( isset( $_POST['mother'] ) ) {
-				update_post_meta( $id, 'mother', sanitize_text_field( $_POST['mother'] ) );
-			}
+				if ( isset( $_POST['father'] ) ) {
+					update_post_meta( $post_id, 'father', sanitize_text_field( $_POST['father'] ) );
+				}
 
-			if ( isset( $_POST['father'] ) ) {
-				update_post_meta( $id, 'father', sanitize_text_field( $_POST['father'] ) );
-			}
+				if ( isset( $_POST['spouse'] ) ) {
+					update_post_meta( $post_id, 'spouse', sanitize_text_field( $_POST['spouse'] ) );
+				}
 
-			if ( isset( $_POST['spouse'] ) ) {
-				update_post_meta( $id, 'spouse', sanitize_text_field( $_POST['spouse'] ) );
-			}
-
-			if ( isset( $_POST['gender'] ) ) {
-				update_post_meta( $id, 'gender', sanitize_text_field( $_POST['gender'] ) );
+				if ( isset( $_POST['gender'] ) ) {
+					update_post_meta( $post_id, 'gender', sanitize_text_field( $_POST['gender'] ) );
+				}
 			}
 		}
 	}
 }
-
-
 
 // Function to deal with showing the family tree on pages
 function family_list_insert($content) {
@@ -452,16 +452,8 @@ add_filter('the_content','family_tree_insert');
 if (wpft_options::get_option('show_biodata_on_posts_page') == 'true') {
 	add_filter('the_content','bio_data_insert');
 }
-
 add_action('init', 'wpft_addHeaderCode');
-
-// @test remove add_action('edit_post', 'family_tree_update_post');
-
-// @test replace with below lineadd_action('save_post', 'family_tree_update_post');
-add_action( 'save_post', 'family_tree_update_post', 10, 3 );// @test this fro WP
-
-// @test remove add_action('publish_post', 'family_tree_update_post');// @test does it still work on publish?
-
+add_action( 'save_post_post', 'family_tree_update_post', 10, 2 );
 add_action('edit_page_form', 'family_tree_edit_page_form');
 add_action('edit_form_advanced', 'family_tree_edit_page_form');
 add_action('simple_edit_form', 'family_tree_edit_page_form');
