@@ -417,7 +417,7 @@ function wpft_family_tree_shortcode($atts, $content=NULL) {
 }
 
 function wpft_family_members_shortcode($atts, $content=NULL) {
-	$root = $atts['root'];
+	$root = isset( $atts['root'] ) ? $atts['root'] : '';
 	$ft_output = family_tree($root);
 	$ft_output = family_list();
 		
