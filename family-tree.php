@@ -103,7 +103,9 @@ function family_tree( $root = '' ) {
 		if (isset($node->partners) && is_array($node->partners)) {
 			foreach ($node->partners as $partner) {
 				if (is_numeric($partner)) {
-					$str .= '"Spouse='.$the_family[$partner]->post_id.'",'."\n";
+					if ( ! empty( $the_family[$partner] ) ) {
+						$str .= '"Spouse=' . $the_family[$partner]->post_id . '",' . "\n";
+					}
 				}
 			}
 		}
