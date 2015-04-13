@@ -157,7 +157,10 @@ class node {
 				} else {
 					$first = false;
 				}
-				$html .= '<a href="'.$the_family[$partner]->url.'">'.$the_family[$partner]->name.'</a>';
+				if ( isset( $the_family[$partner] ) ) {
+					$html .= '<a href="'.$the_family[$partner]->url.'">'.$the_family[$partner]->name.'</a>';
+				}
+
 			}
 			$html .= '</td></tr>';
 		}
