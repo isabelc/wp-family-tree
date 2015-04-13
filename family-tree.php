@@ -4,15 +4,18 @@ Plugin Name: WP Family Tree
 Plugin URI: http://www.wpfamilytree.com/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 1.0.6-mod-9
+Version: 1.0.6-mod-10
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010 - 2013 Arvind Shah
 WP Family Tree is released under the GNU General Public
 License (GPL) http://www.gnu.org/licenses/gpl.txt
 
-* @contributor Isabel Castillo
-* Modified by Isabel Castillo
+@contributor Isabel Castillo
+
+Modified by Isabel Castillo 2015
+See readme.txt for changelog.
+
 */
 require_once('wpft_options.php');
 require_once('class.node.php');
@@ -131,8 +134,6 @@ function family_tree( $root = '' ) {
 	$tree_data_js .= ');'."\n";
 	$out .= $tree_data_js;
 	// End generate javascript tree text.
-
-//	$out .= 'AddOnload(add_drag);'."\n";
 	$out .= 'BOX_LINE_Y_SIZE = "'. 	wpft_options::get_option('generationheight').'";'."\n";
 	$out .= 'canvasbgcol = "'. 	wpft_options::get_option('canvasbgcol').'";'."\n";
 	$out .= 'nodeoutlinecol = "'.wpft_options::get_option('nodeoutlinecol').'";'."\n";
@@ -162,10 +163,10 @@ function family_tree( $root = '' ) {
 	$out .= 'setMinBoxWidth('.wpft_options::get_option('nodeminwidth').');'."\n";
 
 	$out .= 'jQuery(document).ready(function($){'."\n";
-	$out .= '	add_drag();'."\n";
+	$out .= "	$('#dragableElement').draggableTouch();"."\n";
 	$out .= '	familytreemain();'."\n";
 	$out .= "	var midpos = $('#familytree svg').width()/2 - $('#borderBox').width()/2;"."\n";
-	$out .= "	$('#dragableElement').css('left', -midpos);"."\n";	
+	$out .= "	$('#dragableElement').css('left', -midpos);"."\n";
 	$out .= '});'."\n";
 	
 	$out .= '</script>';	
@@ -196,14 +197,6 @@ function family_tree( $root = '' ) {
 	if (wpft_options::get_option('showcreditlink') == 'true') {
 		$out .= '<p style="text-align:left"><small>powered by <a target="_blank" href="http://www.esscotti.com/wp-family-tree-plugin">WP Family Tree</a></small></p>'."\n";
 	}
-/*
-	$out .='<script type="text/javascript">';
-	$out .='	var el = document.getElementById(\'tree-container\');';
-	$out .='	var leftEdge = el.parentNode.clientWidth - el.clientWidth;';
-	$out .='	var topEdge = el.parentNode.clientHeight - el.clientHeight;';
-	$out .='	var dragObj = new dragObject(el, null, new Position(leftEdge, topEdge), new Position(0, 0));';
-	$out .='</script>';
-*/	
 	return $out;
 }
 function bio_data() {
@@ -439,14 +432,9 @@ function wpft_addHeaderCode() {
 	wp_enqueue_script('jquery');
 	wp_enqueue_script('raphael', $plugloc.'raphael.js');
 	wp_enqueue_script('familytree', $plugloc.'familytree.js');
-	wp_enqueue_script('dragobject', $plugloc.'dragobject.js');
-	wp_enqueue_script('onload', $plugloc.'onload.js');
+	wp_enqueue_script('draggabletouch', $plugloc.'jquery.draggableTouch.js', array( 'jquery' ));
 	wp_enqueue_style('ft-style', $plugloc.'styles.css');
 }
-function addFooterCode() {
-
-}
-
 // Enable the ability for the family tree to be loaded from pages
 add_filter('the_content','family_list_insert');
 add_filter('the_content','family_tree_insert');
