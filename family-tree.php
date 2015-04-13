@@ -435,7 +435,7 @@ add_shortcode('family-members', 'wpft_family_members_shortcode');
 add_action('admin_menu', 'family_tree_options_page');
 
 function wpft_addHeaderCode() {
-	$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+	$plugloc = plugin_dir_url( __FILE__ );
 	wp_enqueue_script('jquery');
 	wp_enqueue_script('raphael', $plugloc.'raphael.js');
 	wp_enqueue_script('familytree', $plugloc.'familytree.js');
@@ -454,7 +454,7 @@ add_filter('the_content','family_tree_insert');
 if (wpft_options::get_option('show_biodata_on_posts_page') == 'true') {
 	add_filter('the_content','bio_data_insert');
 }
-add_action('init', 'wpft_addHeaderCode');
+add_action('wp_enqueue_scripts', 'wpft_addHeaderCode');
 add_action( 'save_post_post', 'family_tree_update_post', 10, 2 );
 add_action('edit_page_form', 'family_tree_edit_page_form');
 add_action('edit_form_advanced', 'family_tree_edit_page_form');

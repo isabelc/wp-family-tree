@@ -59,7 +59,7 @@ class node {
 		}
 		$html .= '<span itemprop="name">'.$this->name.'</span></a></b> </td>';
 		$html .= '<td width="80" style="vertical-align:bottom">';
-		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+		$plugloc = plugin_dir_url( __FILE__ );
 //		$html .= ($this->gender == 'm') ? 'Male' : 'Female';
 		if ($this->gender == 'm') {
 			$html .= '<img alt="Male" title="Male" src="'.$plugloc.'icon-male-small.gif"/>';
@@ -169,7 +169,7 @@ class node {
 		return $html;
 	}
 	function get_toolbar_div() {
-		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+		$plugloc = plugin_dir_url( __FILE__ );
 		$ftlink = wpft_options::get_option('family_tree_link');
 
 		if (strpos($ftlink, '?') === false) {
@@ -197,8 +197,6 @@ class node {
 	}
 
 	function get_thumbnail_div() {
-		$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
-
 		$html = '';
 		$html .= '<div class="wpft_thumbnail" id="thumbnail'.$this->post_id.'">';
 //		$html .= 'Thumbnail-'.$this->post_id;
@@ -206,7 +204,6 @@ class node {
 			$html .= '<img src="'.$this->thumbsrc.'">';
 		}
 		$html .= '</div>';
-
 		return $html;
 	}
 
@@ -218,8 +215,6 @@ class node {
 		if (!empty($this->died) && strlen($this->died) > 1) {
 			$html .= '<br>Died: '.	$this->died;	
 		}
-		
 		return $html;
-		
 	}
 }

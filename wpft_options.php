@@ -120,7 +120,7 @@ function family_tree_options_subpanel() {
 	if (function_exists('wp_nonce_field')) {
 		wp_nonce_field('family-tree-action_options');
 	}
-	$plugloc = WP_PLUGIN_URL.'/'.str_replace(basename( __FILE__),"",plugin_basename(__FILE__));
+	$plugloc = plugin_dir_url( __FILE__ );
 ?>
 	<h3>General settings</h3>
 	<table class="form-table">
