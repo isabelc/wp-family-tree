@@ -5,7 +5,11 @@ Modified version of WP Family Tree
 
 This is a modified version of [WP Family Tree plugin](https://wordpress.org/plugins/wp-family-tree/) (version 1.0.5) by the_arv.
 
-These are the changes from the original plugin:
+These are some of the changes from the original plugin:
+
+* New - Mobile Compatibilty - Family tree diagrams can now be dragged on touch/mobile devices.
+
+* New - Mobile Compatibilty - Mobile repsonsive styles for family bio data on family member pages and family directory list.
 
 * New - The family list is now in alphabetical order by first name.
 
@@ -19,6 +23,12 @@ These are the changes from the original plugin:
 
 * Tweak - Added spaces between names and dates in tables for better description snippets in search results. Otherwise, without these spaces, if you use the excerpt for the description meta tag, the [names and dates run together](https://isabelcastillo.com/add-spaces-wp-family-tree).
 
+* Tweak - Use `wp_enqueue_scripts` to load scripts and styles.
+* 
+* Fix - Removed deprecated functions.
+
 * Fix - Removed PHP error notice for deprecated use of User Levels instead of capabilites.
 
-* Fix - Removed several other PHP warnings.
+* Fix - Removed PHP Error notices which appeared while editing posts without Family Tree meta.
+
+* Fix - Removed several other PHP warnings, notices, and erros.
