@@ -4,7 +4,7 @@ Donate link: http://www.wpfamilytree.com/
 Tags: family tree, genealogy, pedigree
 Requires at least: 3.7
 Tested up to: 5.1.1
-Stable tag: 1.0.6-mod-11
+Stable tag: 2.1
 
 WP Family Tree is a graphical family tree generator plugin for Wordpress. Each family member have their own blog post.
 
@@ -51,7 +51,7 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
-= 1.0.6-mod-11 =
+= 2.1 =
 
 * Release date: April 09, 2019
 * Fix - Removed some PHP warnings.
