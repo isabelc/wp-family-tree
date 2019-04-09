@@ -1,6 +1,8 @@
 Modified version of WP Family Tree
 ==================================
 
+**Tested up to WordPress 5.1.1**
+
 This is a modified version of [WP Family Tree plugin](https://wordpress.org/plugins/wp-family-tree/) (version 1.0.5) by the_arv.
 
 These are the changes from the original plugin:
@@ -15,7 +17,7 @@ These are the changes from the original plugin:
 
 * Fix: Family tree post meta was not able to be erased.
 
-* Tweak - Added spaces between names and dates in tables for better description snippets in search results. Otherwise, without these spaces, if you use the excerpt for the description meta tag, the [names and dates run together](http://isabelcastillo.com/add-spaces-wp-family-tree).
+* Tweak - Added spaces between names and dates in tables for better description snippets in search results. Otherwise, without these spaces, if you use the excerpt for the description meta tag, the [names and dates run together](https://isabelcastillo.com/add-spaces-wp-family-tree).
 
 * Fix - Removed PHP error notice for deprecated use of User Levels instead of capabilites.
 

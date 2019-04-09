@@ -3,8 +3,8 @@ Contributors: the_arv, isabel104
 Donate link: http://www.wpfamilytree.com/
 Tags: family tree, genealogy, pedigree
 Requires at least: 3.7
-Tested up to: 4.1.1
-Stable tag: 1.0.6-mod-10
+Tested up to: 5.1.1
+Stable tag: 1.0.6-mod-11
 
 WP Family Tree is a graphical family tree generator plugin for Wordpress. Each family member have their own blog post.
 
@@ -51,11 +51,15 @@ parameter in the shortcode: [family-tree root='&lt;post title&gt;']
 
 == Changelog ==
 
+= 1.0.6-mod-11 =
+
+* Release date: April 09, 2019
+* Fix - Removed some PHP warnings.
+
 = 1.0.6-mod-10 2015-04-13 =
 * New - Family tree diagrams can now be dragged on touch/mobile devices.
 * New - Mobile repsonsive styles for family bio data on family member pages and family directory list.
 * Tweak - Use wp_enqueue_scripts to load scripts and styles.
-
 
 = 1.0.6-mod-9 =
 * Tweak - Rework the family_tree_update_post function to not accidentally delete meta on update.

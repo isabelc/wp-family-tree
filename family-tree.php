@@ -4,7 +4,7 @@ Plugin Name: WP Family Tree
 Plugin URI: http://www.wpfamilytree.com/
 Description: Family Tree plugin
 Author: Arvind Shah
-Version: 1.0.6-mod-10
+Version: 1.0.6-mod-11
 Author URI: http://www.esscotti.com/
 
 Copyright (c) 2010 - 2013 Arvind Shah
@@ -13,7 +13,7 @@ License (GPL) http://www.gnu.org/licenses/gpl.txt
 
 @contributor Isabel Castillo
 
-Modified by Isabel Castillo 2015
+Modified by Isabel Castillo 2015-2019
 See readme.txt for changelog.
 
 */
