@@ -1,7 +1,9 @@
-Modified version of WP Family Tree
+Updated version of WP Family Tree
 ==================================
 
 **Tested up to WordPress 5.1.1**
+
+See a live demo of a [family tree page](https://chemacastillo.com/mcclaskey-family/), or a [single person page](https://chemacastillo.com/norman-james-mcclaskey/), or the [family directory](https://chemacastillo.com/family-directory/).
 
 This is a modified version of [WP Family Tree plugin](https://wordpress.org/plugins/wp-family-tree/) (version 1.0.5) by the_arv.
 
