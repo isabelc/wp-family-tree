@@ -1,3 +1,6 @@
+This plugin has moved over to WP Family Tree Renewed(https://github.com/isabelc/wp-family-tree-renewed)
+=======================================================================================================
+
 Updated version of WP Family Tree
 ==================================
 
